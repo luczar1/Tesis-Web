@@ -27,6 +27,7 @@ module.exports.routes = {
   '/': {
     view: 'pages/homepage'
   },
+  '/db': 'DbController.check',
 
   /***************************************************************************
   *                                                                          *
