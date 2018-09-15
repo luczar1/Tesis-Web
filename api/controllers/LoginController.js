@@ -10,10 +10,8 @@ module.exports = {
     if (req.path != "/login") {
       res.redirect("/login");
     }
-    console.log(req);
-
-
     res.view("pages/login");
+
   }
 };
 

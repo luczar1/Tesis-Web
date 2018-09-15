@@ -10,6 +10,7 @@
  */
 
 module.exports.bootstrap = async function(done) {
+  sails.argon2 = require("argon2");
 
   // By convention, this is a good place to set up fake data during development.
   //
