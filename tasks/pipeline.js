@@ -37,6 +37,7 @@ var cssFilesToInject = [
   'dependencies/**/*.css',
   'plugins/bootstrap/css/bootstrap.css',
   'plugins/font-awesome/css/font-awesome.css',
+  'plugins/admin-dashboard/css/light-bootstrap-dashboard.css',
 
   // All of the rest of your custom `.css` files will be injected here,
   // in no particular order.  To customize the ordering, add additional
@@ -72,6 +73,7 @@ var jsFilesToInject = [
   'plugins/jquery/jquery.js',
   'plugins/bootstrap/js/bootstrap.js',
   'dependencies/**/*.js',
+  'plugins/admin-dashboard/js/light-bootstrap-dashboard.js',
 
   // All of the rest of your custom client-side js files will be injected here,
   // in no particular order.  To customize the ordering, add additional items
