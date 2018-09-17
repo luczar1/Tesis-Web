@@ -24,9 +24,10 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': 'LoginController.login',
+  '/': 'LoginController.redirect',
   '/login': 'LoginController.login',
-  '/panel/:section': 'LoginController.login',
+  '/panel/:section': 'PanelController.showPanel',
+
 
   /***************************************************************************
   *                                                                          *

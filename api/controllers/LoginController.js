@@ -7,37 +7,31 @@
 
 module.exports = {
   login: async function (req, res) {
-    if (req.path.includes("/panel/")) {
-      let seccion = req.param("section");
-      res.view("pages/"+seccion);
 
-    }
-    else if (req.path != "/login") {
-      res.redirect("/login");
-    }
-    if (req.path == "/login") {
-      let email = req.param("email");
-      let pass = req.param("pass");
-      if (email != null && pass != null) {
-        let usr = await User.checkUser(email, pass);
+    LoginService.checkLogin(req, res);
 
-        sails.log(usr);
+    let email = req.param("email");
+    let pass = req.param("pass");
+    if (email != null && pass != null) {
+      let usr = await User.checkUser(email, pass);
 
-        if (usr) {
-          res.redirect("/panel/home")
-        } else {
-          res.view("pages/login");
-        }
-
+      if (usr) {
+        req.session.userId = usr.id;
+        res.redirect("/panel/home")
       } else {
         res.view("pages/login");
       }
     }
+    else {
+      res.view("pages/login");
+    }
+  },
+  redirect: function(req, res) {
+    LoginService.checkLogin(req,res);
 
-
-    // sails.log(req.param("email") + "-" + req.param("pass"));
-
-
+    if (!req.path.includes("/panel")) {
+      res.redirect("/panel/home");
+    }
   }
 };
 
