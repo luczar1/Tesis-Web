@@ -7,7 +7,9 @@
 
 module.exports = {
   login: async function (req, res) {
-    if (req.path.contains("/panel/")) {
+    if (req.path.includes("/panel/")) {
+      let seccion = req.param("section");
+      res.view("pages/"+seccion);
 
     }
     else if (req.path != "/login") {
