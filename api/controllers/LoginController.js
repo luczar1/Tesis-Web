@@ -10,8 +10,25 @@ module.exports = {
     if (req.path != "/login") {
       res.redirect("/login");
     }
+    if (req.path == "/login") {
+      let usr = req.param("email");
+      let pass = req.param("pass");
+      if (usr != null && pass!= null) {
 
-    res.view("pages/login");
+      }
+
+
+
+
+
+      res.view("pages/login");
+    }
+
+
+
+
+
+
 
     sails.log(req.param("email") + "-" + req.param("pass"));
 
