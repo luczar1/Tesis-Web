@@ -7,7 +7,10 @@
 
 module.exports = {
   login: async function (req, res) {
-    if (req.path != "/login") {
+    if (req.path.contains("/panel/")) {
+
+    }
+    else if (req.path != "/login") {
       res.redirect("/login");
     }
     if (req.path == "/login") {
@@ -27,8 +30,6 @@ module.exports = {
       } else {
         res.view("pages/login");
       }
-
-
     }
 
 
