@@ -8,7 +8,10 @@
 module.exports = {
   showPanel: function (req,res) {
     let seccion = req.param("section");
-    res.view("pages/"+seccion);
+    if (seccion==null) {
+      res.redirect("/panel/home");
+    }
+    res.view("pages/"+seccion, {layout: 'admin'});
   }
 
 };
