@@ -19,7 +19,7 @@ module.exports = {
         sails.log(usr);
 
         if (usr) {
-          res.view("pages/home")
+          res.redirect("/panel/home")
         } else {
           res.view("pages/login");
         }
