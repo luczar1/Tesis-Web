@@ -31,9 +31,6 @@ module.exports = {
         res.view("pages/login");
       }
     }
-    else if (req.path.contains("/panel/")) {
-
-    }
 
 
     // sails.log(req.param("email") + "-" + req.param("pass"));
