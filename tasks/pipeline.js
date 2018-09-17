@@ -73,7 +73,11 @@ var jsFilesToInject = [
   'plugins/jquery/jquery.js',
   'plugins/bootstrap/js/bootstrap.js',
   'dependencies/**/*.js',
+  'plugins/admin-dashboard/js/core/popper.min.js',
   'plugins/admin-dashboard/js/light-bootstrap-dashboard.js',
+  'plugins/admin-dashboard/js/plugins/*.js',
+  'plugins/admin-dashboard/js/*.js',
+
 
   // All of the rest of your custom client-side js files will be injected here,
   // in no particular order.  To customize the ordering, add additional items
