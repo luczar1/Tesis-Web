@@ -11,7 +11,9 @@ module.exports = {
       res.redirect("/login");
     }
     if (req.path == "/login") {
-      if (req.param("email") != null && req.param("pass")!= null) {
+      let usr = req.param("email");
+      let pass = req.param("pass");
+      if (usr != null && pass!= null) {
 
       }
 
