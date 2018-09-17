@@ -13,8 +13,8 @@ module.exports = {
 
     res.view("pages/login");
 
+    sails.log(req.param("email") + "-" + req.param("pass"));
 
-    var res = await User.checkUser("pepe@caca.com", "123456");
 
 
 
