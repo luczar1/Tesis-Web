@@ -6,35 +6,33 @@
  */
 
 module.exports = {
-  login: async  function (req, res) {
+  login: async function (req, res) {
     if (req.path != "/login") {
       res.redirect("/login");
     }
     if (req.path == "/login") {
-      let usr = req.param("email");
+      let email = req.param("email");
       let pass = req.param("pass");
-      if (usr != null && pass!= null) {
+      if (email != null && pass != null) {
+        let usr = await User.checkUser(email, pass);
 
+        sails.log(usr);
+
+        if (usr) {
+          res.view("pages/home")
+        } else {
+          res.view("pages/login");
+        }
+
+      } else {
+        res.view("pages/login");
       }
 
 
-
-
-
-      res.view("pages/login");
     }
 
 
-
-
-
-
-
-    sails.log(req.param("email") + "-" + req.param("pass"));
-
-
-
-
+    // sails.log(req.param("email") + "-" + req.param("pass"));
 
 
   }
