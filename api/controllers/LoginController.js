@@ -10,7 +10,7 @@ module.exports = {
     if (req.path.contains("/panel/")) {
 
     }
-    if (req.path != "/login") {
+    else if (req.path != "/login") {
       res.redirect("/login");
     }
     if (req.path == "/login") {
