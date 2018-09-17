@@ -9,12 +9,17 @@ module.exports = {
   attributes: {
     email: {type: "string"},
     pass: {type: "string"},
-    accesLvl: {type: "string"},
+    accessLvl: {type: "string"},
   },
   checkUser: async function(user,pass) {
     var user = await User.find({email: user, pass: pass});
 
-    sails.log(user);
+    if (user.length>0) {
+      return user[0];
+    }
+
+    return false;
+
   }
 
 };
