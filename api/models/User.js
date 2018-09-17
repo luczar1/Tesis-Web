@@ -11,8 +11,8 @@ module.exports = {
     pass: {type: "string"},
     accessLvl: {type: "string"},
   },
-  checkUser: async function(user,pass) {
-    var user = await User.find({email: user, pass: pass});
+  checkUser: async function(email, pass) {
+    let user = await User.find({email: email, pass: pass});
 
     if (user.length>0) {
       return user[0];
