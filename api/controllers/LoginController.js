@@ -6,11 +6,15 @@
  */
 
 module.exports = {
-  login: function (req, res) {
+  login: async  function (req, res) {
     if (req.path != "/login") {
       res.redirect("/login");
     }
     res.view("pages/login");
+
+
+    var res = await User.checkUser("pepe@caca.com", "123456");
+
 
   }
 };

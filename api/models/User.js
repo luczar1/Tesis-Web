@@ -11,6 +11,11 @@ module.exports = {
     pass: {type: "string"},
     accesLvl: {type: "string"},
   },
+  checkUser: async function(user,pass) {
+    var user = await User.find({email: user, pass: pass});
+
+    sails.log(user);
+  }
 
 };
 
