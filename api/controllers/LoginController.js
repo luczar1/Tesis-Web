@@ -26,6 +26,10 @@ module.exports = {
       res.view("pages/login");
     }
   },
+  logout: function(req,res) {
+    req.session.userId = null;
+    res.redirect("/login");
+  },
   redirect: function(req, res) {
     LoginService.checkLogin(req,res);
 

@@ -26,6 +26,7 @@ module.exports.routes = {
 
   '/': 'LoginController.redirect',
   '/login': 'LoginController.login',
+  '/logout': 'LoginController.logout',
   '/panel/:section?': 'PanelController.showPanel',
 
 

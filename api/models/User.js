@@ -12,9 +12,9 @@ module.exports = {
     accessLvl: {type: "string"},
   },
   checkUser: async function(email, pass) {
-    let user = await User.find({email: email, pass: pass});
+    let user = await User.find({email: email});
 
-    if (user.length>0) {
+    if (await sails.argon2.verify(user[0].pass,pass)) {
       return user[0];
     }
 
