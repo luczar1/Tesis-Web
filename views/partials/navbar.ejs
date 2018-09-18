@@ -1,0 +1,21 @@
+<div class="sidebar-wrapper">
+  <div class="logo">
+    <a href="http://www.creative-tim.com" class="simple-text">
+      Creative Tim
+    </a>
+  </div>
+  <ul class="nav">
+    <% _.each(menu, function (item) { %>
+    <% _.each(item.permissions, function (perm) {
+      if (perm == user.accessLvl) {
+    %>
+    <li class="nav-item <% if (path == item.link) { %> active <% } %>">
+      <a class="nav-link" href="<%= item.link %>">
+        <i class="nc-icon <%= item.icon %>"></i>
+        <p><%= item.title %></p>
+      </a>
+    </li>
+    <% }})}) %>
+  </ul>
+</div>
+</div>
