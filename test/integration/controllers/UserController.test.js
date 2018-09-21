@@ -24,6 +24,11 @@ describe('UserController', function() {
         .expect(302)
         .expect('location','/panel/home', done);
     });
+    it('Deberia devolver notFound', function (done) {
+      supertest(sails.hooks.http.app)
+        .get('/user')
+        .expect(404, done);
+    });
   });
 
   describe('#logout()', function() {
