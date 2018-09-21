@@ -2,7 +2,7 @@ image: node:6.10.3
 staging:
   type: deploy
   script:
-  - git remote add heroku https://heroku:$HEROKU_API_KEYgit.heroku.com/fjs-web.git
+  - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git
   - git push heroku master
   - echo "Deployed to staging server"
   only:
