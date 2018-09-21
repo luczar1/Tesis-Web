@@ -19,7 +19,7 @@ module.exports = {
     let usr = await User.checkUser(email, pass);
 
     if (usr) {
-      //Si esta correcto guardo en ID en una variable de session y
+      //Si esta correcto guardo el ID en una variable de session y
       //redirecciono a /panel/home
       req.session.userId = usr.id;
       res.redirect("/panel/home")
