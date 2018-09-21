@@ -1,6 +1,27 @@
-image: node:6.10.3
-staging:
-  type: deploy
+image: node:8.12.0
+stages:
+  - ver
+  - init
+  - tests
+  - deploy
+
+init:
+  stage: init
+  script:
+  - npm cache clean
+  - npm install
+  only:
+  - dev
+
+run_tests:
+  stage: tests
+  script:
+  - npm test
+  only:
+  - dev
+
+deploy_staging:
+  stage: deploy
   script:
   - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git
   - git push heroku dev
