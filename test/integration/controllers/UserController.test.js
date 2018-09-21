@@ -4,6 +4,11 @@ describe('UserController', function() {
 
 
   describe('#login()', function() {
+    it('Deberia permanecer en /login', function (done) {
+      supertest(sails.hooks.http.app)
+        .get('/login')
+        .expect(200, done);
+    });
     it('Deberia redireccionar a /login (Bad Password)', function (done) {
       supertest(sails.hooks.http.app)
         .post('/login')
@@ -11,10 +16,7 @@ describe('UserController', function() {
         .expect(302)
         .expect('location','/login', done);
     });
-  });
 
-
-  describe('#login()', function() {
     it('Deberia redireccionar a  /panel/home (Good Password)', function (done) {
       supertest(sails.hooks.http.app)
         .post('/login')

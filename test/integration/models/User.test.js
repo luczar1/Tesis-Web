@@ -3,7 +3,7 @@ var util = require('util');
 describe('User (model)', function() {
 
   describe('#checkUser()', function() {
-    it('Deberia devolver un usuario', function (done) {
+    it('Deberia devolver un usuario (Good Password)', function (done) {
       User.checkUser("prueba@prueba.com", "prueba")
         .then(function(user) {
 
@@ -19,13 +19,12 @@ describe('User (model)', function() {
         })
         .catch(done);
     });
-  });
-  describe('#checkUser()', function() {
-    it('Debería devolver false', function (done) {
+
+    it('Debería devolver false (Bad Password)', function (done) {
       User.checkUser("prueba@prueba.com", "prueba2")
         .then(function(user) {
           if (!user) {
-           return done();
+            return done();
           }//-•
 
           return done(new Error(
@@ -37,5 +36,4 @@ describe('User (model)', function() {
         .catch(done);
     });
   });
-
 });
