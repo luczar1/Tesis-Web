@@ -5,10 +5,15 @@ stages:
   - tests
   - deploy
 
+ver:
+  stage: ver
+  script:
+  - node --version
+  - whoami
+
 init:
   stage: init
   script:
-  - npm cache clean
   - npm install
   only:
   - dev
