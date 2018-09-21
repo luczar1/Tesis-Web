@@ -34,8 +34,8 @@ module.exports.routes = {
   '/panel/home': 'HomeController.show',
 
   //Models
-  '/user': "UserController.forbidden",
-  '/user/*': "UserController.forbidden",
+  '/user': "UserController.notFound",
+  '/user/*': "UserController.notFound",
 
 
   /***************************************************************************

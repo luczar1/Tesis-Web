@@ -48,6 +48,11 @@ module.exports = {
     res.forbidden();
 
   },
+  notFound: function (req, res) {
+
+    res.notFound();
+
+  }
 
 };
 
