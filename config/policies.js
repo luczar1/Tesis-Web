@@ -16,6 +16,13 @@ module.exports.policies = {
   * (`true` allows public access)                                            *
   *                                                                          *
   ***************************************************************************/
+  HomeController: {
+    'show': 'isAuthenticated'
+  },
+  UserController: {
+    'showLogin': 'redirHomeIfAuth'
+  },
+
 
   // '*': true,
 

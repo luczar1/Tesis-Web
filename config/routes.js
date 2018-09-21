@@ -24,10 +24,14 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': 'LoginController.redirect',
-  '/login': 'LoginController.login',
-  '/logout': 'LoginController.logout',
-  '/panel/:section?': 'PanelController.showPanel',
+  '/': 'HomeController.show',
+  'get /login': 'UserController.showLogin',
+  'post /login': 'UserController.login',
+  '/logout': 'UserController.logout',
+
+  //Paneles de Usuario
+  '/panel': 'HomeController.redirect',
+  '/panel/home': 'HomeController.show',
 
 
   /***************************************************************************
