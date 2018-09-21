@@ -33,6 +33,10 @@ module.exports.routes = {
   '/panel': 'HomeController.redirect',
   '/panel/home': 'HomeController.show',
 
+  //Models
+  '/user': "UserController.forbidden",
+  '/user/*': "UserController.forbidden",
+
 
   /***************************************************************************
   *                                                                          *

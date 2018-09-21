@@ -43,6 +43,11 @@ module.exports = {
   redirectLogin: function (req, res) {
     res.redirect("/login");
   },
+  forbidden: function (req, res) {
+
+    res.forbidden();
+
+  },
 
 };
 
