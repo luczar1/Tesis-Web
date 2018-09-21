@@ -7,12 +7,13 @@ stages:
 ver:
   stage: ver
   script:
+  - node --version
   - whoami
 
 run_tests:
   stage: tests
   script:
-  - node --version
+  - npm install
   - npm test
   only:
   - dev
