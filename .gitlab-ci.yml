@@ -1,11 +1,10 @@
 image: node:8.12.0
 stages:
-  - ver
   - tests
   - deploy
 
-ver:
-  stage: ver
+version:
+  stage: tests
   script:
   - node --version
   - whoami
@@ -18,7 +17,7 @@ run_tests:
   only:
   - dev
 
-deploy_staging:
+deploy_staging_dev:
   stage: deploy
   script:
   - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git
