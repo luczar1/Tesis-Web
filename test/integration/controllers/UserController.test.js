@@ -24,6 +24,7 @@ describe('UserController', function() {
         .expect(302)
         .expect('location','/panel/home', done);
     });
+  });
 
   describe('#userApi', function () {
     it('Deberia devolver notFound', function (done) {
