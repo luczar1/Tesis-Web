@@ -2,7 +2,6 @@ image: node:6.10.3
 staging:
   type: deploy
   script:
-  - npm test
   - gem install dpl
   - dpl --provider=heroku --app=fjs-web --api-key=$HEROKU_API_KEY
   only:
