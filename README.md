@@ -3,7 +3,7 @@
 a [Sails v1](https://sailsjs.com) application
 
 
-### Links
+### Links de ayuda
 
 + [Get started](https://sailsjs.com/get-started)
 + [Sails framework documentation](https://sailsjs.com/documentation)
@@ -29,4 +29,9 @@ Cada vez que se realize un pull, ejecutar:
 
 ```
 npm install
+```
+
+Para correr los tests ejecutar:
+```
+npm test
 ```
