@@ -8,6 +8,8 @@ version:
   script:
   - node --version
   - whoami
+  only:
+  - dev
 
 run_tests:
   stage: tests

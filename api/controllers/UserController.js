@@ -40,6 +40,9 @@ module.exports = {
     //Envio la view de login
     res.view("pages/login");
   },
+  redirectLogin: function (req, res) {
+    res.redirect("/login");
+  },
 
 };
 

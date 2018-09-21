@@ -24,7 +24,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': 'HomeController.show',
+  '/': 'HomeController.redirect',
   'get /login': 'UserController.showLogin',
   'post /login': 'UserController.login',
   '/logout': 'UserController.logout',
