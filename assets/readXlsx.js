@@ -6,8 +6,6 @@ var workbook = XLSX.read(buf, {type:'buffer'});
 
 
 var ws = workbook.Sheets[workbook.SheetNames[0]];
-
-for (el in ws) {
-  console.log(ws[el].w);
-}
-
+ws["!ref"] = ws["!ref"].replace("A1", "A2");
+//console.log(ws["!ref"]);
+console.log(XLSX.utils.sheet_to_json(ws));
