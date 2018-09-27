@@ -51,13 +51,25 @@ module.exports = {
 
       cursosOk.push(cursoOk);
     }
+    await Curso.destroy({});
+    await Curso.createEach (cursosOk);
 
-    for (cursoOk in cursosOk) {
-
-      let cursoAgregado = await Curso.create(cursosOk[cursoOk]).fetch();
-      console.log(cursoAgregado);
-
-    }
+    // for (key in cursosOk) {
+    //   let cant = await Curso.count({codigo: cursosOk[key].codigo});
+    //   console.log(cant);
+    //
+    //   if ( cant > 0){
+    //            await Curso.update({codigo: cursosOk[key].codigo}, cursosOk[key]);
+    //
+    //   } else {
+    //
+    //     await Curso.create(cursosOk[key]);
+    //
+    //   }
+    //
+    //
+    //
+    // }
 
 
     // All done.
