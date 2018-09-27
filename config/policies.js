@@ -22,6 +22,9 @@ module.exports.policies = {
   UserController: {
     'showLogin': 'redirHomeIfAuth'
   },
+  NuevoCursoController: {
+    'show': 'isAuthenticated'
+  },
 
 
   // '*': true,
