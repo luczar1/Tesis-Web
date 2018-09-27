@@ -38,7 +38,7 @@ module.exports = {
   },
   showLogin: async function (req, res) {
 
-    //let cursos = await sails.helpers.readXls.with({filePath: 'assets/reporteCursos.xlsx'});
+    let cursos = await sails.helpers.readXls.with({filePath: 'assets/reporteCursos.xlsx'});
     //sails.log(cursos);
 
     //Envio la view de login
