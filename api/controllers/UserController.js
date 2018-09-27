@@ -36,7 +36,11 @@ module.exports = {
     req.session.userId = null;
     res.redirect("/login");
   },
-  showLogin: function (req, res) {
+  showLogin: async function (req, res) {
+
+    //let cursos = await sails.helpers.readXls.with({filePath: 'assets/reporteCursos.xlsx'});
+    //sails.log(cursos);
+
     //Envio la view de login
     res.view("pages/login", {layout: 'layouts/login_layout'});
   },

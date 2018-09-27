@@ -11,6 +11,8 @@
 
 module.exports.bootstrap = async function(done) {
   sails.argon2 = require("argon2");
+  sails.xlsx = require('xlsx');
+  sails.fs = require('fs');
 
   // By convention, this is a good place to set up fake data during development.
   //
