@@ -9,10 +9,18 @@ module.exports = {
 
   attributes: {
 
+    codigo: {type: "string"},
+    nombre: {type: "string"},
+    UA: {type: "string"},
+    nombreUA: {type: "string"},
+    inicio: {type: "string"},
+    fin: {type: "string"},
+    categoria: {type: "string"},
+    estado: {type: "string"},
+    cupoMax: {type: "number"},
+    cantHoras: {type: "number"},
+    cantDias: {type: "number"},
 
-    email: {type: "string"},
-    pass: {type: "string"},
-    accessLvl: {type: "string"},
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
