@@ -51,10 +51,12 @@ module.exports = {
 
       cursosOk.push(cursoOk);
     }
-    await Curso.destroy({});
-    await Curso.createEach (cursosOk);
+    //await Curso.destroy({});
+    //await Curso.createEach (cursosOk);
 
-    // for (key in cursosOk) {
+
+
+    for (key in cursosOk) {
     //   let cant = await Curso.count({codigo: cursosOk[key].codigo});
     //   console.log(cant);
     //
@@ -69,7 +71,15 @@ module.exports = {
     //
     //
     //
-    // }
+
+        Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
+          .exec(async(err, newOrExistingRecord, wasCreated)=> {
+            sails.log(wasCreated);
+            if (!wasCreated) {
+              Curso.update({codigo: cursosOk[key].codigo}, cursosOk[key]);
+            }
+          });
+     }
 
 
     // All done.
