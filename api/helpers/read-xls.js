@@ -51,7 +51,7 @@ module.exports = {
 
       cursosOk.push(cursoOk);
     }
-    //await Curso.destroy({});
+    //await Curso.destroy ({});
     //await Curso.createEach (cursosOk);
 
 
