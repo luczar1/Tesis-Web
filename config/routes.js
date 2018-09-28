@@ -32,7 +32,8 @@ module.exports.routes = {
   //Paneles de Usuario
   '/panel': 'HomeController.redirect',
   '/panel/home': 'HomeController.show',
-  '/panel/uploadCourse': 'NuevoCursoController.show',
+  'get /panel/uploadCourse': 'NuevoCursoController.show',
+  'post /panel/uploadCourse': 'NuevoCursoController.uploadXls',
 
   //Models
   '/user': "UserController.notFound",
