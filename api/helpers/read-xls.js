@@ -72,11 +72,23 @@ module.exports = {
     //
     //
 
-        Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
-          .exec(async(err, newOrExistingRecord, wasCreated)=> {
+        await Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
+          .exec(async (err, newOrExistingRecord, wasCreated)=> {
             sails.log(wasCreated);
             if (!wasCreated) {
-              Curso.update({codigo: cursosOk[key].codigo}, cursosOk[key]);
+
+
+              for (key2 in cursosOk) {
+                if (cursosOk[key2].codigo == newOrExistingRecord.codigo) {
+
+                  delete cursosOk[key2].id;
+                  delete cursosOk[key2].updatedAt;
+                  delete cursosOk[key2].createdAt;
+
+                  sails.log(cursosOk[key2]);
+                  await Curso.update({id: newOrExistingRecord.id}, cursosOk[key2]);
+                }
+              }
             }
           });
      }
