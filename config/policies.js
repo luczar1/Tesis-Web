@@ -23,7 +23,8 @@ module.exports.policies = {
     'showLogin': 'redirHomeIfAuth'
   },
   NuevoCursoController: {
-    'show': 'isAuthenticated'
+    'show': 'isAuthenticated',
+    'uploadXls': 'isAuthenticated',
   },
 
 
