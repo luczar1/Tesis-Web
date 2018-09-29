@@ -3,6 +3,15 @@ var supertest = require('supertest');
 describe('UserController', function() {
 
 
+  describe('#navbar()', function () {
+    it('Deberia redireccionar a /login', function (done) {
+      supertest(sails.hooks.http.app)
+        .get('/api/navBar')
+        .expect(302)
+        .expect('location','/login', done);
+    });
+  });
+
   describe('#login()', function() {
     it('Deberia permanecer en /login', function (done) {
       supertest(sails.hooks.http.app)
