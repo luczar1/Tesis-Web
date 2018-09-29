@@ -35,6 +35,10 @@ module.exports.routes = {
   'get /panel/uploadCourse': 'NuevoCursoController.show',
   'post /panel/uploadCourse': 'NuevoCursoController.uploadXls',
 
+
+  //Funciones que sirven
+  'get /api/navBar': 'UserController.navbar',
+
   //Models
   '/user': "UserController.notFound",
   '/user/*': "UserController.notFound",

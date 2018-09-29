@@ -5,16 +5,15 @@
     </a>
   </div>
   <ul class="nav">
-    <li class="nav-item">
-      <a class="nav-link" href="/panel/home">
-        <i class="fas fa-home"></i>
-        <p>HOME</p>
+    <li v-if="navbar.length === 0" class="nav-item">
+      <a class="nav-link" href="/" style="text-align: center">
+        <p><i class="fas fa-spinner fa-spin"></i></p>
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/panel/uploadCourse">
-        <i class="fas fa-upload"></i>
-        <p>Cargar excel</p>
+    <li v-for="item in navbar" class="nav-item" :class="{active: checkLocation(item.link)}">
+      <a class="nav-link" :href="item.link">
+        <i :class="item.icon"></i>
+        <p>{{item.title}}</p>
       </a>
     </li>
   </ul>

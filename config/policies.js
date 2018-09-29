@@ -20,11 +20,12 @@ module.exports.policies = {
     'show': 'isAuthenticated'
   },
   UserController: {
-    'showLogin': 'redirHomeIfAuth'
+    'showLogin': 'redirHomeIfAuth',
+    'navbar': 'isAuthenticated',
   },
   NuevoCursoController: {
-    'show': 'isAuthenticated',
-    'uploadXls': 'isAuthenticated',
+    'show': ['isAuthenticated', 'isAdmin'],
+    'uploadXls': ['isAuthenticated', 'isAdmin'],
   },
 
 

@@ -52,7 +52,35 @@ module.exports = {
 
     res.notFound();
 
-  }
+  },
+  navbar: async function (req, res) {
+
+    let navbar = [
+      {
+        title: "HOME",
+        icon: "fas fa-home",
+        link: "/panel/home",
+        accesLvl: ['admin'],
+      },
+      {
+        title: "CARGAR CURSOS",
+        icon: "fas fa-upload",
+        link: "/panel/uploadCourse",
+        accesLvl: ['admin'],
+      }
+    ];
+
+    let currentUser = await User.findOne({id: req.session.userId});
+    let navBarForUser = [];
+
+    for (key in navbar) {
+      if (navbar[key].accesLvl.includes(currentUser.accessLvl)){
+          navBarForUser.push(navbar[key]);
+      }
+    }
+    res.json(navBarForUser);
+
+  },
 
 };
 
