@@ -17,16 +17,14 @@ module.exports = {
   },
 
 
-  exits: {
-
-  },
+  exits: {},
 
 
   fn: async function (inputs, exits) {
 
 
     let buf = sails.fs.readFileSync(inputs.filePath);
-    let workbook = sails.xlsx.read(buf, {type:'buffer'});
+    let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
     ws["!ref"] = ws["!ref"].replace("A1", "A2");
 
@@ -55,43 +53,28 @@ module.exports = {
     //await Curso.createEach (cursosOk);
 
 
-
     for (key in cursosOk) {
-    //   let cant = await Curso.count({codigo: cursosOk[key].codigo});
-    //   console.log(cant);
-    //
-    //   if ( cant > 0){
-    //            await Curso.update({codigo: cursosOk[key].codigo}, cursosOk[key]);
-    //
-    //   } else {
-    //
-    //     await Curso.create(cursosOk[key]);
-    //
-    //   }
-    //
-    //
-    //
 
-        await Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
-          .exec(async (err, newOrExistingRecord, wasCreated)=> {
-            sails.log(wasCreated);
-            if (!wasCreated) {
+      await Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
+        .exec(async (err, newOrExistingRecord, wasCreated) => {
+          sails.log(wasCreated);
+          if (!wasCreated) {
+
+            let found = cursosOk.find((e) => {
+              return e.codigo === newOrExistingRecord.codigo
+            });
 
 
-              for (key2 in cursosOk) {
-                if (cursosOk[key2].codigo == newOrExistingRecord.codigo) {
+            delete found.id;
+            delete found.updatedAt;
+            delete found.createdAt;
 
-                  delete cursosOk[key2].id;
-                  delete cursosOk[key2].updatedAt;
-                  delete cursosOk[key2].createdAt;
+            sails.log(found);
+            await Curso.update({id: newOrExistingRecord.id}, found);
 
-                  sails.log(cursosOk[key2]);
-                  await Curso.update({id: newOrExistingRecord.id}, cursosOk[key2]);
-                }
-              }
-            }
-          });
-     }
+          }
+        });
+    }
 
 
     // All done.
