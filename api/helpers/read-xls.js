@@ -44,10 +44,10 @@ module.exports = {
       cursoOk.inicio = json[curso]['Inicio'];
       cursoOk.fin = json[curso]['Fin'];
       cursoOk.categoria = json[curso]['Categoría'];
+      cursoOk.vigente = json[curso]['Vigente'];
       cursoOk.estado = json[curso]['Estado'];
       cursoOk.cupoMax = json[curso]['Cupo Max.'];
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
-      cursoOk.cantDias = json[curso]['Cant.Días'];
 
       cursosOk.push(cursoOk);
     }

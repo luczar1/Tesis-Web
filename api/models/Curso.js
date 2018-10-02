@@ -16,10 +16,10 @@ module.exports = {
     inicio: {type: "string"},
     fin: {type: "string"},
     categoria: {type: "string"},
+    vigente: {type: "string"},
     estado: {type: "string"},
     cupoMax: {type: "number"},
     cantHoras: {type: "number"},
-    cantDias: {type: "number"},
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
