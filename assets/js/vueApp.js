@@ -11,7 +11,7 @@ var app = new Vue({
 
           let navBarItems = response.body;
 
-          for (key in navBarItems) {
+          for (let key in navBarItems) {
             this.navbar.push(navBarItems[key]);
 
           }

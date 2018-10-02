@@ -122,6 +122,7 @@ nbproject
 .idea
 .node_history
 dump.rdb
+assets/reporteCursos.xlsx
 
 npm-debug.log
 lib-cov
