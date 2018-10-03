@@ -35,9 +35,8 @@ var cssFilesToInject = [
 
   // Bring in `.css` files for themes and style guides (e.g. Bootstrap, Foundation)
   'dependencies/**/*.css',
-  'plugins/admin-dashboard/css/light-bootstrap-dashboard.css',
-  'plugins/bootstrap/css/bootstrap.css',
-  'plugins/font-awesome/css/font-awesome.css',
+  'node_modules/dm-file-uploader/dist/css/*',
+  'node_modules/@fortawesome/fontawesome-free/css/all.css',
 
 
   // All of the rest of your custom `.css` files will be injected here,
@@ -74,10 +73,7 @@ var jsFilesToInject = [
   'plugins/jquery/jquery.js',
   'plugins/bootstrap/js/bootstrap.js',
   'dependencies/**/*.js',
-  'plugins/admin-dashboard/js/core/popper.min.js',
-  'plugins/admin-dashboard/js/light-bootstrap-dashboard.js',
-  'plugins/admin-dashboard/js/plugins/*.js',
-  'plugins/admin-dashboard/js/*.js',
+  'node_modules/dm-file-uploader/dist/js/*',
 
 
   // All of the rest of your custom client-side js files will be injected here,
