@@ -67,6 +67,12 @@ module.exports = {
         icon: "fas fa-upload",
         link: "/panel/uploadCourse",
         accesLvl: ['admin'],
+      },
+      {
+        title: "LISTADO DE CURSOS",
+        icon: "fas fa-list-ul",
+        link: "/panel/listCourses",
+        accesLvl: ['admin'],
       }
     ];
 

@@ -18,7 +18,38 @@ module.exports = function(grunt) {
         cwd: './assets',
         src: ['**/*.!(coffee|less)'],
         dest: '.tmp/public'
-      }]
+      },
+        {
+          expand:true,
+          cwd: './node_modules/@fortawesome/fontawesome-free',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/fontawesome'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/jquery/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/jquery'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/bootstrap/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/bootstrap'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/vue/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/vue'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/vue-resource/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/vue'
+        },
+      ]
     },
     build: {
       files: [{

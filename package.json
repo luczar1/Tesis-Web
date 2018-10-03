@@ -23,6 +23,8 @@
     "sails-local-fs": "^0.9.11",
     "sails-mongo": "^1.0.1",
     "supertest": "^3.3.0",
+    "vue": "^2.5.17",
+    "vue-resource": "^1.5.1",
     "xlsx": "^0.14.0"
   },
   "devDependencies": {

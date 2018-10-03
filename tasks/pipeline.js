@@ -35,8 +35,9 @@ var cssFilesToInject = [
 
   // Bring in `.css` files for themes and style guides (e.g. Bootstrap, Foundation)
   'dependencies/**/*.css',
-  'node_modules/dm-file-uploader/dist/css/*',
-  'node_modules/@fortawesome/fontawesome-free/css/all.css',
+  'plugins/fontawesome/css/all.css',
+  '/plugins/bootstrap/css/*',
+  '/plugins/admin-dashboard/css/light-bootstrap-dashboard.css',
 
 
   // All of the rest of your custom `.css` files will be injected here,
@@ -72,8 +73,9 @@ var jsFilesToInject = [
   // > Be sure to list dependencies that depend on each other in the right order!
   'plugins/jquery/jquery.js',
   'plugins/bootstrap/js/bootstrap.js',
+  'plugins/vue/vue.js',
+  'plugins/vue/vue-resource.js',
   'dependencies/**/*.js',
-  'node_modules/dm-file-uploader/dist/js/*',
 
 
   // All of the rest of your custom client-side js files will be injected here,
