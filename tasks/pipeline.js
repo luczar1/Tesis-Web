@@ -36,7 +36,7 @@ var cssFilesToInject = [
   // Bring in `.css` files for themes and style guides (e.g. Bootstrap, Foundation)
   'dependencies/**/*.css',
   'plugins/fontawesome/css/all.css',
-  '/plugins/bootstrap/css/*',
+  '/plugins/bootstrap/css/bootstrap.css',
   '/plugins/admin-dashboard/css/light-bootstrap-dashboard.css',
 
 

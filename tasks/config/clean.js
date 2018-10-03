@@ -22,7 +22,10 @@ module.exports = function(grunt) {
       'www/styles',
       'www/templates',
       'www/dependencies'
-    ]
+    ],
+    options: {
+      force: true,
+    },
   });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
