@@ -67,6 +67,14 @@ module.exports = function(grunt) {
         dest: '.tmp/public/dist'
       }]
     },
+    fonts: {
+      files: [{
+          expand: true,
+          cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
+          src: ['**/*'],
+          dest: '.tmp/public/webfonts'
+        }]
+    },
   });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
