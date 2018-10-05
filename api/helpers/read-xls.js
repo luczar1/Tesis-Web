@@ -68,6 +68,7 @@ module.exports = {
             delete found.id;
             delete found.updatedAt;
             delete found.createdAt;
+            delete found.alumnos;
 
             sails.log(found);
             await Curso.update({id: newOrExistingRecord.id}, found);

@@ -1,5 +1,5 @@
 /**
- * Curso.js
+ * AlumnoPorCurso.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -8,23 +8,19 @@
 module.exports = {
 
   attributes: {
-
-    codigo: {type: "string"},
-    nombre: {type: "string"},
-    UA: {type: "string"},
-    nombreUA: {type: "string"},
-    inicio: {type: "string"},
-    fin: {type: "string"},
-    categoria: {type: "string"},
-    vigente: {type: "string"},
-    estado: {type: "string"},
-    cupoMax: {type: "number"},
-    cantHoras: {type: "number"},
-    alumnos: {
-      collection: "alumno",
-      via: "curso",
-      through: "alumnoporcurso"
-    }
+    alumno: {
+      model: "alumno"
+    },
+    curso: {
+      model: "curso"
+    },
+    // Todo: preguntar qué es para saber si ponerlo acá o en Alumno.js
+    documentacion: {type: "boolean"},
+    pago: {type: "boolean"},
+    // Mail a los 7 días
+    mail1: {type: "boolean"},
+    // Mail a los 15 días
+    mail2: {type: "boolean"},
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
