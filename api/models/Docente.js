@@ -1,5 +1,5 @@
 /**
- * Alumno.js
+ * Docente.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
 
     /**
-     * Clave de alumno UCC.
+     * Clave de docente UCC.
      */
     clave: {type: "number"},
 
@@ -40,12 +40,12 @@ module.exports = {
     telefono: {type: "number"},
 
     /**
-     * Cursos en los que se ha inscripto.
+     * Cursos en los que participa.
      */
     cursos: {
       collection: "curso",
-      via: "alumno",
-      through: "alumnoporcurso"
+      via: "docente",
+      through: "docenteporcurso"
     }
   },
 

@@ -9,8 +9,19 @@ module.exports = {
 
   attributes: {
 
+    /**
+     * Email.
+     */
     email: {type: "string"},
+
+    /**
+     * Password.
+     */
     pass: {type: "string"},
+
+    /**
+     * Access level.
+     */
     accessLvl: {type: "string"},
 
   },
