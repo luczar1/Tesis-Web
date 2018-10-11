@@ -29,7 +29,7 @@ describe('User (model)', function() {
 
           return done(new Error(
             'Deberia devolver un usuario '+
-            'Pero deolvio: '+util.inspect(user, {depth:null})+''
+            'Pero devolvio: '+util.inspect(user, {depth:null})+''
           ));
 
         })
