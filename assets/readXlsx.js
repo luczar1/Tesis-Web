@@ -29,13 +29,6 @@ for (let curso in json) {
   cursoOk.cantDias = json[curso]['Cant.Días'];
 
 
-
-
-
-
-
-
-
   cursosOk.push(cursoOk);
 }
 
