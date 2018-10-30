@@ -14,7 +14,7 @@ module.exports = {
     //El archivo viene con nombre cursosXlsx
     req.file('cursosXlsx').upload(async function (err, uploadedFiles) {
       if (err) {
-        //Hago logen caso de error
+        //Hago log en caso de error
         sails.log(err);
       }
 

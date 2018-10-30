@@ -12,6 +12,7 @@ ws["!ref"] = ws["!ref"].replace("A1", "A2");
 let json = XLSX.utils.sheet_to_json(ws);
 //console.log(json);
 
+<<<<<<< HEAD
 let profesores = [];
 
 for (let key in json) {
@@ -27,6 +28,26 @@ for (let key in json) {
   profesor.tel = json[key]['Teléfono'];
 
   profesores.push(profesor);
+=======
+let cursosOk = [];
+
+for (let curso in json) {
+  let cursoOk = {};
+  cursoOk.codigo = json[curso]['Cod.Presup.'];
+  cursoOk.nombre = json[curso]['Curso'];
+  cursoOk.UA = json[curso]['U.A.'];
+  cursoOk.nombreUA = json[curso]['Nomb.U.A.'];
+  cursoOk.inicio = json[curso]['Inicio'];
+  cursoOk.fin = json[curso]['Fin'];
+  cursoOk.categoria = json[curso]['Categoría'];
+  cursoOk.estado = json[curso]['Estado'];
+  cursoOk.cupoMax = json[curso]['Cupo Max.'];
+  cursoOk.cantHoras = json[curso]['Cant.Hs.'];
+  cursoOk.cantDias = json[curso]['Cant.Días'];
+
+
+  cursosOk.push(cursoOk);
+>>>>>>> e45fea6f9e7e827f0b2d78ca1b926820c7e3e23d
 }
 
 

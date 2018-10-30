@@ -1,26 +1,68 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">Subir archivo</h4>
+<!--<div class="row">-->
+<!--<div class="col-md-12">-->
+<!--<div class="card">-->
+<!--<div class="card-header">-->
+<!--<h4 class="card-title">Subir archivo</h4>-->
+<!--</div>-->
+<!--<div class="card-body">-->
+<!--<form method="post" enctype="multipart/form-data">-->
+<!--<div class="row">-->
+<!--<div class="col-md-12 pr-1">-->
+<!--<div class="form-group">-->
+<!--<input id="cursosXlsx" name="cursosXlsx" type="file" class="file" data-preview-file-type="text" data-language="es" data-theme="fa" data-uploadUrl="/uploadCourse">-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-md-12">-->
+<!--<button type="submit" class="btn btn-info btn-fill pull-right" >Aceptar</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="clearfix"></div>-->
+<!--</form>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<form method="post" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row m-b-1">
+        <div class="col-sm-6 offset-sm-3">
+          <button type="submit" class="btn btn-primary btn-block"
+          >Agregar cursos
+          </button>
+          <div class="form-group inputDnD">
+            <label class="sr-only" for="inputFile">File Upload</label>
+            <input type="file" class="form-control-file text-primary " id="cursosXlsx" data-uploadUrl="/uploadCourse"
+                   onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-          <div class="row">
-            <div class="col-md-12 pr-1">
-              <div class="form-group">
-                <input id="cursosXlsx" name="cursosXlsx" type="file" class="file" data-preview-file-type="text" data-language="es" data-theme="fa" data-uploadUrl="/uploadCourse">
-              </div>
-            </div>
+      <div class="row m-b-1">
+        <div class="col-sm-6 offset-sm-3">
+          <button type="button" class="btn btn-success btn-block"
+                  onclick="document.getElementById('inputFile').click()">Agregar alumnos
+          </button>
+          <div class="form-group inputDnD">
+            <label class="sr-only" for="inputFile">File Upload</label>
+            <input type="file" class="form-control-file text-success " id="inputFile" accept="image/*"
+                   onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <button type="submit" class="btn btn-info btn-fill pull-right" >Aceptar</button>
-            </div>
+        </div>
+      </div>
+      <div class="row m-b-1">
+        <div class="col-sm-6 offset-sm-3">
+          <button type="button" class="btn btn-warning btn-block"
+                  onclick="document.getElementById('inputFile').click()">Agregar profesores
+          </button>
+          <div class="form-group inputDnD">
+            <label class="sr-only" for="inputFile">File Upload</label>
+            <input type="file" class="form-control-file text-warning " id="inputFile" accept="image/*"
+                   onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
           </div>
-          <div class="clearfix"></div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>
