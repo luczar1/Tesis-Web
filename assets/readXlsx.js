@@ -1,7 +1,7 @@
 var XLSX = require('xlsx');
 var fs = require('fs');
 
-var buf = fs.readFileSync("reporteCursos.xlsx");
+var buf = fs.readFileSync("reporteDocentes.xlsx");
 var workbook = XLSX.read(buf, {type:'buffer'});
 
 
@@ -12,37 +12,24 @@ ws["!ref"] = ws["!ref"].replace("A1", "A2");
 let json = XLSX.utils.sheet_to_json(ws);
 //console.log(json);
 
-let cursosOk = [];
+let profesores = [];
 
-for (let curso in json) {
-  let cursoOk = {};
-  cursoOk.codigo = json[curso]['Cod.Presup.'];
-  cursoOk.nombre = json[curso]['Curso'];
-  cursoOk.UA = json[curso]['U.A.'];
-  cursoOk.nombreUA = json[curso]['Nomb.U.A.'];
-  cursoOk.inicio = json[curso]['Inicio'];
-  cursoOk.fin = json[curso]['Fin'];
-  cursoOk.categoria = json[curso]['Categoría'];
-  cursoOk.estado = json[curso]['Estado'];
-  cursoOk.cupoMax = json[curso]['Cupo Max.'];
-  cursoOk.cantHoras = json[curso]['Cant.Hs.'];
-  cursoOk.cantDias = json[curso]['Cant.Días'];
+for (let key in json) {
+  let profesor = {};
+  profesor.clave = json[key]['Clave'];
+  profesor.codCurso = json[key]['Cod.Presup.'];
+  profesor.apellido = json[key]['Apellido y nombre'].split(",")[0].trim();
+  profesor.nombre = json[key]['Apellido y nombre'].split(",")[1].trim();
+  profesor.caracter = json[key]['Caráter'];
+  profesor.tipoDoc = json[key]['Documento'].split(" ")[0];
+  profesor.doc = json[key]['Documento'].split(" ")[1];
+  profesor.email = json[key]['E-mail'];
+  profesor.tel = json[key]['Teléfono'];
 
-
-
-
-
-
-
-
-
-  cursosOk.push(cursoOk);
+  profesores.push(profesor);
 }
 
-console.log(json);
-let propCount = Object.keys(json[0]).length;
 
-console.log(propCount);
-console.log(cursosOk);
+console.log(profesores);
 
 

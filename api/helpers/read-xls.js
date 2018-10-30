@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Read xls',
+  friendlyName: 'Read xls cursos',
 
 
   description: 'Read and parse the xlsx to generate and update courses',

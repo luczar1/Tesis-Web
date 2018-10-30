@@ -25,7 +25,7 @@ module.exports.policies = {
   },
   NuevoCursoController: {
     'show': ['isAuthenticated', 'isAdmin'],
-    'uploadXls': ['isAuthenticated', 'isAdmin'],
+    //'uploadXls': ['isAuthenticated', 'isAdmin'],
   },
 
 

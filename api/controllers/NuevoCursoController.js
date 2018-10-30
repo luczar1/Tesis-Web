@@ -20,11 +20,31 @@ module.exports = {
 
       if (uploadedFiles.length === 0 ) {
         //Si no hay archivos subidos, devuelvo bad request
-        res.badRequest();
+        //res.badRequest();
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
         await sails.helpers.readXls.with({filePath: uploadedFiles[0].fd});
+
+        //Devuelvo ok
+        res.ok()
+      }
+
+
+    });
+    req.file('profesXlsx').upload(async function (err, uploadedFiles) {
+      if (err) {
+        //Hago logen caso de error
+        sails.log(err);
+      }
+
+      if (uploadedFiles.length === 0 ) {
+        //Si no hay archivos subidos, devuelvo bad request
+        //res.badRequest();
+      }
+      else {
+        //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
+        await sails.helpers.readXlsxProfesores.with({filePath: uploadedFiles[0].fd});
 
         //Devuelvo ok
         res.ok()

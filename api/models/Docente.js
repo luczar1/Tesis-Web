@@ -25,6 +25,11 @@ module.exports = {
     nombre: {type: "string"},
 
     /**
+     * Tipo de documento (LE, DNI, etc).
+     */
+    tipoDocumento: {type: "string"},
+
+    /**
      * Numero de documento.
      */
     documento: {type: "number"},
@@ -37,7 +42,7 @@ module.exports = {
     /**
      * Numero de telefono.
      */
-    telefono: {type: "number"},
+    telefono: {type: "string"},
 
     /**
      * Cursos en los que participa.
