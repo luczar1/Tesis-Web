@@ -32,7 +32,7 @@ module.exports = {
     /**
      * Numero de documento.
      */
-    documento: {type: "number"},
+    documento: {type: "string"},
 
     /**
      * Email.
