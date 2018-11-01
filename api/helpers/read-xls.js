@@ -57,7 +57,7 @@ module.exports = {
 
       await Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
         .exec(async (err, newOrExistingRecord, wasCreated) => {
-          sails.log(wasCreated);
+          // sails.log(wasCreated);
           if (!wasCreated) {
 
             let found = cursosOk.find((e) => {
@@ -70,7 +70,7 @@ module.exports = {
             delete found.createdAt;
             delete found.alumnos;
 
-            sails.log(found);
+            // sails.log(found);
             await Curso.update({id: newOrExistingRecord.id}, found);
 
           }

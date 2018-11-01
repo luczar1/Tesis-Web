@@ -24,17 +24,15 @@
 <!--</div>-->
 <!--</div>-->
 <!--</div>-->
-<form method="post" enctype="multipart/form-data">
+<form method="post" id="subirCurso" enctype="multipart/form-data">
   <div class="row">
     <div class="col-md-12">
       <div class="row m-b-1">
         <div class="col-sm-6 offset-sm-3">
-          <button type="submit" class="btn btn-primary btn-block"
-          >Agregar cursos
-          </button>
+          <button type="submit" class="btn btn-primary btn-block">Agregar cursos</button>
           <div class="form-group inputDnD">
             <label class="sr-only" for="inputFile">File Upload</label>
-            <input type="file" class="form-control-file text-primary " id="cursosXlsx" data-uploadUrl="/uploadCourse"
+            <input type="file" class="form-control-file text-primary " id="cursosXlsx" name="cursosXlsx" data-uploadUrl="/uploadCourse"
                    onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
           </div>
         </div>
