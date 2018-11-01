@@ -1,6 +1,6 @@
 $(function () {
 
-  $('#subirCurso').fileUpload({
+  $('.subir-archivo').fileUpload({
     success: function (data, textStatus, jqXHR) {
       console.log(data);
       notificacion("success","Listo","fa fa-check");
