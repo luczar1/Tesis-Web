@@ -20,6 +20,11 @@ module.exports = {
     nombre: {type: "string"},
 
     /**
+     * URL imagen del curso.
+     */
+    img: {type: "string"},
+
+    /**
      * Codigo de la Unidad Academica.
      */
     UA: {type: "string"},

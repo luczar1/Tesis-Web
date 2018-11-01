@@ -123,6 +123,7 @@ nbproject
 .node_history
 dump.rdb
 assets/reporteCursos.xlsx
+assets/uploads/img/*.*
 
 npm-debug.log
 lib-cov
