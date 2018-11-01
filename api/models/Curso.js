@@ -12,7 +12,7 @@ module.exports = {
     /**
      * Codigo de curso.
      */
-    codigo: {type: "string"},
+    codigo: {type: "number"},
 
     /**
      * Nombre.
