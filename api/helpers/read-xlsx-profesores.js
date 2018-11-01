@@ -74,7 +74,6 @@ module.exports = {
 
 
     for (key in profesoresUnicos) {
-      sails.log(profesoresUnicos[key]);
       if (profesoresUnicos[key].doc == null) {
         errores.push({nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "No tiene definido documento"});
       }
@@ -97,19 +96,18 @@ module.exports = {
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
             if (!wasCreated) {
-
               let found = profesoresUnicos.find((e) => {
-                return e.doc === newOrExistingRecord.documento
+                return e.doc == newOrExistingRecord.documento
               });
 
               await Docente.update({id: newOrExistingRecord.id}, {
-                clave: found[key].clave,
-                apellido: found[key].apellido,
-                nombre: found[key].nombre,
-                tipoDocumento: found[key].tipoDoc,
-                documento: found[key].doc,
-                email: found[key].email,
-                telefono: found[key].tel,});
+                clave: found.clave,
+                apellido: found.apellido,
+                nombre: found.nombre,
+                tipoDocumento: found.tipoDoc,
+                documento: found.doc,
+                email: found.email,
+                telefono: found.tel,});
 
             }
           });
@@ -119,16 +117,16 @@ module.exports = {
 
     /*for (key in profesoresUnicos) {
       let cursos = await Curso.find({
-        codigo: profesoresUnicos[key].codCurso
+        codigo: { in: profesoresUnicos[key].codCurso }
       });
 
       sails.log(cursos);
       //await Docente.addToCollection(prof.id, 'cursos', [curso.id]);
-    }
+    }*/
 
 
     //sails.log(errores);
-    // All done.*/
+    // All done.
     return exits.success();
 
   }

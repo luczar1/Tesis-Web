@@ -20,7 +20,7 @@ module.exports = {
 
       if (uploadedFiles.length === 0 ) {
         //Si no hay archivos subidos, devuelvo bad request
-        res.badRequest();
+        //res.badRequest();
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
