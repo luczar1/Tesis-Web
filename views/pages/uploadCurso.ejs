@@ -24,7 +24,7 @@
 <!--</div>-->
 <!--</div>-->
 <!--</div>-->
-<form method="post" id="subirCurso" enctype="multipart/form-data">
+<form method="post" class="subir-archivo" enctype="multipart/form-data">
   <div class="row">
     <div class="col-md-12">
       <div class="row m-b-1">
@@ -32,16 +32,21 @@
           <button type="submit" class="btn btn-primary btn-block">Agregar cursos</button>
           <div class="form-group inputDnD">
             <label class="sr-only" for="inputFile">File Upload</label>
-            <input type="file" class="form-control-file text-primary " id="cursosXlsx" name="cursosXlsx" data-uploadUrl="/uploadCourse"
+            <input type="file" class="form-control-file text-primary " id="cursosXlsx" name="cursosXlsx"
+                   data-uploadUrl="/uploadCourse"
                    onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</form>
+<form method="post" class="subir-archivo" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-12">
       <div class="row m-b-1">
         <div class="col-sm-6 offset-sm-3">
-          <button type="button" class="btn btn-success btn-block"
-                  onclick="document.getElementById('inputFile').click()">Agregar alumnos
-          </button>
+          <button type="submit" class="btn btn-success btn-block">Agregar alumnos</button>
           <div class="form-group inputDnD">
             <label class="sr-only" for="inputFile">File Upload</label>
             <input type="file" class="form-control-file text-success " id="inputFile" accept="image/*"
@@ -49,14 +54,19 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</form>
+<form method="post" class="subir-archivo" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-12">
       <div class="row m-b-1">
         <div class="col-sm-6 offset-sm-3">
-          <button type="button" class="btn btn-warning btn-block"
-                  onclick="document.getElementById('inputFile').click()">Agregar profesores
-          </button>
+          <button type="submit" class="btn btn-warning btn-block">Agregar profesores</button>
           <div class="form-group inputDnD">
             <label class="sr-only" for="inputFile">File Upload</label>
-            <input type="file" class="form-control-file text-warning " id="inputFile" accept="image/*"
+            <input type="file" class="form-control-file text-warning " id="profesXlsx" name="profesXlsx"
+                   data-uploadUrl="/uploadCourse"
                    onchange="readUrl(this)" data-title="Arrastra el archivo o haz click aqui">
           </div>
         </div>
