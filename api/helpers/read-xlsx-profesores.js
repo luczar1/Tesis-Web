@@ -22,6 +22,8 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    var startTime = new Date().getTime();
+
     let buf = sails.fs.readFileSync(inputs.filePath);
     let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
@@ -37,7 +39,7 @@ module.exports = {
       let profesor = {};
       profesor.codCurso = [];
       profesor.clave = json[key]['Clave'];
-      profesor.codCurso.push(json[key]['Cod.Presup.']);
+      profesor.codCurso.push(json[key]['Cod.Presup.'].toString());
       profesor.apellido = json[key]['Apellido y nombre'].split(",")[0].trim();
       profesor.nombre = json[key]['Apellido y nombre'].split(",")[1].trim();
       profesor.caracter = json[key]['Caráter'];
@@ -67,7 +69,7 @@ module.exports = {
         profesoresUnicos.push(profesor);
       }
       else {
-        busqueda.codCurso.push(profesor.codCurso);
+        busqueda.codCurso.push(profesor.codCurso.toString());
       }
     }
 
@@ -84,6 +86,18 @@ module.exports = {
         errores.push({documento: profesoresUnicos[key].doc, nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "Error en el DNI"});
       }
       else {
+        let cursos = await Curso.find({
+          codigo: {
+            in: profesoresUnicos[key].codCurso
+          }
+        });
+
+        let arrIdCursos = []
+
+        for (key2 in cursos) {
+          arrIdCursos.push(cursos[key2].id);
+        }
+
         await Docente.findOrCreate({documento: profesoresUnicos[key].doc},
           {
             clave: profesoresUnicos[key].clave,
@@ -93,8 +107,15 @@ module.exports = {
             documento: profesoresUnicos[key].doc,
             email: profesoresUnicos[key].email,
             telefono: profesoresUnicos[key].tel,
+            cursos: arrIdCursos
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
+            /*let cursos = await Curso.find({
+              codigo: {
+                in: profesoresUnicos[key].codCurso
+              }
+            });*/
+
             if (!wasCreated) {
               let found = profesoresUnicos.find((e) => {
                 return e.doc == newOrExistingRecord.documento
@@ -107,25 +128,19 @@ module.exports = {
                 tipoDocumento: found.tipoDoc,
                 documento: found.doc,
                 email: found.email,
-                telefono: found.tel,});
+                telefono: found.tel,
+                cursos: arrIdCursos
+              });
 
             }
           });
       }
-
     }
 
-    /*for (key in profesoresUnicos) {
-      let cursos = await Curso.find({
-        codigo: { in: profesoresUnicos[key].codCurso }
-      });
+    var endTime = new Date().getTime();
 
-      sails.log(cursos);
-      //await Docente.addToCollection(prof.id, 'cursos', [curso.id]);
-    }*/
+    sails.log(endTime - startTime);
 
-
-    //sails.log(errores);
     // All done.
     return exits.success();
 
