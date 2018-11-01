@@ -20,14 +20,14 @@ module.exports = {
 
       if (uploadedFiles.length === 0 ) {
         //Si no hay archivos subidos, devuelvo bad request
-        //res.badRequest();
+        res.badRequest();
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
         await sails.helpers.readXls.with({filePath: uploadedFiles[0].fd});
 
         //Devuelvo ok
-        res.ok()
+        res.json({status: 'OK'})
       }
 
 
@@ -47,7 +47,7 @@ module.exports = {
         await sails.helpers.readXlsxProfesores.with({filePath: uploadedFiles[0].fd});
 
         //Devuelvo ok
-        res.ok()
+        res.json({status: 'OK'})
       }
 
 

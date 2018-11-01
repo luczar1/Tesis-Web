@@ -74,9 +74,11 @@ var jsFilesToInject = [
   'plugins/jquery/jquery.js',
   'plugins/bootstrap/js/bootstrap.js',
   'plugins/vue/vue.js',
+  'plugins/admin-dashboard/bootstrap-notify.js',
   'plugins/vue/vue-resource.js',
+  'plugins/jquery-fileupload.js',
   'dependencies/**/*.js',
-
+  'assets/js/uploadFiles.js',
 
   // All of the rest of your custom client-side js files will be injected here,
   // in no particular order.  To customize the ordering, add additional items
