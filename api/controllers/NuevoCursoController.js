@@ -44,10 +44,15 @@ module.exports = {
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
-        await sails.helpers.readXlsxProfesores.with({filePath: uploadedFiles[0].fd});
+        let errores = await sails.helpers.readXlsxProfesores.with({filePath: uploadedFiles[0].fd});
+        let retJson = {
+          status: "OK",
+          cantErrores: errores.length,
+          errores: errores
+        };
 
-        //Devuelvo ok
-        res.json({status: 'OK'})
+        //Devuelvo los datos de retorno
+        res.json(retJson)
       }
 
 

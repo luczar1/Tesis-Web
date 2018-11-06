@@ -32,7 +32,6 @@ module.exports = {
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
     let profesoresUnicos = [];
-    let profesoresConCursos = [];
     let errores = [];
 
     for (let key in json) {
@@ -142,7 +141,8 @@ module.exports = {
     sails.log(endTime - startTime);
 
     // All done.
-    return exits.success();
+
+    return exits.success(errores);
 
   }
 
