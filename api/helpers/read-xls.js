@@ -47,18 +47,47 @@ module.exports = {
       cursoOk.cupoMax = json[curso]['Cupo Max.'];
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
 
+      if (cursoOk.estado != "Terminado") {
+
+        sails.request.get({
+          url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + cursoOk.codigo
+        }, function (error, response, body) {
+          if (error) {
+            console.log(error);
+          }
+          else {
+            try {
+              let json = JSON.parse(body);
+              if (json[0].cext_foto != null) {
+                cursoOk.img = json[0].cext_foto;
+                console.log(cursoOk.img);
+              }
+              if (json[0].descripcion != null) {
+                cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
+                console.log(cursoOk.descripcion);
+              }
+            }
+            catch (e) {
+              sails.log.error(e);
+              sails.log(cursoOk.codigo);
+            }
+          }
+        });
+
+        let sleep = sails.sleep;
+        sleep(250);
+      }
+
       cursosOk.push(cursoOk);
     }
-    //await Curso.destroy ({});
-    //await Curso.createEach (cursosOk);
 
 
     for (key in cursosOk) {
 
       await Curso.findOrCreate({codigo: cursosOk[key].codigo}, cursosOk[key])
         .exec(async (err, newOrExistingRecord, wasCreated) => {
-          // sails.log(wasCreated);
-          if (!wasCreated) {
+          sails.log(err);
+          if (wasCreated != null && !wasCreated) {
 
             let found = cursosOk.find((e) => {
               return e.codigo === newOrExistingRecord.codigo
@@ -84,6 +113,7 @@ module.exports = {
     return exits.success(cursosOk);
 
   }
+
 
 
 };
