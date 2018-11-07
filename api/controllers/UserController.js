@@ -78,9 +78,9 @@ module.exports = {
     let currentUser = await User.findOne({id: req.session.userId});
     let navBarForUser = [];
 
-    for (key in navbar) {
-      if (navbar[key].accesLvl.includes(currentUser.accessLvl)){
-          navBarForUser.push(navbar[key]);
+    for (item of navbar) {
+      if (item.accesLvl.includes(currentUser.tipoUser)){
+          navBarForUser.push(item);
       }
     }
     res.json(navBarForUser);

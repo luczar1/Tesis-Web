@@ -4,7 +4,7 @@ module.exports = async function (req, res, next) {
   let currentUser = await User.findOne({id: req.session.userId});
 
 
-  if (currentUser.accessLvl == 'admin') {
+  if (currentUser.tipoUser == 'admin') {
     return next();
   }
 

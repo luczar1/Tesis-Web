@@ -24,7 +24,7 @@ module.exports = {
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
-        await sails.helpers.readXls.with({filePath: uploadedFiles[0].fd});
+       Admin.cargarCursos(uploadedFiles[0].fd);
 
         //Devuelvo ok
         res.json({status: 'OK'})
@@ -44,15 +44,10 @@ module.exports = {
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
-        let errores = await sails.helpers.readXlsxProfesores.with({filePath: uploadedFiles[0].fd});
-        let retJson = {
-          status: "OK",
-          cantErrores: errores.length,
-          errores: errores
-        };
+        let errores = await Admin.cargarProfesores(uploadedFiles[0].fd);
 
         //Devuelvo los datos de retorno
-        res.json(retJson)
+        res.json(errores)
       }
 
 
@@ -69,7 +64,7 @@ module.exports = {
       }
       else {
         //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
-        await sails.helpers.readXlsxAlumnos.with({filePath: uploadedFiles[0].fd});
+        await Admin.cargarAlumnos(uploadedFiles[0].fd);
 
         //Devuelvo ok
         res.json({status: 'OK'})

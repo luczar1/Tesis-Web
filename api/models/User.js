@@ -27,10 +27,10 @@ module.exports = {
     /**
      * Relacion con admin
      */
-    admin: {
+    /*admin: {
       model: 'admin',
       unique: true
-    }
+    }*/
   },
 
   login: async function(email, pass, session) {
