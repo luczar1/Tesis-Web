@@ -8,9 +8,12 @@
 module.exports = {
 
   attributes: {
-
     /**
-     * Codigo de curso.
+     * Codigo de curso (lo usan los alumnos)
+     */
+    codigoAlternativo: {type: 'string'},
+    /**
+     * Codigo de presupuesto del curso (usado en la web)
      */
     codigo: {type: "number"},
 

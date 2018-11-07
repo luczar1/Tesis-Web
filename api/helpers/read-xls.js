@@ -35,6 +35,7 @@ module.exports = {
 
     for (let curso in json) {
       let cursoOk = {};
+      cursoOk.codigoAlternativo = json[curso]['Código'];
       cursoOk.codigo = json[curso]['Cod.Presup.'];
       cursoOk.nombre = json[curso]['Curso'];
       cursoOk.UA = json[curso]['U.A.'];
@@ -46,6 +47,8 @@ module.exports = {
       cursoOk.estado = json[curso]['Estado'];
       cursoOk.cupoMax = json[curso]['Cupo Max.'];
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
+
+      sails.log(cursoOk.codigoAlternativo);
 
       if (cursoOk.estado != "Terminado") {
 

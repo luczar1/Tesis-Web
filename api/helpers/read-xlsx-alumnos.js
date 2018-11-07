@@ -29,7 +29,7 @@ module.exports = {
 
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
-    let alumnosOk = [];
+    // let alumnosOk = [];
     let alumnosUnicos = [];
 
     sails.log('Por entrar al for');
@@ -62,13 +62,11 @@ module.exports = {
       alumnosOk.pago = json[alumno]['Pago'];
 
 
-
-
-      var busqueda = alumnosUnicos.find(function(element) {
+      var busqueda = alumnosUnicos.find(function (element) {
         return element.doc == alumnosOk.doc;
       });
 
-      if(!busqueda) {
+      if (!busqueda) {
         alumnosUnicos.push(alumnosOk);
       }
       else {
@@ -76,12 +74,40 @@ module.exports = {
       }
     }
 
-    for (key in alumnosUnicos) {
+    sails.log(alumnosUnicos);
 
-      await Alumno.findOrCreate({codigo: alumnosUnicos[key].codigo}, alumnosUnicos[key])
+    for (let key in alumnosUnicos) {
+
+      let cursos = await Curso.find({
+        codigoAlternativo: {
+          in: alumnosUnicos[key].codCurso
+        }
+      });
+
+      let arrIdCursos = [];
+
+      for (let key2 in cursos) {
+        arrIdCursos.push(cursos[key2].id);
+      }
+      //sails.log(arrIdCursos);
+      //sails.log(alumnosUnicos[key].doc);
+      await Alumno.findOrCreate({documento: alumnosUnicos[key].doc}, {
+
+        clave: alumnosUnicos[key].clave,
+        apellido: alumnosUnicos[key].apellido,
+        nombre: alumnosUnicos[key].nombre,
+        tipoDocumento: alumnosUnicos[key].tipoDoc,
+        documento: alumnosUnicos[key].doc,
+        email: alumnosUnicos[key].email,
+        telefono: alumnosUnicos[key].tel,
+        cursos: arrIdCursos,
+        documentacion: alumnosUnicos[key].documentacion,
+        pago: alumnosUnicos[key].pago,
+
+      })
         .exec(async (err, newOrExistingRecord, wasCreated) => {
-          // sails.log(wasCreated);
-          if (!wasCreated) {
+           sails.log(err);
+          if (wasCreated != null && !wasCreated) {
 
             let found = alumnosUnicos.find((e) => {
               return e.codigo === newOrExistingRecord.codigo
@@ -94,10 +120,19 @@ module.exports = {
             delete found.alumnos;
 
             // sails.log(found);
-            await Alumno.update({id: newOrExistingRecord.id}, found);
+            await Alumno.update({id: newOrExistingRecord.id}, {
+
+                clave: found.clave,
+                apellido: found.apellido,
+                nombre: found.nombre,
+                tipoDocumento: found.tipoDoc,
+                documento: found.doc,
+                email: found.email,
+                telefono: found.tel,
+                cursos: arrIdCursos
+              });
 
           }
-          console.log(alumnosUnicos[key].apellido);
         });
     }
 
