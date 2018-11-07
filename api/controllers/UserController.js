@@ -62,7 +62,7 @@ module.exports = {
         accesLvl: ['admin'],
       },
       {
-        title: "CARGAR CURSOS",
+        title: "CARGAR ARCHIVOS",
         icon: "fas fa-upload",
         link: "/panel/uploadCourse",
         accesLvl: ['admin'],
