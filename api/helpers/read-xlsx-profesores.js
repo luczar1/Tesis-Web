@@ -24,6 +24,7 @@ module.exports = {
 
     var startTime = new Date().getTime();
 
+
     let buf = sails.fs.readFileSync(inputs.filePath);
     let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
@@ -75,6 +76,7 @@ module.exports = {
 
 
     for (key in profesoresUnicos) {
+
       if (profesoresUnicos[key].doc == null) {
         errores.push({nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "No tiene definido documento"});
       }
@@ -91,7 +93,7 @@ module.exports = {
           }
         });
 
-        let arrIdCursos = []
+        let arrIdCursos = [];
 
         for (key2 in cursos) {
           arrIdCursos.push(cursos[key2].id);
