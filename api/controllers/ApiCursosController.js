@@ -31,7 +31,26 @@ module.exports = {
     let curso = await Curso.findOne({id: req.param('id')});
     curso.img = imgPath + curso.img;
 
-    res.json(curso);
+    sails.request.get({
+      url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + curso.codigo
+    }, function (error, response, body) {
+      if (error) {
+        sails.log(error);
+      }
+      else {
+        let jsonResp = JSON.parse(body);
+
+        try {
+          curso.inscripcionLink = jsonResp[0].link;
+        }
+        catch (e) {
+          sails.log(e);
+        }
+      }
+      res.json(curso);
+    });
+
+
 
 
 
