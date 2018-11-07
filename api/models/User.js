@@ -24,6 +24,12 @@ module.exports = {
      */
     tipoUser: {type: "string"},
 
+    /**
+     * Relacion con admin
+     */
+    admin: {
+      model: 'admin'
+    }
   },
 
   login: async function(email, pass, session) {
