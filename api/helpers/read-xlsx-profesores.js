@@ -87,12 +87,7 @@ module.exports = {
         errores.push({documento: profesoresUnicos[key].doc, nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "Error en el DNI"});
       }
       else {
-        let cursos = await Curso.find({
-          codigo: {
-            in: profesoresUnicos[key].codCurso
-          }
-        });
-
+        let cursos = await Curso.buscarCursos(profesoresUnicos[key].codCurso);
         let arrIdCursos = [];
 
         for (key2 in cursos) {

@@ -99,7 +99,18 @@ module.exports = {
     }
   },
 
+
+  buscarCursos: async function(codigosCurso) {
+    let cursos = await Curso.find({
+      codigo: {
+        in: codigosCurso
+      }
+    });
+    return cursos;
+  },
   consultarJson: function (codigo) {
+
+
     sails.request.get({
       url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + codigo
     }, function (error, response, body) {

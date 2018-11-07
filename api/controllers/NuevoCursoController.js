@@ -63,9 +63,7 @@ module.exports = {
         //res.badRequest();
       }
       else {
-        //Si esta correcto, ejecuto el helper para parsear y subir a la base de datos
         await Admin.cargarAlumnos(uploadedFiles[0].fd);
-
         //Devuelvo ok
         res.json({status: 'OK'})
       }
