@@ -8,13 +8,19 @@
 module.exports = {
   getCursos: async function (req, res) {
 
+    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
+
     let cursos = await Curso.find(
       {
-        select: ['id', 'nombre', 'img'],
+        select: ['id', 'nombre', 'img', 'categoria', 'descripcion'],
         where: {
           estado: {'!=': 'Terminado'}
         }
       });
+
+    for (let curso of cursos) {
+      curso.img = imgPath + curso.img;
+    }
 
     res.json(cursos);
 
