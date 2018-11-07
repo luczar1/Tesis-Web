@@ -26,9 +26,10 @@ module.exports = {
 
   },
   getCurso: async function (req, res) {
-
+    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
 
     let curso = await Curso.findOne({id: req.param('id')});
+    curso.img = imgPath + curso.img;
 
     res.json(curso);
 
