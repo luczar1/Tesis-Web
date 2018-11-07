@@ -52,35 +52,26 @@ module.exports = {
 
       if (cursoOk.estado != "Terminado") {
 
-        sails.request.get({
-          url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + cursoOk.codigo
-        }, function (error, response, body) {
-          if (error) {
-            console.log(error);
-          }
-          else {
-            try {
-              let json = JSON.parse(body);
-              if (json[0].cext_foto != null) {
-                cursoOk.img = json[0].cext_foto;
-                console.log(cursoOk.img);
-              }
-              if (json[0].descripcion != null) {
-                cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
-                console.log(cursoOk.descripcion);
-              }
+        let req = await Curso.consultarJson(cursoOk.codigo);
+          try {
+            let json = JSON.parse(body);
+            if (json[0].cext_foto != null) {
+              cursoOk.img = json[0].cext_foto;
+              console.log(cursoOk.img);
             }
-            catch (e) {
-              sails.log.error(e);
-              sails.log(cursoOk.codigo);
+            if (json[0].descripcion != null) {
+              cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
+              console.log(cursoOk.descripcion);
             }
           }
-        });
-
-        let sleep = sails.sleep;
-        sleep(250);
+          catch (e) {
+            sails.log.error(e);
+            sails.log(cursoOk.codigo);
+          }
       }
 
+      let sleep = sails.sleep;
+      sleep(250);
       cursosOk.push(cursoOk);
     }
 

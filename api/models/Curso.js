@@ -99,5 +99,24 @@ module.exports = {
     }
   },
 
+  consultarJson: async function (codigo) {
+    sails.request.get({
+      url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + codigo
+    }, function (error, response, body) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        try {
+          let json = JSON.parse(body);
+        }
+        catch (e) {
+          sails.log.error(e);
+        }
+        return json;
+      }
+    });
+  },
+
 };
 
