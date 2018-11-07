@@ -45,6 +45,11 @@ module.exports.routes = {
   '/user/*': "UserController.notFound",
 
 
+  //API
+  'get /api/curso': 'ApiCursosController.getCursos',
+  'get /api/curso/:id': 'ApiCursosController.getCurso',
+
+
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *
