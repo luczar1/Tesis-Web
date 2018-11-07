@@ -28,7 +28,8 @@ module.exports = {
      * Relacion con admin
      */
     admin: {
-      model: 'admin'
+      model: 'admin',
+      unique: true
     }
   },
 

@@ -23,7 +23,8 @@ module.exports = {
      * Relacion con clase madre
      */
     user: {
-      model: 'user'
+      collection: 'user',
+      via: 'admin'
     }
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
