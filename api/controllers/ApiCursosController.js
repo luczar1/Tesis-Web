@@ -42,6 +42,7 @@ module.exports = {
 
         try {
           curso.inscripcionLink = jsonResp[0].link;
+          curso.precio = jsonResp[0].precio;
         }
         catch (e) {
           sails.log(e);
