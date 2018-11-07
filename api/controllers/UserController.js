@@ -15,13 +15,12 @@ module.exports = {
     let email = req.param("email");
     let pass = req.param("pass");
 
-    //Chequeo el usuario enviando las variables @email y @pass
-    let usr = await User.checkUser(email, pass);
+    //Chequeo el usuario enviando las variables @email, @pass y la variable de session
+    let usrLogged = await User.login(email, pass, req.session);
 
-    if (usr) {
+    if (usrLogged) {
       //Si esta correcto guardo el ID en una variable de session y
       //redirecciono a /panel/home
-      req.session.userId = usr.id;
       res.redirect("/panel/home")
     }
     else {
@@ -32,8 +31,8 @@ module.exports = {
   },
 
   logout: function (req,res) {
-    //Borro el id de la variable de session y redirecciono a login
-    req.session.userId = null;
+    //Paremtro la variable de session
+    User.logout(req.session);
     res.redirect("/login");
   },
   showLogin: async function (req, res) {
