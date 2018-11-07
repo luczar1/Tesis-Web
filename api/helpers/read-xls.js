@@ -54,13 +54,12 @@ module.exports = {
 
         let req = await Curso.consultarJson(cursoOk.codigo);
           try {
-            let json = JSON.parse(body);
-            if (json[0].cext_foto != null) {
-              cursoOk.img = json[0].cext_foto;
+            if (req.cext_foto != null) {
+              cursoOk.img = req.cext_foto;
               console.log(cursoOk.img);
             }
-            if (json[0].descripcion != null) {
-              cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
+            if (req.descripcion != null) {
+              cursoOk.descripcion = sails.utf8.decode(req.descripcion);
               console.log(cursoOk.descripcion);
             }
           }

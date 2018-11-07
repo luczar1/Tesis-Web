@@ -113,7 +113,7 @@ module.exports = {
         catch (e) {
           sails.log.error(e);
         }
-        return json;
+        return json[0];
       }
     });
   },
