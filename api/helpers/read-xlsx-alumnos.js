@@ -74,7 +74,6 @@ module.exports = {
       }
     }
 
-    sails.log(alumnosUnicos);
 
     for (let key in alumnosUnicos) {
 
@@ -89,8 +88,7 @@ module.exports = {
       for (let key2 in cursos) {
         arrIdCursos.push(cursos[key2].id);
       }
-      //sails.log(arrIdCursos);
-      //sails.log(alumnosUnicos[key].doc);
+
       await Alumno.findOrCreate({documento: alumnosUnicos[key].doc}, {
 
         clave: alumnosUnicos[key].clave,
@@ -106,7 +104,6 @@ module.exports = {
 
       })
         .exec(async (err, newOrExistingRecord, wasCreated) => {
-           sails.log(err);
           if (wasCreated != null && !wasCreated) {
 
             let found = alumnosUnicos.find((e) => {
