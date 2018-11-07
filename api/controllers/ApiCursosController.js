@@ -7,29 +7,13 @@
 
 module.exports = {
   getCursos: async function (req, res) {
-
-    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
-
-    let cursos = await Curso.find(
-      {
-        select: ['id', 'nombre', 'img', 'categoria', 'descripcion'],
-        where: {
-          estado: {'!=': 'Terminado'}
-        }
-      });
-
-    for (let curso of cursos) {
-      curso.img = imgPath + curso.img;
-    }
-
+    let cursos = await User.getCursos();
     res.json(cursos);
-
   },
-  getCurso: async function (req, res) {
-    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
 
-    let curso = await Curso.findOne({id: req.param('id')});
-    curso.img = imgPath + curso.img;
+  getCurso: async function (req, res) {
+    let cursoId = req.param('id');
+    let curso = await User.getCurso(cursoId);
 
     sails.request.get({
       url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + curso.codigo
@@ -38,9 +22,8 @@ module.exports = {
         sails.log(error);
       }
       else {
-        let jsonResp = JSON.parse(body);
-
         try {
+          let jsonResp = JSON.parse(body);
           curso.inscripcionLink = jsonResp[0].link;
           curso.precio = jsonResp[0].precio;
         }
@@ -50,12 +33,6 @@ module.exports = {
       }
       res.json(curso);
     });
-
-
-
-
-
-
   },
 
 };
