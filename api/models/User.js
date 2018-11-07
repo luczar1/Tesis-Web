@@ -20,9 +20,9 @@ module.exports = {
     pass: {type: "string"},
 
     /**
-     * Access level.
+     * Tipo de usuario (Alumno, Docente, Admin).
      */
-    accessLvl: {type: "string"},
+    tipoUser: {type: "string"},
 
   },
 
@@ -50,6 +50,34 @@ module.exports = {
     //Si las contraseñas cifradas no concuerdan, devuelvo false
 
     return false;
+  },
+
+  getCursos: async function() {
+    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
+
+    let cursos = await Curso.find(
+      {
+        select: ['id', 'nombre', 'img', 'categoria', 'descripcion'],
+        where: {
+          estado: {'!=': 'Terminado'}
+        }
+      });
+
+    for (let curso of cursos) {
+      curso.img = imgPath + curso.img;
+    }
+
+    return cursos;
+
+  },
+
+  getCurso: async function(id) {
+    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
+
+    let curso = await Curso.findOne({id: id});
+    curso.img = imgPath + curso.img;
+
+    return curso;
   },
 
   logout: function (session) {
