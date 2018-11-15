@@ -35,11 +35,24 @@ module.exports = {
     let profesoresUnicos = [];
     let errores = [];
 
+    let cursos = await Curso.find({
+      select: ['id', 'codigo']
+    });
+
+
     for (let key in json) {
       let profesor = {};
       profesor.codCurso = [];
       profesor.clave = json[key]['Clave'];
-      profesor.codCurso.push(json[key]['Cod.Presup.'].toString());
+
+      var busquedaCurso = cursos.find(function(element) {
+        return element.codigo == json[key]['Cod.Presup.'];
+      });
+
+      if (busquedaCurso) {
+        profesor.codCurso.push(busquedaCurso.id);
+      }
+
       profesor.apellido = json[key]['Apellido y nombre'].split(",")[0].trim();
       profesor.nombre = json[key]['Apellido y nombre'].split(",")[1].trim();
       profesor.caracter = json[key]['Caráter'];
@@ -74,7 +87,6 @@ module.exports = {
     }
 
 
-
     for (key in profesoresUnicos) {
 
       if (profesoresUnicos[key].doc == null) {
@@ -87,12 +99,6 @@ module.exports = {
         errores.push({documento: profesoresUnicos[key].doc, nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "Error en el DNI"});
       }
       else {
-        let cursos = await Curso.buscarCursos(profesoresUnicos[key].codCurso);
-        let arrIdCursos = [];
-
-        for (key2 in cursos) {
-          arrIdCursos.push(cursos[key2].id);
-        }
 
         await Docente.findOrCreate({documento: profesoresUnicos[key].doc},
           {
@@ -103,7 +109,7 @@ module.exports = {
             documento: profesoresUnicos[key].doc,
             email: profesoresUnicos[key].email,
             telefono: profesoresUnicos[key].tel,
-            cursos: arrIdCursos
+            cursos: profesoresUnicos[key].codCurso
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
             /*let cursos = await Curso.find({
@@ -112,7 +118,7 @@ module.exports = {
               }
             });*/
 
-            if (!wasCreated) {
+            if (!wasCreated && wasCreated != null) {
               let found = profesoresUnicos.find((e) => {
                 return e.doc == newOrExistingRecord.documento
               });
@@ -125,7 +131,7 @@ module.exports = {
                 documento: found.doc,
                 email: found.email,
                 telefono: found.tel,
-                cursos: arrIdCursos
+                cursos: found.codCurso
               });
 
             }
