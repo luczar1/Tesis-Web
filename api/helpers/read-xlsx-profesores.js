@@ -36,12 +36,7 @@ module.exports = {
     let profesoresUnicos = [];
     let errores = [];
 
-<<<<<<< HEAD
-    // traigo a memoria todos los cursos su id y su codigo
-    let cursos = await Curso.find({
-=======
     let cursosDB = await Curso.find({
->>>>>>> 3127346eb570dc4cef601f88fddf656acbed6869
       select: ['id', 'codigo']
     });
 
@@ -216,5 +211,5 @@ module.exports = {
     return exits.success(errores);
 
   }
-};
+}
 
