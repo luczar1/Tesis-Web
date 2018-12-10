@@ -35,6 +35,7 @@ module.exports = {
     let profesoresUnicos = [];
     let errores = [];
 
+    // traigo a memoria todos los cursos su id y su codigo
     let cursos = await Curso.find({
       select: ['id', 'codigo']
     });
@@ -144,6 +145,14 @@ module.exports = {
     sails.log(endTime - startTime);
 
     // All done.
+
+    for (key in errores){
+      await Logs.create({
+        pagina: 'Carga de docentes',
+        error: 'Profesor ' + errores[key].nombre + ' ' + errores[key].apellido + ' ' + errores[key].error
+      });
+
+    }
 
     return exits.success(errores);
 
