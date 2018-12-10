@@ -21,6 +21,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const util = require('util')
 
     var startTime = new Date().getTime();
 
@@ -35,28 +36,35 @@ module.exports = {
     let profesoresUnicos = [];
     let errores = [];
 
+<<<<<<< HEAD
     // traigo a memoria todos los cursos su id y su codigo
     let cursos = await Curso.find({
+=======
+    let cursosDB = await Curso.find({
+>>>>>>> 3127346eb570dc4cef601f88fddf656acbed6869
       select: ['id', 'codigo']
     });
 
 
     for (let key in json) {
       let profesor = {};
-      profesor.codCurso = [];
+      profesor.cursos = [];
       profesor.clave = json[key]['Clave'];
 
-      var busquedaCurso = cursos.find(function(element) {
+      var busquedaCurso = cursosDB.find(function (element) {
         return element.codigo == json[key]['Cod.Presup.'];
       });
 
       if (busquedaCurso) {
-        profesor.codCurso.push(busquedaCurso.id);
+        profesor.cursos.push({
+          idCurso: busquedaCurso.id,
+          caracter: json[key]['Caráter'],
+        });
       }
 
       profesor.apellido = json[key]['Apellido y nombre'].split(",")[0].trim();
       profesor.nombre = json[key]['Apellido y nombre'].split(",")[1].trim();
-      profesor.caracter = json[key]['Caráter'];
+      //profesor.caracter = json[key]['Caráter'];
       switch (json[key]['Documento'].split(" ")[0]) {
         case "DN":
           profesor.tipoDoc = "DNI";
@@ -75,29 +83,45 @@ module.exports = {
       profesor.email = json[key]['E-mail'];
       profesor.tel = json[key]['Teléfono'];
 
-      var busqueda = profesoresUnicos.find(function(element) {
+      var busqueda = profesoresUnicos.find(function (element) {
         return element.doc == profesor.doc;
       });
 
-      if(!busqueda) {
+      if (!busqueda) {
         profesoresUnicos.push(profesor);
       }
       else {
-        busqueda.codCurso.push(profesor.codCurso.toString());
+        busqueda.cursos.push(profesor.cursos[0]);
       }
     }
+
+    //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
 
 
     for (key in profesoresUnicos) {
 
       if (profesoresUnicos[key].doc == null) {
-        errores.push({nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "No tiene definido documento"});
+        errores.push({
+          nombre: profesoresUnicos[key].nombre,
+          apellido: profesoresUnicos[key].apellido,
+          error: "No tiene definido documento"
+        });
       }
       else if (profesoresUnicos[key].email == null) {
-        errores.push({documento: profesoresUnicos[key].doc, nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "No tiene definido email"});
+        errores.push({
+          documento: profesoresUnicos[key].doc,
+          nombre: profesoresUnicos[key].nombre,
+          apellido: profesoresUnicos[key].apellido,
+          error: "No tiene definido email"
+        });
       }
       else if (profesoresUnicos[key].tipoDoc == "DNI" && isNaN(profesoresUnicos[key].doc)) {
-        errores.push({documento: profesoresUnicos[key].doc, nombre: profesoresUnicos[key].nombre, apellido: profesoresUnicos[key].apellido, error: "Error en el DNI"});
+        errores.push({
+          documento: profesoresUnicos[key].doc,
+          nombre: profesoresUnicos[key].nombre,
+          apellido: profesoresUnicos[key].apellido,
+          error: "Error en el DNI"
+        });
       }
       else {
 
@@ -110,7 +134,11 @@ module.exports = {
             documento: profesoresUnicos[key].doc,
             email: profesoresUnicos[key].email,
             telefono: profesoresUnicos[key].tel,
-            cursos: profesoresUnicos[key].codCurso
+            cursos: profesoresUnicos[key].cursos.map((x) => {
+              if (x != null && x.idCurso != null) {
+                return x.idCurso;
+              }
+            })
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
             /*let cursos = await Curso.find({
@@ -118,11 +146,20 @@ module.exports = {
                 in: profesoresUnicos[key].codCurso
               }
             });*/
+            console.log(err);
+            let found = profesoresUnicos.find((e) => {
+              return e.doc == newOrExistingRecord.documento
+            });
+
+
+            found.id = newOrExistingRecord.id;
+
+            //sails.log(found);
 
             if (!wasCreated && wasCreated != null) {
-              let found = profesoresUnicos.find((e) => {
+              /*let found = profesoresUnicos.find((e) => {
                 return e.doc == newOrExistingRecord.documento
-              });
+              });*/
 
               await Docente.update({id: newOrExistingRecord.id}, {
                 clave: found.clave,
@@ -132,7 +169,11 @@ module.exports = {
                 documento: found.doc,
                 email: found.email,
                 telefono: found.tel,
-                cursos: found.codCurso
+                cursos: found.cursos.map((x) => {
+                  if (x != undefined) {
+                    return x.idCurso;
+                  }
+                })
               });
 
             }
@@ -140,8 +181,26 @@ module.exports = {
       }
     }
 
+    let cursosProfesoresDB = await DocentePorCurso.find({});
+
+    //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+
+    for (profe of profesoresUnicos) {
+      for (curso of profe.cursos) {
+        let CursoPorProfe = cursosProfesoresDB.find((element) => {
+          return element.docente == profe.id && element.curso == curso.id;
+        });
+
+        DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
+
+
+      }
+    }
+
+
     var endTime = new Date().getTime();
 
+    sails.log("ALTO TIME");
     sails.log(endTime - startTime);
 
     // All done.
@@ -157,7 +216,5 @@ module.exports = {
     return exits.success(errores);
 
   }
-
-
 };
 
