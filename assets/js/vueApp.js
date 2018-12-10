@@ -10,8 +10,8 @@ Vue.component('list-courses', {
   methods: {
     getCursosPage(pg) {
       let cursosRet = [];
-      const start = (pg - 1) * this.cantPerPage;
-      const end = pg * this.cantPerPage;
+      const start = (this.page - 1) * this.cantPerPage;
+      const end = this.page * this.cantPerPage;
 
       for (let i = start; i < end; i++) {
         if (this.search == "") {
