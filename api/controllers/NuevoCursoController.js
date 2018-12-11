@@ -10,7 +10,7 @@ module.exports = {
     //Envio la view uploadCurso usando el layout de admin
     res.view("pages/uploadCurso", {layout: "layouts/admin"});
   },
-  uploadXls: function (req, res) {
+  uploadXls: async function (req, res) {
     //El archivo viene con nombre cursosXlsx
     req.file('cursosXlsx').upload(async function (err, uploadedFiles) {
       if (err) {
