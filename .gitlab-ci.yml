@@ -60,7 +60,7 @@ production_deploy:
   stage: production
   script:
   - git remote add dokku dokku@migserv.ucc.edu.ar:fjsappadm
-  - git push dokku master
+  - git push dokku master --force
   - echo "🔥 Deployed to PRODUCTION 🔥"
   only:
   - master
