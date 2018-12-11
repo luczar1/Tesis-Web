@@ -1,7 +1,8 @@
-image: node:8.12.0
+image: node:8-alpine
 stages:
   - tests
   - deploy
+  - production
 
 version:
   stage: tests
@@ -10,6 +11,7 @@ version:
   - whoami
   only:
   - dev
+  - master
 
 run_tests:
   stage: tests
@@ -18,6 +20,7 @@ run_tests:
   - npm test
   only:
   - dev
+  - master
 
 deploy_staging_dev:
   stage: deploy
@@ -27,3 +30,12 @@ deploy_staging_dev:
   - echo "Deployed to staging server"
   only:
   - dev
+
+production_deploy:
+  stage: production
+  script:
+  - git remote add dokku dokku@migserv.ucc.edu.ar:fjsappadm
+  - git push dokku master
+  - echo "🔥 Deployed to PRODUCTION 🔥"
+  only:
+  - master
