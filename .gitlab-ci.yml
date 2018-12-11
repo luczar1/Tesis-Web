@@ -2,20 +2,29 @@ image: node:8.12.0
 
 
 stages:
+  - tests
   - deploy
-  - production
+
+
+run_tests:
+  stage: tests
+  script:
+  - npm install
+  - npm test
+  only:
+  - dev
+
 
 deploy_staging_dev:
   stage: deploy
   script:
-  - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git
-  - git push heroku dev:master
+  - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git dev:master
   - echo "🧪 Deployed to staging server 🧪"
   only:
   - dev
 
 production_deploy:
-  stage: production
+  stage: deploy
   before_script:
   - mkdir -p ~/.ssh
   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
