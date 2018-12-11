@@ -1,23 +1,9 @@
 image: node:8.12.0
 
-before_script:
-  - mkdir -p ~/.ssh
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - ssh-keyscan -H '172.16.66.128' >> ~/.ssh/known_hosts
 
 stages:
   - deploy
   - production
-
-run_tests:
-  stage: tests
-  script:
-  - npm install
-  - npm test
-  only:
-  - dev
-  - master
 
 deploy_staging_dev:
   stage: deploy
@@ -30,8 +16,14 @@ deploy_staging_dev:
 
 production_deploy:
   stage: production
+  before_script:
+  - mkdir -p ~/.ssh
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - ssh-keyscan -H 'migserv.ucc.edu.ar' >> ~/.ssh/known_hosts
+
   script:
-  - git push dokku@172.16.66.128:fjsappadm HEAD:master
+  - git push dokku@migserv.ucc.edu.ar:fjsappadm HEAD:master
   - echo "🔥 Deployed to PRODUCTION 🔥"
   only:
   - master
