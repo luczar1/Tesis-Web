@@ -35,47 +35,31 @@ module.exports = {
     sails.log('Por entrar al for');
 
     for (let alumno in json) {
-      let alumnosOk = {};
-      alumnosOk.clave = json[alumno]['Clave'];
-      alumnosOk.apellido = json[alumno]['Apellido y nombre'].split(",")[0].trim();
-      alumnosOk.nombre = json[alumno]['Apellido y nombre'].split(",")[1].trim();
-      switch (json[alumno]['Documento'].split(" ")[0]) {
-        case "DN":
-          alumnosOk.tipoDoc = "DNI";
-          break;
-        case "PA":
-          alumnosOk.tipoDoc = "PASAPORTE";
-          break;
-        case "LE":
-          alumnosOk.tipoDoc = "LE";
-          break;
-        case "LC":
-          alumnosOk.tipoDoc = "LC";
-          break;
-      }
-      alumnosOk.doc = json[alumno]['Documento'].split(" ")[1];
-      alumnosOk.codCurso = [];
-      alumnosOk.codCurso.push(json[alumno]['Código'].toString());
-      alumnosOk.email = json[alumno]['E-mail'];
-      alumnosOk.tel = json[alumno]['Teléfono'];
-      alumnosOk.documentacion = json[alumno]['Docu'];
-      alumnosOk.pago = json[alumno]['Pago'];
+      let alumnosOk = getAlumno(json[alumno]);
 
-
-      var busqueda = alumnosUnicos.find(function (element) {
-        return element.doc == alumnosOk.doc;
+      let busqueda = alumnosUnicos.find(function (element) {
+        return element.doc === alumnosOk.doc;
       });
 
       if (!busqueda) {
         alumnosUnicos.push(alumnosOk);
-      }
-      else {
+      } else if (busqueda.codCurso.includes(alumnosOk.codCurso.toString())) {
+        busqueda.documentacion = alumnosOk.documentacion || busqueda.documentacion;
+        busqueda.pago = alumnosOk.pago || busqueda.pago;
+      } else {
         busqueda.codCurso.push(alumnosOk.codCurso.toString());
       }
     }
 
+    // let cursosDB = await Curso.find({
+    //   select: ['id', 'codigo']
+    // });
 
     for (let key in alumnosUnicos) {
+
+      // let busquedaCurso = cursosDB.find(function (element) {
+      //   return element.codigo == alumnosUnicos[key]['Cod.Presup.'];
+      // });
 
       let cursos = await Curso.find({
         codigoAlternativo: {
@@ -136,8 +120,39 @@ module.exports = {
     // All done.
     return exits.success();
 
+  },
+
+  /**
+   * Recibe un array a partir del cual crea el objeto alumno.
+   * @param data
+   */
+  getAlumno: function(data) {
+    let alumno = {};
+    alumno.clave = data['Clave'];
+    alumno.apellido = data['Apellido y nombre'].split(",")[0].trim();
+    alumno.nombre = data['Apellido y nombre'].split(",")[1].trim();
+    switch (data['Documento'].split(" ")[0]) {
+      case "DN":
+        alumno.tipoDoc = "DNI";
+        break;
+      case "PA":
+        alumno.tipoDoc = "PASAPORTE";
+        break;
+      case "LE":
+        alumno.tipoDoc = "LE";
+        break;
+      case "LC":
+        alumno.tipoDoc = "LC";
+        break;
+    }
+    alumno.doc = data['Documento'].split(" ")[1];
+    alumno.codCurso = [];
+    alumno.codCurso.push(data['Código'].toString());
+    alumno.email = data['E-mail'];
+    alumno.tel = data['Teléfono'];
+    alumno.documentacion = data['Docu'].toLowerCase() === 'si';
+    alumno.pago = data['Pago'].toLowerCase() === 'si';
+    return alumno;
   }
-
-
 };
 

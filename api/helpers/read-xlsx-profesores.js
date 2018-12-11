@@ -21,9 +21,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const util = require('util')
+    const util = require('util');
 
-    var startTime = new Date().getTime();
+    let startTime = new Date().getTime();
 
 
     let buf = sails.fs.readFileSync(inputs.filePath);
@@ -47,7 +47,7 @@ module.exports = {
       profesor.cursos = [];
       profesor.clave = json[key]['Clave'];
 
-      var busquedaCurso = cursosDB.find(function (element) {
+      let busquedaCurso = cursosDB.find(function (element) {
         return element.codigo == json[key]['Cod.Presup.'];
       });
 
@@ -79,7 +79,7 @@ module.exports = {
       profesor.email = json[key]['E-mail'];
       profesor.tel = json[key]['Teléfono'];
 
-      var busqueda = profesoresUnicos.find(function (element) {
+      let busqueda = profesoresUnicos.find(function (element) {
         return element.doc == profesor.doc;
       });
 
@@ -194,7 +194,7 @@ module.exports = {
     }
 
 
-    var endTime = new Date().getTime();
+    let endTime = new Date().getTime();
 
     sails.log("ALTO TIME");
     sails.log(endTime - startTime);
