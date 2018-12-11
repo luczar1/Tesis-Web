@@ -7,18 +7,8 @@ before_script:
   - ssh-keyscan -H '172.16.66.128' >> ~/.ssh/known_hosts
 
 stages:
-  - tests
   - deploy
   - production
-
-version:
-  stage: tests
-  script:
-  - node --version
-  - whoami
-  only:
-  - dev
-  - master
 
 run_tests:
   stage: tests
