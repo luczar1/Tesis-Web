@@ -59,7 +59,7 @@ module.exports = {
       //  ```
       //--------------------------------------------------------------------------
      adapter: 'sails-mongo',
-     url: 'mongodb://fjsappadmDB:69ee1572414bd21f63d2535fade8ad0a@dokku-mongo-fjsappadmDB:27017/fjsappadmDB',
+     url: process.env.MONGO_URL,
       /****************************************************************************
       *                                                                           *
       * More adapter-specific options                                             *
