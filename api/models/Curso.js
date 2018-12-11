@@ -96,6 +96,14 @@ module.exports = {
       collection: "docente",
       via: "curso",
       through: "docenteporcurso"
+    },
+
+    /**
+     * Areas a las que pertenecen
+     */
+    areas: {
+      collection: 'area',
+      via: 'cursos'
     }
   },
 

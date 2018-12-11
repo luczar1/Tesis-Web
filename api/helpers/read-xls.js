@@ -32,6 +32,7 @@ module.exports = {
 
 
     let cursosOk = [];
+    let areaDB = await Area.find({});
 
     for (let curso in json) {
       let cursoOk = {};
@@ -47,6 +48,7 @@ module.exports = {
       cursoOk.estado = json[curso]['Estado'];
       cursoOk.cupoMax = json[curso]['Cupo Max.'];
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
+      cursoOk.areas = [];
 
       sails.log(cursoOk.codigoAlternativo);
 
@@ -68,6 +70,17 @@ module.exports = {
               if (json[0].descripcion != null) {
                 cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
                 console.log(cursoOk.descripcion);
+              }
+              if (json[0].id_area != null) {
+                let areas = json[0].id_area.split(";");
+                for(area of areas){
+                  if (area != '0')
+                  cursoOk.areas.push(areaDB.find(function (element)
+                  {
+                   return element.id_area == area;
+                  }).id);
+                }
+                console.log(cursoOk.areas);
               }
             }
             catch (e) {

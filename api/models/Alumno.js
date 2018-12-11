@@ -44,6 +44,9 @@ module.exports = {
      */
     telefono: {type: "string"},
 
+    /**
+     * Categoria a la que pertence
+     */
 
     /**
      * Cursos en los que se ha inscripto.

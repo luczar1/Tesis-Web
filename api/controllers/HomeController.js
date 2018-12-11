@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  show: function (req, res) {
+  show:  function (req, res) {
     //Envio la view home usando el layout de admin
     res.view("pages/home", {layout: "layouts/admin"});
   },
