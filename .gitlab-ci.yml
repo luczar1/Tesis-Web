@@ -1,28 +1,10 @@
 image: node:8.12.0
 
 before_script:
-   ## Install ssh-agent if not already installed, it is required by Docker.
-   ## (change apt-get to yum if you use an RPM-based image)
-   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-
-   ## Run ssh-agent (inside the build environment)
-   - eval $(ssh-agent -s)
-
-   ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
-   ## We're using tr to fix line endings which makes ed25519 keys work
-   ## without extra base64 encoding.
-   ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
-   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-
-   ## Create the SSH directory and give it the right permissions
-   - mkdir -p ~/.ssh
-   - chmod 700 ~/.ssh
-
-   ## Optionally, if you will be using any Git commands, set the user name and
-   ## and email.
-   ##
-   - git config --global user.email "gitlab@gitlab.ci"
-   - git config --global user.name "GitlabCI"
+  - mkdir -p ~/.ssh
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - ssh-keyscan -H '172.16.66.128' >> ~/.ssh/known_hosts
 
 stages:
   - tests
@@ -59,8 +41,7 @@ deploy_staging_dev:
 production_deploy:
   stage: production
   script:
-  - git remote add dokku dokku@migserv.ucc.edu.ar:fjsappadm
-  - git push dokku master --force
+  - git push dokku@172.16.66.128:fjsappadm master
   - echo "🔥 Deployed to PRODUCTION 🔥"
   only:
   - master
