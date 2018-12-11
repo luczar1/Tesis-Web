@@ -34,7 +34,7 @@ deploy_staging_dev:
   script:
   - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/fjs-web.git
   - git push heroku dev:master
-  - echo "Deployed to staging server"
+  - echo "🧪 Deployed to staging server 🧪"
   only:
   - dev
 
