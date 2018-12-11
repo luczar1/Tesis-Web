@@ -41,7 +41,7 @@ deploy_staging_dev:
 production_deploy:
   stage: production
   script:
-  - git push dokku@172.16.66.128:fjsappadm master
+  - git push dokku@172.16.66.128:fjsappadm HEAD:master
   - echo "🔥 Deployed to PRODUCTION 🔥"
   only:
   - master
