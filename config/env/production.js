@@ -58,7 +58,8 @@ module.exports = {
       //  sails_datastores__default__url=mysql://admin:myc00lpAssw2D@db.example.com:3306/my_prod_db
       //  ```
       //--------------------------------------------------------------------------
-
+     adapter: 'sails-mongo',
+     url: 'mongodb://fjsappadmDB:69ee1572414bd21f63d2535fade8ad0a@dokku-mongo-fjsappadmDB:27017/fjsappadmDB',
       /****************************************************************************
       *                                                                           *
       * More adapter-specific options                                             *
@@ -253,6 +254,7 @@ module.exports = {
     onlyAllowOrigins: [
       'https://fjs-web.herokuapp.com',
       'https://127.0.0.1:1337',
+      'https://fjsappadm.ucc.edu.ar'
     ],
 
 
@@ -322,7 +324,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    // trustProxy: true,
+    trustProxy: true,
 
   },
 
@@ -371,7 +373,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://example.com',
+    baseUrl: 'https://fjsappadm.ucc.edu.ar',
     internalEmailAddress: 'support@example.com',
 
     // mailgunDomain: 'mg.example.com',

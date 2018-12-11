@@ -10,10 +10,8 @@ Vue.component('list-courses', {
   methods: {
     getCursosPage(pg) {
       let cursosRet = [];
-      const start = (this.page - 1) * this.cantPerPage;
-      const end = this.page * this.cantPerPage;
 
-      for (let i = start; i < end; i++) {
+      for (let i = 0; i < this.cursos.length; i++) {
         if (this.search == "") {
           cursosRet.push(this.cursos[i]);
         }
@@ -42,6 +40,20 @@ Vue.component('list-courses', {
       }
       return false;
     },
+    loadCourses() {
+      this.$http.get('/curso')
+        .then((response) => {
+
+          let cursos = response.body;
+
+          for (let key in cursos) {
+            this.cursos.push(cursos[key]);
+
+          }
+        }, err => {
+          console.log(err);
+        });
+    },
     nextPage() {
       if (this.listPages().length > this.page) {
         this.page++;
@@ -52,6 +64,9 @@ Vue.component('list-courses', {
         this.page--;
       }
     }
+  },
+  beforeMount() {
+    this.loadCourses();
   },
   template: `<div><div class="card strpied-tabled-with-hover" >
                                 <div class="card-header ">
@@ -126,23 +141,9 @@ var app = new Vue({
       }
       return false;
     },
-    loadCourses() {
-      this.$http.get('/curso')
-        .then((response) => {
-
-          let cursos = response.body;
-
-          for (let key in cursos) {
-            this.cursos.push(cursos[key]);
-
-          }
-        }, err => {
-          console.log(err);
-        });
-    },
   },
   beforeMount() {
     this.loadNavBar();
-    this.loadCourses();
+    //this.loadCourses();
   },
 });
