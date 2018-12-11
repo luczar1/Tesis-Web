@@ -87,12 +87,15 @@ module.exports = {
         profesoresUnicos.push(profesor);
       }
       else {
-        busqueda.cursos.push(profesor.cursos[0]);
+        if (profesor.cursos[0]!=null){
+          busqueda.cursos.push(profesor.cursos[0]);
+        }
       }
     }
 
     //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
 
+    let findOrCreateCouter = 0;
 
     for (key in profesoresUnicos) {
 
@@ -131,7 +134,7 @@ module.exports = {
             email: profesoresUnicos[key].email,
             telefono: profesoresUnicos[key].tel,
             cursos: profesoresUnicos[key].cursos.map((x) => {
-              if (x != null && x.idCurso != null) {
+              if (x != null && x.idCurso != null && x !== undefined && x.idCurso !== undefined) {
                 return x.idCurso;
               }
             })
@@ -166,33 +169,39 @@ module.exports = {
                 email: found.email,
                 telefono: found.tel,
                 cursos: found.cursos.map((x) => {
-                  if (x != undefined) {
+                  if (x != null && x.idCurso != null && x != undefined && x.idCurso != undefined) {
                     return x.idCurso;
                   }
                 })
               });
 
             }
+
+
+
+            if (findOrCreateCouter >= profesoresUnicos.length - 1) {
+              let cursosProfesoresDB = await DocentePorCurso.find({});
+
+              //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+
+              for (profe of profesoresUnicos) {
+                for (curso of profe.cursos) {
+                  let CursoPorProfe = cursosProfesoresDB.find((element) => {
+                    return element.docente == profe.id && element.curso == curso.id;
+                  });
+
+                  DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
+
+
+                }
+              }
+            }
+            else {
+              findOrCreateCouter++;
+            }
           });
       }
     }
-
-    let cursosProfesoresDB = await DocentePorCurso.find({});
-
-    //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
-
-    for (profe of profesoresUnicos) {
-      for (curso of profe.cursos) {
-        let CursoPorProfe = cursosProfesoresDB.find((element) => {
-          return element.docente == profe.id && element.curso == curso.id;
-        });
-
-        DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
-
-
-      }
-    }
-
 
     let endTime = new Date().getTime();
 

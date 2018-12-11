@@ -29,130 +29,118 @@ module.exports = {
 
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
-    // let alumnosOk = [];
-    let alumnosUnicos = [];
+    let listadoAlumnos = [];
+
+    let cursosDB = await Curso.find({
+      select: ['id', 'codigoAlternativo']
+    });
 
     sails.log('Por entrar al for');
 
-    for (let alumno in json) {
-      let alumnosOk = getAlumno(json[alumno]);
-
-      let busqueda = alumnosUnicos.find(function (element) {
-        return element.doc === alumnosOk.doc;
+    for (let alumno of json) {
+      /**
+       * Se llama la funcion para pasar del excel a datos mas ordenados
+       */
+      listadoAlumnos = await sails.helpers.procesarAlumno.with({
+        alumnoXls: alumno,
+        listadoAlumnos: listadoAlumnos,
+        cursosDB: cursosDB,
       });
 
-      if (!busqueda) {
-        alumnosUnicos.push(alumnosOk);
-      } else if (busqueda.codCurso.includes(alumnosOk.codCurso.toString())) {
-        busqueda.documentacion = alumnosOk.documentacion || busqueda.documentacion;
-        busqueda.pago = alumnosOk.pago || busqueda.pago;
-      } else {
-        busqueda.codCurso.push(alumnosOk.codCurso.toString());
-      }
     }
 
-    // let cursosDB = await Curso.find({
-    //   select: ['id', 'codigo']
-    // });
+    // const util = require('util')
+    // console.log(util.inspect(listadoAlumnos, {showHidden: false, depth: null}))
+    //
+    // return;
+    let findOrCreateCounter= 0;
 
-    for (let key in alumnosUnicos) {
+    for (let key in listadoAlumnos) {
 
-      // let busquedaCurso = cursosDB.find(function (element) {
-      //   return element.codigo == alumnosUnicos[key]['Cod.Presup.'];
-      // });
 
-      let cursos = await Curso.find({
-        codigoAlternativo: {
-          in: alumnosUnicos[key].codCurso
-        }
-      });
+      await Alumno.findOrCreate({documento: listadoAlumnos[key].doc}, {
 
-      let arrIdCursos = [];
-
-      for (let key2 in cursos) {
-        arrIdCursos.push(cursos[key2].id);
-      }
-
-      await Alumno.findOrCreate({documento: alumnosUnicos[key].doc}, {
-
-        clave: alumnosUnicos[key].clave,
-        apellido: alumnosUnicos[key].apellido,
-        nombre: alumnosUnicos[key].nombre,
-        tipoDocumento: alumnosUnicos[key].tipoDoc,
-        documento: alumnosUnicos[key].doc,
-        email: alumnosUnicos[key].email,
-        telefono: alumnosUnicos[key].tel,
-        cursos: arrIdCursos,
-        documentacion: alumnosUnicos[key].documentacion,
-        pago: alumnosUnicos[key].pago,
-
+        clave: listadoAlumnos[key].clave,
+        apellido: listadoAlumnos[key].apellido,
+        nombre: listadoAlumnos[key].nombre,
+        tipoDocumento: listadoAlumnos[key].tipoDoc,
+        documento: listadoAlumnos[key].doc,
+        email: listadoAlumnos[key].email,
+        telefono: listadoAlumnos[key].tel,
+        cursos: listadoAlumnos[key].cursos.map((x) => {
+          if (x != null && x.id != null) {
+            return x.id;
+          }
+        })
       })
         .exec(async (err, newOrExistingRecord, wasCreated) => {
+
+          let found = listadoAlumnos.find((e) => {
+            return e.doc == newOrExistingRecord.documento
+          });
+
+
+          found.id = newOrExistingRecord.id;
+
           if (wasCreated != null && !wasCreated) {
-
-            let found = alumnosUnicos.find((e) => {
-              return e.codigo === newOrExistingRecord.codigo
-            });
-
-
-            delete found.id;
-            delete found.updatedAt;
-            delete found.createdAt;
-            delete found.alumnos;
 
             // sails.log(found);
             await Alumno.update({id: newOrExistingRecord.id}, {
 
-                clave: found.clave,
-                apellido: found.apellido,
-                nombre: found.nombre,
-                tipoDocumento: found.tipoDoc,
-                documento: found.doc,
-                email: found.email,
-                telefono: found.tel,
-                cursos: arrIdCursos
-              });
+              clave: found.clave,
+              apellido: found.apellido,
+              nombre: found.nombre,
+              tipoDocumento: found.tipoDoc,
+              documento: found.doc,
+              email: found.email,
+              telefono: found.tel,
+              cursos: listadoAlumnos[key].cursos.map((x) => {
+                if (x != null && x.id != null) {
+                  return x.id;
+                }
+              })
+            });
 
+          }
+
+          if (findOrCreateCounter >= listadoAlumnos.length - 1) {
+
+            let cursosAlumnosDB = await AlumnoPorCurso.find();
+            sails.log('DB: ');
+            sails.log(cursosAlumnosDB);
+            //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+
+            for (alumno of listadoAlumnos) {
+              // sails.log('Alumno: ');
+              // sails.log(alumno);
+              for (curso of alumno.cursos) {
+                let cursoPorAlumno = cursosAlumnosDB.find((element) => {
+                  return element.alumno == alumno.id && element.curso == curso.id;
+                });
+                sails.log('Alumno por curso: ');
+                sails.log(cursoPorAlumno);
+
+                await AlumnoPorCurso.update({id: cursoPorAlumno.id}, {
+                  documentacion: curso.documentacion,
+                  pago: curso.pago
+                })
+
+
+              }
+            }
+          }
+          else {
+            findOrCreateCounter++;
           }
         });
     }
+
+
 
     // All done.
     return exits.success();
 
   },
 
-  /**
-   * Recibe un array a partir del cual crea el objeto alumno.
-   * @param data
-   */
-  getAlumno: function(data) {
-    let alumno = {};
-    alumno.clave = data['Clave'];
-    alumno.apellido = data['Apellido y nombre'].split(",")[0].trim();
-    alumno.nombre = data['Apellido y nombre'].split(",")[1].trim();
-    switch (data['Documento'].split(" ")[0]) {
-      case "DN":
-        alumno.tipoDoc = "DNI";
-        break;
-      case "PA":
-        alumno.tipoDoc = "PASAPORTE";
-        break;
-      case "LE":
-        alumno.tipoDoc = "LE";
-        break;
-      case "LC":
-        alumno.tipoDoc = "LC";
-        break;
-    }
-    alumno.doc = data['Documento'].split(" ")[1];
-    alumno.codCurso = [];
-    alumno.codCurso.push(data['Código'].toString());
-    alumno.email = data['E-mail'];
-    alumno.tel = data['Teléfono'];
-    alumno.documentacion = data['Docu'].toLowerCase() === 'si';
-    alumno.pago = data['Pago'].toLowerCase() === 'si';
-    return alumno;
-  }
 };
 
