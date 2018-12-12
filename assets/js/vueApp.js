@@ -309,6 +309,7 @@ Vue.component('list-courses', {
                                             <tr>
                                               <th>Código</th>
                                               <th>Nombre</th>
+                                              <th>Vigencia</th>
                                               <th>Estado</th>
                                               <th>Inscriptos</th>
                                         </tr>
@@ -317,6 +318,7 @@ Vue.component('list-courses', {
                                             <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)" style="cursor: pointer">
                                                 <td><button class="btn vtn-default"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
+                                                <td>{{curso.vigente}}</td>
                                                 <td><i 
                                                 :class="{
                                                 'fas fa-play-circle text-success': curso.estado.toUpperCase() == 'INICIADO', 
