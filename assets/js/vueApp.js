@@ -1,3 +1,5 @@
+Vue.use(VTooltip);
+
 Vue.component('box-curso', {
   props: ['curso'],
   data: () => {
@@ -316,14 +318,29 @@ Vue.component('list-courses', {
                                         </thead>
                                         <tbody>
                                             <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)" style="cursor: pointer">
-                                                <td><button class="btn vtn-default"> {{curso.codigo}} </button></td>
+                                                <td><button class="btn btn-default"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
-                                                <td>{{curso.vigente}}</td>
-                                                <td><i 
+                                                <td><button 
                                                 :class="{
-                                                'fas fa-play-circle text-success': curso.estado.toUpperCase() == 'INICIADO', 
-                                                'fas fa-stop-circle text-danger': curso.estado.toUpperCase() == 'TERMINADO'}">
-                                                </i></td>
+                                                'btn btn-success': curso.vigente.toUpperCase() == 'VIGENTE', 
+                                                'btn btn-warning': curso.vigente.toUpperCase() == 'EN REPROGRAMACIÓN', 
+                                                'btn btn-danger': curso.vigente.toUpperCase() == 'CANCELADO', 
+                                                }">{{curso.vigente}}</button></td>
+                                                <td>
+                                                  <i v-tooltip='curso.estado' 
+                                                  v-if="curso.estado.toUpperCase() == 'INICIADO' 
+                                                  || curso.estado.toUpperCase() == 'TERMINADO'
+                                                  || curso.estado.toUpperCase() == 'POR INICIAR'"
+                                                  :class="{
+                                                  'fas fa-play-circle fa-2x text-success': curso.estado.toUpperCase() == 'INICIADO', 
+                                                  'fas fa-stop-circle fa-2x text-danger': curso.estado.toUpperCase() == 'TERMINADO',
+                                                  'fas fa-arrow-circle-right fa-2x text-warning': curso.estado.toUpperCase() == 'POR INICIAR',}">
+                                                  </i>
+                                                  <span 
+                                                  v-if="curso.estado.toUpperCase() != 'INICIADO' 
+                                                  && curso.estado.toUpperCase() != 'TERMINADO'
+                                                  && curso.estado.toUpperCase() != 'POR INICIAR'">{{curso.estado}}</span>
+                                                </td>
                                                 <td>{{curso.alumnos.length}}</td>
                                             </tr>
                                         </tbody>
@@ -378,7 +395,3 @@ var app = new Vue({
     //this.loadCourses();
   },
 });
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
