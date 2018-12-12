@@ -36,7 +36,6 @@ Vue.component('list-logs', {
       cantPerPage: 10,
       search: "",
       logs: [],
-      logMostrar: null,
     }
   },
   methods: {
@@ -48,14 +47,32 @@ Vue.component('list-logs', {
 
           for (let key in logs) {
             this.logs.push(logs[key]);
-
           }
+          this.logs = this.logs.sort(function (a, b) {
+            return b.createdAt - a.createdAt
+          });
         }, err => {
           console.log(err);
         });
     },
+    displayDate(timestamp) {
+      let fecha = new Date(timestamp);
+
+      let date = fecha.getDate();
+      let month = fecha.getMonth() + 1;
+      let year = fecha.getFullYear();
+
+      let hours = fecha.getHours() < 10 ? '0' + fecha.getHours() : fecha.getHours();
+      let minutes = fecha.getMinutes() < 10 ? '0' + fecha.getMinutes() : fecha.getMinutes();
+      let seconds = fecha.getSeconds() < 10 ? '0' + fecha.getSeconds() : fecha.getSeconds();
+
+      return fecha.getDate() + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ":" + seconds;
+    },
   },
-  template: `<div><div class="card strpied-tabled-with-hover" v-if="logMostrar == null">
+  beforeMount(){
+    this.loadLogs();
+  },
+  template: `<div><div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
                                     <h4 class="card-title">{{titulo}}</h4>
                                     <!--<p class="card-category">Here is a subtitle for this table</p>-->
@@ -75,12 +92,14 @@ Vue.component('list-logs', {
                                             <tr>
                                               <th>Tipo de error</th>
                                               <th>Descripción</th>
-                                        </tr>
+                                              <th>Fecha</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>{{logs.pagina}}</td>
-                                                <td>{{logs.error}}</td>                                              
+                                            <tr v-for="log in logs">
+                                                <td>{{log.pagina}}</td>
+                                                <td>{{log.error}}</td>
+                                                <td>{{displayDate(log.createdAt)}}</td>                                                     
                                             </tr>
                                         </tbody>
                                     </table>
