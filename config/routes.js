@@ -35,6 +35,7 @@ module.exports.routes = {
   'get /panel/uploadCourse': 'NuevoCursoController.show',
   'post /panel/uploadCourse': 'NuevoCursoController.uploadXls',
   'get /panel/listCourses': 'ListCursosController.show',
+  'get /panel/listLogs': 'ListLogsProfesoresController.show',
 
 
   //Funciones que sirven

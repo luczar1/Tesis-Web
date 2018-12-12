@@ -12,11 +12,13 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
+    /**
+     * De donde viene  el error
+     */
     pagina: {type: "string"},
 
     /**
-     * Apellido.
+     * Descripcion del error
      */
     error: {type: "string"},
 

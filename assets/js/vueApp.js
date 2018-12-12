@@ -28,6 +28,66 @@ Vue.component('box-curso', {
     </div>`
 });
 
+Vue.component('list-logs', {
+  props: ['titulo'],
+  data: () => {
+    return {
+      page: 1,
+      cantPerPage: 10,
+      search: "",
+      logs: [],
+      logMostrar: null,
+    }
+  },
+  methods: {
+    loadLogs() {
+      this.$http.get('/logs')
+        .then((response) => {
+
+          let logs = response.body;
+
+          for (let key in logs) {
+            this.logs.push(logs[key]);
+
+          }
+        }, err => {
+          console.log(err);
+        });
+    },
+  },
+  template: `<div><div class="card strpied-tabled-with-hover" v-if="logMostrar == null">
+                                <div class="card-header ">
+                                    <h4 class="card-title">{{titulo}}</h4>
+                                    <!--<p class="card-category">Here is a subtitle for this table</p>-->
+                                     <div class="form-inline float-right" v-if="logs.length > 0">
+                                      <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                          <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                         </div>
+                                        <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                      </div>
+                                     </div>
+                                </div>
+                                <div class="card-body table-full-width table-responsive" v-if="logs.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
+                                <div class="card-body table-full-width table-responsive" v-if="logs.length > 0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                              <th>Tipo de error</th>
+                                              <th>Descripción</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{logs.pagina}}</td>
+                                                <td>{{logs.error}}</td>                                              
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`,
+
+});
+
 
 Vue.component('list-courses', {
   props: ['titulo'],
