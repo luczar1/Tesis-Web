@@ -378,3 +378,7 @@ var app = new Vue({
     //this.loadCourses();
   },
 });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
