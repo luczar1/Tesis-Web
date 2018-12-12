@@ -1,29 +1,109 @@
 Vue.component('box-curso', {
   props: ['curso'],
   data: () => {
-    return {}
+    return {
+      section: 'general',
+    }
   },
-  methods: {},
+  methods: {
+    close() {
+      this.$emit('closeCurso', true);
+    },
+    getImgPath() {
+      return "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + this.curso.img;
+    },
+    changeSection(newSection) {
+      this.section = newSection;
+    },
+    toggleNotifAppDocentes(){
+      for (let docente of this.curso.docentes) {
+        docente.sendNotifApp = !docente.sendNotifApp;
+      }
+    },
+    toggleNotifEmailDocentes(){
+      for (let docente of this.curso.docentes) {
+        docente.sendNotifEmail = !docente.sendNotifEmail;
+      }
+    },
+  },
   template: `
-      <div class="card text-center" v-if="curso != null">
+      <div class="card" v-if="curso != null">
         <div class="card-header">
-          <h4 class="card-title">{{curso.nombre}}</h4>
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-        </ul>
+        <div class="row">
+          <div class="col-sm-10"><h4 class="card-title">{{curso.nombre}}</h4></div>
+          <div class="col-sm-2 text-right"><button type="button" class="btn btn-outline-dark" style="cursor: pointer" @click="close()"><i class="fas fa-times-circle fa-2x"></i></button></div>
+        </div>
+          
       </div>
       <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+      <div class="row">
+        <div class="col-sm-12">
+          <nav class="nav nav-pills">
+            <a class="nav-link" :class="{'active': section == 'general'}" href="#" @click="changeSection('general')">General</a>
+            <a class="nav-link" :class="{'active': section == 'profesores'}" href="#" @click="changeSection('profesores')">Profesores ({{this.curso.docentes.length}})</a>
+            <a class="nav-link" :class="{'active': section == 'alumnos'}" href="#" @click="changeSection('alumnos')">Alumnos ({{this.curso.alumnos.length}})</a>
+          </nav>
+        </div>
+       </div>
+       <div class="row">
+       
+        <div class="col-sm-12" v-if="section == 'general'">
+          <div class="row pt-3">
+            <div class="col-sm-4">
+              <img :src="getImgPath()" style="width: 100%;">
+            </div>
+            <div class="col-sm-8">
+              <div><b>Descripcion:</b> {{curso.descripcion}}</div>
+              <div><b>Inicio:</b> {{curso.inicio}}</div>
+              <div><b>Fin:</b> {{curso.fin}}</div>
+              <div><b>Estado:</b> {{curso.estado}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12" v-if="section == 'profesores'">
+          <div class="row pt-3">
+            <div class="col-sm-12">
+              <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Clave UCC</th>
+                      <th scope="col">Apellido</th>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">E-Mail</th>
+                      <th scope="col"><i class="fas fa-at"></i></th>
+                      <th scope="col"><i class="fas fa-bell"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="docente in curso.docentes">
+                      <td>{{docente.clave}}</td>
+                      <td>{{docente.apellido}}</td>
+                      <td>{{docente.nombre}}</td>
+                      <td>{{docente.email}}</td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifEmail"></td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifApp"></td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                      <th scope="col" colspan="4">Marcar/Desmarcar todos</th>
+                      <th scope="col"><i class="fas fa-at" style="cursor: pointer" @click="toggleNotifEmailDocentes()"></i></th>
+                      <th scope="col"><i class="fas fa-bell" style="cursor: pointer" @click="toggleNotifAppDocentes()"></i></th>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button type="button" class="btn btn-outline-success"><i class="fas fa-bell"></i> Enviar notificaciones</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12" v-if="section == 'alumnos'">
+        
+        </div>
+        </div>
       </div>
     </div>`
 });
@@ -69,21 +149,27 @@ Vue.component('list-logs', {
       return fecha.getDate() + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ":" + seconds;
     },
   },
-  beforeMount(){
+  beforeMount() {
     this.loadLogs();
   },
   template: `<div><div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
-                                    <h4 class="card-title">{{titulo}}</h4>
-                                    <!--<p class="card-category">Here is a subtitle for this table</p>-->
-                                     <div class="form-inline float-right" v-if="logs.length > 0">
-                                      <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                          <div class="input-group-text"><i class="fas fa-search"></i></div>
-                                         </div>
-                                        <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <h4 class="card-title">{{titulo}}</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                      <!--<p class="card-category">Here is a subtitle for this table</p>-->
+                                      <div class="form-inline float-right" v-if="logs.length > 0">
+                                        <div class="input-group mb-2 mr-sm-2">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                          </div>
+                                          <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                        </div>
                                       </div>
-                                     </div>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div class="card-body table-full-width table-responsive" v-if="logs.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
                                 <div class="card-body table-full-width table-responsive" v-if="logs.length > 0">
@@ -158,9 +244,21 @@ Vue.component('list-courses', {
           let cursos = response.body;
 
           for (let key in cursos) {
-            this.cursos.push(cursos[key]);
 
+            for (let alumno of cursos[key].alumnos) {
+              alumno.sendNotifEmail = false;
+              alumno.sendNotifApp = false;
+            }
+            for (let docente of cursos[key].docentes) {
+              docente.sendNotifEmail = false;
+              docente.sendNotifApp = false;
+            }
+
+            this.cursos.push(cursos[key]);
           }
+
+
+
         }, err => {
           console.log(err);
         });
@@ -177,6 +275,9 @@ Vue.component('list-courses', {
     },
     verCurso(curso) {
       this.cursoMostrar = curso;
+    },
+    closeCurso() {
+      this.cursoMostrar = null;
     }
   },
   beforeMount() {
@@ -184,16 +285,22 @@ Vue.component('list-courses', {
   },
   template: `<div><div class="card strpied-tabled-with-hover" v-if="cursoMostrar == null">
                                 <div class="card-header ">
-                                    <h4 class="card-title">{{titulo}}</h4>
-                                    <!--<p class="card-category">Here is a subtitle for this table</p>-->
-                                     <div class="form-inline float-right" v-if="cursos.length > 0">
-                                      <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                          <div class="input-group-text"><i class="fas fa-search"></i></div>
-                                         </div>
-                                        <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <h4 class="card-title">{{titulo}}</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                      <!--<p class="card-category">Here is a subtitle for this table</p>-->
+                                      <div class="form-inline float-right" v-if="cursos.length > 0">
+                                        <div class="input-group mb-2 mr-sm-2">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                          </div>
+                                          <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                        </div>
                                       </div>
-                                     </div>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div class="card-body table-full-width table-responsive" v-if="cursos.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
                                 <div class="card-body table-full-width table-responsive" v-if="cursos.length > 0">
@@ -207,7 +314,7 @@ Vue.component('list-courses', {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)">
+                                            <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)" style="cursor: pointer">
                                                 <td><button class="btn vtn-default"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
                                                 <td><i 
@@ -231,7 +338,7 @@ Vue.component('list-courses', {
                                   </div>-->
                                 </div>
                             </div>
-                             <box-curso :curso="cursoMostrar"></box-curso>
+                             <box-curso :curso="cursoMostrar" v-on:closeCurso="closeCurso()"></box-curso>
                             </div>`,
 });
 
