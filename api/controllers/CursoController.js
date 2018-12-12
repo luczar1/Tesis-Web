@@ -9,7 +9,9 @@ module.exports = {
 
   find: async function (req, res) {
     if (await User.isAdmin(req.session)) {
-      res.json(await Curso.find().populate('alumnos').populate('docentes'));
+      res.json(await Curso.find({
+        vigente: { '!=' : 'Recargado' }
+      }).populate('alumnos').populate('docentes'));
     } else {
       res.json(await Curso.find());
     }
