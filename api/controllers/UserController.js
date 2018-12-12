@@ -92,6 +92,5 @@ module.exports = {
     res.json(navBarForUser);
 
   },
-
 };
 
