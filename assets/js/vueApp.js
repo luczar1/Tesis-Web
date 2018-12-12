@@ -1,10 +1,43 @@
+Vue.component('box-curso', {
+  props: ['curso'],
+  data: () => {
+    return {}
+  },
+  methods: {},
+  template: `
+      <div class="card text-center" v-if="curso != null">
+        <div class="card-header">
+          <h4 class="card-title">{{curso.nombre}}</h4>
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>`
+});
+
+
 Vue.component('list-courses', {
-  props: ['cursos', 'titulo'],
+  props: ['titulo'],
   data: () => {
     return {
       page: 1,
       cantPerPage: 10,
       search: "",
+      cursos: [],
+      cursoMostrar: null,
     }
   },
   methods: {
@@ -14,8 +47,7 @@ Vue.component('list-courses', {
       for (let i = 0; i < this.cursos.length; i++) {
         if (this.search == "") {
           cursosRet.push(this.cursos[i]);
-        }
-        else {
+        } else {
           if (this.cursos[i].codigo.toString().includes(this.search) ||
             this.cursos[i].nombre.toUpperCase().includes(this.search.toUpperCase()) ||
             this.cursos[i].nombreUA.toUpperCase().includes(this.search.toUpperCase())) {
@@ -63,12 +95,15 @@ Vue.component('list-courses', {
       if (this.page > 1) {
         this.page--;
       }
+    },
+    verCurso(curso) {
+      this.cursoMostrar = curso;
     }
   },
   beforeMount() {
     this.loadCourses();
   },
-  template: `<div><div class="card strpied-tabled-with-hover" >
+  template: `<div><div class="card strpied-tabled-with-hover" v-if="cursoMostrar == null">
                                 <div class="card-header ">
                                     <h4 class="card-title">{{titulo}}</h4>
                                     <!--<p class="card-category">Here is a subtitle for this table</p>-->
@@ -88,29 +123,37 @@ Vue.component('list-courses', {
                                             <tr>
                                               <th>Código</th>
                                               <th>Nombre</th>
-                                              <th>Unidad Académica</th>
+                                              <th>Estado</th>
+                                              <th>Inscriptos</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="curso in getCursosPage(page)">
+                                            <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)">
                                                 <td><button class="btn vtn-default"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
-                                                <td>{{curso.nombreUA}}</td>
+                                                <td><i 
+                                                :class="{
+                                                'fas fa-play-circle text-success': curso.estado.toUpperCase() == 'INICIADO', 
+                                                'fas fa-stop-circle text-danger': curso.estado.toUpperCase() == 'TERMINADO'}">
+                                                </i></td>
+                                                <td>{{curso.alumnos.length}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="card-footer">
-                                  <div class="form-inline float-right" v-if="cursos.length > 0">
+                                 <!-- <div class="form-inline float-right" v-if="cursos.length > 0">
                                       <input class="form-control" type="number" v-model="cantPerPage">
                                     <div class="btn-group">
                                       <button class="btn btn-default" @click="prevPage"><i class="fas fa-arrow-left"></i></button>
                                       <button v-for="pg in listPages()" class="btn" :class="{ 'btn-primary': pg === page, 'btn-default': pg != page}"  @click="page = pg">{{pg}}</button>
                                       <button class="btn btn-default" @click="nextPage"><i class="fas fa-arrow-right"></i></button>
                                     </div>
-                                  </div>
+                                  </div>-->
                                 </div>
-                            </div></div>`,
+                            </div>
+                             <box-curso :curso="cursoMostrar"></box-curso>
+                            </div>`,
 });
 
 
