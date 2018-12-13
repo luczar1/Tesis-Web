@@ -17,6 +17,8 @@ module.exports = {
     }
   },
   findOne: async function(req, res) {
+
+    //Si es admin, devuelvo los datos completos y ademas busco los datos de la tabla intermedia de profesores y alumnos
     if (await User.isAdmin(req.session)) {
       let curso = await Curso.findOne({id: req.param('id')}).populate('alumnos').populate('docentes');
 
