@@ -6,6 +6,7 @@ Vue.component('box-curso', {
   data: () => {
     return {
       section: 'general',
+      alumnosSection: 'todos',
     }
   },
   watch: {
@@ -43,6 +44,54 @@ Vue.component('box-curso', {
     changeSection(newSection) {
       this.section = newSection;
     },
+    toggleNotifAppAlumnos(section){
+      switch (section) {
+        case 'todos':
+          for (let alumno of this.curso.alumnos) {
+            alumno.sendNotifApp = ! alumno.sendNotifApp;
+          }
+          break;
+        case 'inscriptos':
+          for (let alumno of this.curso.alumnos) {
+            if (alumno.pago) {
+              alumno.sendNotifApp = ! alumno.sendNotifApp;
+            }
+          }
+          break;
+        case 'solicitudes':
+          for (let alumno of this.curso.alumnos) {
+            if (!alumno.pago) {
+              alumno.sendNotifApp = ! alumno.sendNotifApp;
+            }
+          }
+          break;
+      }
+      this.$forceUpdate();
+    },
+    toggleNotifEmailAlumnos(section) {
+      switch (section) {
+        case 'todos':
+          for (let alumno of this.curso.alumnos) {
+            alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+          }
+          break;
+        case 'inscriptos':
+          for (let alumno of this.curso.alumnos) {
+            if (alumno.pago) {
+              alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+            }
+          }
+          break;
+        case 'solicitudes':
+          for (let alumno of this.curso.alumnos) {
+            if (!alumno.pago) {
+              alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+            }
+          }
+          break;
+      }
+      this.$forceUpdate();
+    },
     toggleNotifAppDocentes(){
       for (let docente of this.curso.docentes) {
         docente.sendNotifApp = !docente.sendNotifApp;
@@ -54,6 +103,25 @@ Vue.component('box-curso', {
         docente.sendNotifEmail = !docente.sendNotifEmail;
       }
       this.$forceUpdate();
+    },
+    getListadoAlumnos(section) {
+      let alumnosReturn = [];
+      switch (section){
+        case 'todos':
+          return this.curso.alumnos;
+          break;
+        case 'solicitudes':
+            return this.curso.alumnos.filter(element => !element.pago);
+          break;
+        case 'inscriptos':
+          return this.curso.alumnos.filter(element => element.pago);
+          break;
+      }
+
+      return this.curso.alumnos;
+    },
+    changeSectionAlumnos(val) {
+      this.alumnosSection = val;
     },
   },
   template: `
@@ -100,6 +168,7 @@ Vue.component('box-curso', {
                       <th scope="col">Clave UCC</th>
                       <th scope="col">Apellido</th>
                       <th scope="col">Nombre</th>
+                      <th scope="col">Caracter</th>
                       <th scope="col">E-Mail</th>
                       <th scope="col"><i class="fas fa-at"></i></th>
                       <th scope="col"><i class="fas fa-bell"></i></th>
@@ -110,14 +179,16 @@ Vue.component('box-curso', {
                       <td>{{docente.clave}}</td>
                       <td>{{docente.apellido}}</td>
                       <td>{{docente.nombre}}</td>
+                      <td>{{docente.caracter}}</td>
                       <td>{{docente.email}}</td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifEmail"></td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifApp"></td>
                     </tr>
+                    <tr v-if="curso.docentes.length == 0"><td colspan="9" class="text-center"><b>No se registraron docentes</b></td></tr>
                   </tbody>
-                  <tfoot>
+                  <tfoot v-if="curso.docentes.length > 0">
                   <tr>
-                      <th scope="col" colspan="4">Marcar/Desmarcar todos</th>
+                      <th scope="col" colspan="5">Marcar/Desmarcar todos</th>
                       <th scope="col"><i class="fas fa-at" style="cursor: pointer" @click="toggleNotifEmailDocentes()"></i></th>
                       <th scope="col"><i class="fas fa-bell" style="cursor: pointer" @click="toggleNotifAppDocentes()"></i></th>
                     </tr>
@@ -132,7 +203,72 @@ Vue.component('box-curso', {
           </div>
         </div>
         <div class="col-sm-12" v-if="section == 'alumnos'">
-        
+        <div class="row pt-3">
+          <div class="col-sm-12">
+          <nav class="nav nav-pills">
+            <a class="nav-link" :class="{'active': alumnosSection == 'todos'}" href="#" @click="changeSectionAlumnos('todos')">Todos ({{getListadoAlumnos('all').length}})</a>
+            <a class="nav-link" :class="{'active': alumnosSection == 'solicitudes'}" href="#" @click="changeSectionAlumnos('solicitudes')">Solicitudes ({{getListadoAlumnos('solicitudes').length}})</a>
+            <a class="nav-link" :class="{'active': alumnosSection == 'inscriptos'}" href="#" @click="changeSectionAlumnos('inscriptos')">Inscriptos ({{getListadoAlumnos('inscriptos').length}})</a>
+          </nav>
+          </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-sm-12">
+              <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Clave UCC</th>
+                      <th scope="col">Apellido</th>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Documento</th>
+                      <th scope="col">E-Mail</th>
+                      <th scope="col">Documentación</th>
+                      <th scope="col">Pago</th>
+                      <th scope="col"><i class="fas fa-at"></i></th>
+                      <th scope="col"><i class="fas fa-bell"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="alumno in getListadoAlumnos(alumnosSection)">
+                      <td>{{alumno.clave == 0 ? 'No definido' : alumno.clave}}</td>
+                      <td>{{alumno.apellido}}</td>
+                      <td>{{alumno.nombre}}</td>
+                      <td>{{alumno.tipoDocumento}} {{alumno.documento}}</td>
+                      <td>{{alumno.email}}</td>
+                      <td>
+                        <i :class="{
+                        'fas fa-check-circle text-success': alumno.documentacion === true,
+                        'fas fa-times-circle text-danger': alumno.documentacion === false,
+                        'fas fa-spinner fa-spin': alumno.documentacion == null,
+                        }"></i>
+                      </td>
+                      <td>
+                       <i :class="{
+                        'fas fa-check-circle text-success': alumno.pago === true,
+                        'fas fa-times-circle text-danger': alumno.pago === false,
+                        'fas fa-spinner fa-spin': alumno.pago == null,
+                        }"></i>
+                      </td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifEmail"></td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifApp"></td>
+                    </tr>
+                    <tr v-if="getListadoAlumnos(alumnosSection).length == 0"><td colspan="9" class="text-center"><b>No se registraron alumnos</b></td></tr>
+                  </tbody>
+                  <tfoot>
+                  <tr v-if="getListadoAlumnos(alumnosSection).length > 0">
+                      <th scope="col" colspan="7">Marcar/Desmarcar todos</th>
+                      <th scope="col"><i v-tooltip="'Invertir selección'" class="fas fa-at" style="cursor: pointer" @click="toggleNotifEmailAlumnos(alumnosSection)"></i></th>
+                      <th scope="col"><i v-tooltip="'Invertir selección'" class="fas fa-bell" style="cursor: pointer" @click="toggleNotifAppAlumnos(alumnosSection)"></i></th>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button type="button" class="btn btn-outline-success"><i class="fas fa-bell"></i> Enviar notificaciones</button>
+                  </div>
+                </div>
+            </div>
+          </div>
         </div>
         </div>
       </div>
@@ -177,7 +313,7 @@ Vue.component('list-logs', {
       let minutes = fecha.getMinutes() < 10 ? '0' + fecha.getMinutes() : fecha.getMinutes();
       let seconds = fecha.getSeconds() < 10 ? '0' + fecha.getSeconds() : fecha.getSeconds();
 
-      return fecha.getDate() + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ":" + seconds;
+      return date + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ":" + seconds;
     },
   },
   beforeMount() {
@@ -234,25 +370,73 @@ Vue.component('list-courses', {
       search: "",
       cursos: [],
       cursoMostrar: null,
+      sort: {
+        order: 'asc',
+        by: 'inicio'
+      }
     }
   },
   methods: {
-    getCursosPage(pg) {
+    getCursos() {
       let cursosRet = [];
 
-      for (let i = 0; i < this.cursos.length; i++) {
+      for (let curso of this.cursos) {
         if (this.search == "") {
-          cursosRet.push(this.cursos[i]);
+          cursosRet.push(curso);
         } else {
-          if (this.cursos[i].codigo.toString().includes(this.search) ||
-            this.cursos[i].nombre.toUpperCase().includes(this.search.toUpperCase()) ||
-            this.cursos[i].nombreUA.toUpperCase().includes(this.search.toUpperCase())) {
-            cursosRet.push(this.cursos[i]);
+          if (curso.codigo.toString().includes(this.search) ||
+            curso.nombre.toUpperCase().includes(this.search.toUpperCase()) ||
+            curso.nombreUA.toUpperCase().includes(this.search.toUpperCase())) {
+            cursosRet.push(curso);
           }
         }
       }
 
       return cursosRet;
+    },
+    sortCursos(by) {
+
+      if (this.sort.order == 'asc') {
+        this.cursos = this.cursos.sort(function (a, b) {
+          if (a[by] > b[by]) {
+            return 1;
+          }
+          if (a[by] < b[by]) {
+            return -1;
+          }
+
+          return 0;
+
+        });
+      }
+      else {
+        this.cursos = this.cursos.sort(function (a, b) {
+          if (a[by] > b[by]) {
+            return -1;
+          }
+          if (a[by] < b[by]) {
+            return 1;
+          }
+
+          return 0;
+        });
+      }
+
+      this.sort.by = by;
+      this.sort.order = this.sort.order == 'asc' ? 'desc' : 'asc';
+    },
+    displayDate(timestamp) {
+      let fecha = new Date(timestamp);
+
+      let date = fecha.getDate();
+      let month = fecha.getMonth() + 1;
+      let year = fecha.getFullYear();
+
+      let hours = fecha.getHours() < 10 ? '0' + fecha.getHours() : fecha.getHours();
+      let minutes = fecha.getMinutes() < 10 ? '0' + fecha.getMinutes() : fecha.getMinutes();
+      let seconds = fecha.getSeconds() < 10 ? '0' + fecha.getSeconds() : fecha.getSeconds();
+
+      return date + '/' + month + '/' + year;
     },
     listPages() {
       let list = [];
@@ -338,17 +522,37 @@ Vue.component('list-courses', {
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                              <th>Código</th>
-                                              <th>Nombre</th>
+                                              <th @click="sortCursos('codigo')" style="cursor: pointer">
+                                                <i v-if="sort.by == 'codigo'" 
+                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                  'fas fa-sort-amount-down': sort.order == 'asc'}">                     
+                                                </i> 
+                                                Código
+                                              </th>
+                                              <th @click="sortCursos('nombre')" style="cursor: pointer">
+                                               <i v-if="sort.by == 'nombre'" 
+                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                  'fas fa-sort-amount-down': sort.order == 'asc'}">                     
+                                                </i> 
+                                              Nombre
+                                              </th>
+                                              <th @click="sortCursos('nombreUA')" style="cursor: pointer" v-tooltip="'Unidad Academica'">
+                                               <i v-if="sort.by == 'nombreUA'" 
+                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                  'fas fa-sort-amount-down': sort.order == 'asc'}">                     
+                                                </i> 
+                                              UA</th>
                                               <th>Vigencia</th>
                                               <th>Estado</th>
-                                              <th>Inscriptos</th>
+                                              <th>Inicio</th>
+                                              <th>Alumnos</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="curso in getCursosPage(page)" @click="verCurso(curso)" style="cursor: pointer">
+                                            <tr v-for="curso in getCursos()" @click="verCurso(curso)" style="cursor: pointer">
                                                 <td><button class="btn btn-default"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
+                                                <td>{{curso.nombreUA}}</td>
                                                 <td><button 
                                                 :class="{
                                                 'btn btn-success': curso.vigente.toUpperCase() == 'VIGENTE', 
@@ -370,6 +574,7 @@ Vue.component('list-courses', {
                                                   && curso.estado.toUpperCase() != 'TERMINADO'
                                                   && curso.estado.toUpperCase() != 'POR INICIAR'">{{curso.estado}}</span>
                                                 </td>
+                                                <td>{{curso.inicio.replace(/-/g,'/')}}</td>
                                                 <td>{{curso.alumnos.length}}</td>
                                             </tr>
                                         </tbody>
