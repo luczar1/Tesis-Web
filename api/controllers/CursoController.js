@@ -8,12 +8,29 @@
 module.exports = {
 
   find: async function (req, res) {
+    //Chequeo si el usuario que realiza la peticion es admin
     if (await User.isAdmin(req.session)) {
+      /*
+      * Devuelvo todos los cursos y lleno los arrays de cursos y docentes ya que la peticion viene desde
+      * un admin.
+      * Esta no devuelve los datos de las tablas intermedios de Docentes y ALumnos
+      * es decir Documentacion y pago en caso de alumno, caracter en caso de docente
+      * */
       res.json(await Curso.find({
         vigente: { '!=' : 'Recargado' }
       }).populate('alumnos').populate('docentes'));
     } else {
-      res.json(await Curso.find());
+      if (req.param('area')) {
+        //Busco por id de area, me devuelve datos del area junto con un array de cursos de esa area
+        res.json(await Area.findOne({id: req.param('area')}).populate('cursos'));
+      }
+      else {
+        //Devuelvo todos lso cursos, omito recargados
+        res.json(await Curso.find({
+            vigente: {'!=': 'Recargado'}
+          }
+        ));
+      }
     }
   },
   findOne: async function(req, res) {
