@@ -1,5 +1,6 @@
 Vue.use(VTooltip);
 
+
 Vue.component('box-curso', {
   props: ['curso'],
   data: () => {
@@ -7,12 +8,37 @@ Vue.component('box-curso', {
       section: 'general',
     }
   },
+  watch: {
+    curso: function (val) {
+      this.loadNewData();
+    }
+  },
   methods: {
     close() {
       this.$emit('closeCurso', true);
     },
+    loadNewData() {
+      this.$http.get('/curso/' + this.curso.id)
+        .then((response) => {
+
+          let data = response.body;
+
+          this.curso.alumnos = data.alumnos;
+          this.curso.docentes = data.docentes;
+
+          for (let alumno of  this.curso.alumnos) {
+            alumno.sendNotifEmail = false;
+            alumno.sendNotifApp = false;
+          }
+          for (let docente of this.curso.docentes) {
+            docente.sendNotifEmail = false;
+            docente.sendNotifApp = false;
+          }
+          this.$forceUpdate();
+      });
+    },
     getImgPath() {
-      return "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + this.curso.img;
+      return this.curso.img;
     },
     changeSection(newSection) {
       this.section = newSection;
@@ -21,11 +47,13 @@ Vue.component('box-curso', {
       for (let docente of this.curso.docentes) {
         docente.sendNotifApp = !docente.sendNotifApp;
       }
+      this.$forceUpdate();
     },
     toggleNotifEmailDocentes(){
       for (let docente of this.curso.docentes) {
         docente.sendNotifEmail = !docente.sendNotifEmail;
       }
+      this.$forceUpdate();
     },
   },
   template: `
@@ -59,6 +87,7 @@ Vue.component('box-curso', {
               <div><b>Inicio:</b> {{curso.inicio}}</div>
               <div><b>Fin:</b> {{curso.fin}}</div>
               <div><b>Estado:</b> {{curso.estado}}</div>
+              <div><b>Vigente:</b> {{curso.vigente}}</div>
             </div>
           </div>
         </div>
@@ -247,14 +276,14 @@ Vue.component('list-courses', {
 
           for (let key in cursos) {
 
-            for (let alumno of cursos[key].alumnos) {
-              alumno.sendNotifEmail = false;
-              alumno.sendNotifApp = false;
+            if (cursos[key].img == "") {
+              cursos[key].img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
             }
-            for (let docente of cursos[key].docentes) {
-              docente.sendNotifEmail = false;
-              docente.sendNotifApp = false;
+            else {
+              cursos[key].img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + cursos[key].img;
             }
+
+
 
             this.cursos.push(cursos[key]);
           }
