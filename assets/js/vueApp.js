@@ -170,8 +170,8 @@ Vue.component('box-curso', {
                       <th scope="col">Nombre</th>
                       <th scope="col">Caracter</th>
                       <th scope="col">E-Mail</th>
-                      <th scope="col"><i class="fas fa-at"></i></th>
-                      <th scope="col"><i class="fas fa-bell"></i></th>
+                      <th scope="col"><i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i></th>
+                      <th scope="col"><i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -224,8 +224,8 @@ Vue.component('box-curso', {
                       <th scope="col">E-Mail</th>
                       <th scope="col">Documentación</th>
                       <th scope="col">Pago</th>
-                      <th scope="col"><i class="fas fa-at"></i></th>
-                      <th scope="col"><i class="fas fa-bell"></i></th>
+                      <th scope="col"><i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i></th>
+                      <th scope="col"><i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></th>
                     </tr>
                   </thead>
                   <tbody>
