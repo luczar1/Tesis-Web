@@ -334,6 +334,9 @@ Vue.component('list-logs', {
         this.page--;
       }
     },
+    downloadLogsExcel() {
+      window.location.href = '/log/generateXlsx'
+    },
     displayDate(timestamp) {
       let fecha = new Date(timestamp);
 
@@ -405,6 +408,11 @@ Vue.component('list-logs', {
                                              </div>
                                           </div>
                                       </div>
+                                   </div>
+                                   <div class="row" style="display: flex">
+                                   <div class="col-sm-12" style="display: flex;">
+                                      <button class="btn btn-success" @click="downloadLogsExcel()"><i class="fas fa-file-excel"></i> Descargar en formato Excel</button>
+                                   </div>
                                    </div>
                                 </div>`,
 
