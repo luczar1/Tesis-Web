@@ -362,14 +362,14 @@ Vue.component('list-logs', {
                                     </div>
                                     <div class="col-sm-6">
                                       <!--<p class="card-category">Here is a subtitle for this table</p>-->
-                                      <div class="form-inline float-right" v-if="logs.length > 0">
+                                      <!--<div class="form-inline float-right" v-if="logs.length > 0">
                                         <div class="input-group mb-2 mr-sm-2">
                                           <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-search"></i></div>
                                           </div>
                                           <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
                                         </div>
-                                      </div>
+                                      </div>-->
                                     </div>
                                   </div>
                                 </div>
