@@ -283,6 +283,9 @@ Vue.component('list-logs', {
       cantPerPage: 10,
       search: "",
       logs: [],
+      inicio: 0,
+      fin : 9,
+      cantLogs: 0,
     }
   },
   methods: {
@@ -301,6 +304,35 @@ Vue.component('list-logs', {
         }, err => {
           console.log(err);
         });
+    },
+    getLogs() {
+
+      this.cantLogs = this.logs.length;
+
+      this.inicio = this.page * this.cantPerPage - this.cantPerPage;
+      this.fin = this.page * this.cantPerPage;
+
+      if (this.inicio == 1) {
+        this.inicio = 0;
+      }
+
+      return this.logs.slice(this.inicio, this.fin);
+    },
+    nextPage() {
+      let pages = Math.trunc(this.cantLogs / this.cantPerPage);
+      let rest = this.cantLogs % this.cantPerPage;
+
+      if (rest>0) {
+        pages++;
+      }
+      if (this.page < pages) {
+        this.page++;
+      }
+    },
+    prevPage() {
+      if (this.page > 1) {
+        this.page--;
+      }
     },
     displayDate(timestamp) {
       let fecha = new Date(timestamp);
@@ -349,13 +381,31 @@ Vue.component('list-logs', {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="log in logs">
+                                            <tr v-for="log in getLogs()">
                                                 <td>{{log.pagina}}</td>
                                                 <td>{{log.error}}</td>
                                                 <td>{{displayDate(log.createdAt)}}</td>                                                     
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="card-footer" v-if="logs.length > 0">
+                                     <div class="row" style="display: flex">
+                                         <div class="col-sm-10">
+                                            {{inicio + 1}} - {{fin}} de {{cantLogs}} 
+                                         </div>
+                                         <div class="col-sm-2" style="display: flex">
+                                            <div class="input-group mb-3" style="display: flex">
+                                                <div class="input-group-prepend" style="display: flex">
+                                                    <button class="btn btn-outline-secondary" style="padding-bottom: 2px" type="button" @click="prevPage()"><i class="fas fa-arrow-left"></i></button>
+                                                </div>
+                                                 <input type="text" class="form-control" placeholder="" aria-label="" v-model="page" aria-describedby="basic-addon1">
+                                            <div class="input-group-append" style="display: flex">
+                                                 <button class="btn btn-outline-secondary" style="padding-bottom: 2px" type="button" @click="nextPage()"><i class="fas fa-arrow-right"></i></button>
+                                             </div>
+                                          </div>
+                                      </div>
+                                   </div>
                                 </div>`,
 
 });
