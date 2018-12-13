@@ -28,6 +28,10 @@ module.exports.policies = {
     //'uploadXls': ['isAuthenticated', 'isAdmin'],
   },
 
+  //Policies para api blueprints
+
+  'log/*': ['isAuthenticated','isAdmin'],
+
 
   // '*': true,
 
