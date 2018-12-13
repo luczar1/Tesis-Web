@@ -18,7 +18,27 @@ module.exports = {
   },
   findOne: async function(req, res) {
     if (await User.isAdmin(req.session)) {
-      res.json(await Curso.findOne({id: req.param('id')}).populate('alumnos').populate('docentes'));
+      let curso = await Curso.findOne({id: req.param('id')}).populate('alumnos').populate('docentes');
+
+      for (let alumno of curso.alumnos) {
+        let alumnoPorCurso = await AlumnoPorCurso.findOne({
+          alumno: alumno.id,
+          curso: curso.id,
+        });
+        alumno.documentacion = alumnoPorCurso.documentacion;
+        alumno.pago = alumnoPorCurso.pago;
+        alumno.mail1 = alumnoPorCurso.mail1;
+        alumno.mail2 = alumnoPorCurso.mail2;
+      }
+
+      for (let docente of curso.docentes) {
+        let docentePorCurso = await DocentePorCurso.findOne({
+          docente: docente.id,
+          curso: curso.id,
+        });
+        docente.caracter = docentePorCurso.caracter;
+      }
+      res.json(curso);
     } else {
       res.json(await Curso.findOne({id: req.param('id')}));
     }
