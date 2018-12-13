@@ -287,7 +287,7 @@ Vue.component('list-logs', {
   },
   methods: {
     loadLogs() {
-      this.$http.get('/logs')
+      this.$http.get('/log')
         .then((response) => {
 
           let logs = response.body;

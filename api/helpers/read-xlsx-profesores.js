@@ -209,14 +209,14 @@ module.exports = {
     sails.log(endTime - startTime);
 
     // All done.
-
-    for (key in errores){
-      await Logs.create({
-        pagina: 'Carga de docentes',
-        error: 'Profesor ' + errores[key].nombre + ' ' + errores[key].apellido + ' ' + errores[key].error
-      });
-
+    let logs = [];
+    for (let error of errores){
+      logs.push({pagina: 'Carga de docentes',
+        error: 'Profesor ' + error.nombre + ' ' + error.apellido + ' ' + error.error
+      })
     }
+
+    await Log.createEach(logs)
 
     return exits.success(errores);
 
