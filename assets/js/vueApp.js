@@ -373,8 +373,16 @@ Vue.component('list-courses', {
       sort: {
         order: 'asc',
         by: 'inicio'
-      }
+      },
+      inicio: 0,
+      fin : 9,
+      cantCursos: 0,
     }
+  },
+  watch: {
+    search: function (val) {
+      this.page = 1;
+    },
   },
   methods: {
     getCursos() {
@@ -392,7 +400,16 @@ Vue.component('list-courses', {
         }
       }
 
-      return cursosRet;
+      this.cantCursos = cursosRet.length;
+
+      this.inicio = this.page * this.cantPerPage - this.cantPerPage;
+      this.fin = this.page * this.cantPerPage;
+
+      if (this.inicio == 1) {
+        this.inicio = 0;
+      }
+
+      return cursosRet.slice(this.inicio, this.fin);
     },
     sortCursos(by) {
 
@@ -466,20 +483,20 @@ Vue.component('list-courses', {
             else {
               cursos[key].img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + cursos[key].img;
             }
-
-
-
             this.cursos.push(cursos[key]);
           }
-
-
-
         }, err => {
           console.log(err);
         });
     },
     nextPage() {
-      if (this.listPages().length > this.page) {
+      let pages = Math.trunc(this.cantCursos / this.cantPerPage);
+      let rest = this.cantCursos % this.cantPerPage;
+
+      if (rest>0) {
+        pages++;
+      }
+      if (this.page < pages) {
         this.page++;
       }
     },
@@ -580,15 +597,23 @@ Vue.component('list-courses', {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="card-footer">
-                                 <!-- <div class="form-inline float-right" v-if="cursos.length > 0">
-                                      <input class="form-control" type="number" v-model="cantPerPage">
-                                    <div class="btn-group">
-                                      <button class="btn btn-default" @click="prevPage"><i class="fas fa-arrow-left"></i></button>
-                                      <button v-for="pg in listPages()" class="btn" :class="{ 'btn-primary': pg === page, 'btn-default': pg != page}"  @click="page = pg">{{pg}}</button>
-                                      <button class="btn btn-default" @click="nextPage"><i class="fas fa-arrow-right"></i></button>
+                                <div class="card-footer" v-if="cursos.length > 0">
+                                  <div class="row" style="display: flex">
+                                    <div class="col-sm-10">
+                                    {{inicio + 1}} - {{fin}} de {{cantCursos}} 
                                     </div>
-                                  </div>-->
+                                    <div class="col-sm-2" style="display: flex">
+                                       <div class="input-group mb-3" style="display: flex">
+                                        <div class="input-group-prepend" style="display: flex">
+                                          <button class="btn btn-outline-secondary" style="padding-bottom: 2px" type="button" @click="prevPage()"><i class="fas fa-arrow-left"></i></button>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="" aria-label="" v-model="page" aria-describedby="basic-addon1">
+                                        <div class="input-group-append" style="display: flex">
+                                          <button class="btn btn-outline-secondary" style="padding-bottom: 2px" type="button" @click="nextPage()"><i class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                             </div>
                              <box-curso :curso="cursoMostrar" v-on:closeCurso="closeCurso()"></box-curso>
