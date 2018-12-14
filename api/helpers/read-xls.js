@@ -63,9 +63,12 @@ module.exports = {
           else {
             try {
               let json = JSON.parse(body);
-              if (json[0].cext_foto != null) {
-                cursoOk.img = json[0].cext_foto;
+              if (json[0].cext_foto != null && json[0].cext_foto != "") {
+                cursoOk.img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + json[0].cext_foto;
                 console.log(cursoOk.img);
+              }
+              else {
+                cursoOk.img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
               }
               if (json[0].descripcion != null) {
                 cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);

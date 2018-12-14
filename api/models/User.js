@@ -107,10 +107,7 @@ module.exports = {
   },
 
   getCurso: async function(id) {
-    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
-
     let curso = await Curso.findOne({id: id});
-    curso.img = imgPath + curso.img;
 
     return curso;
   },
