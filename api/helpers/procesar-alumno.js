@@ -70,7 +70,7 @@ module.exports = {
       return element.codigoAlternativo == inputs.alumnoXls['Código'].toString();
 
     }).id;
-    curso.documentacion = inputs.alumnoXls['Docu'].toLowerCase() === 'si';
+    curso.documentacion = inputs.alumnoXls['Docu Pers'].toLowerCase() === 'si';
     curso.pago = inputs.alumnoXls['Pago'].toLowerCase() === 'si';
 
     alumno.cursos.push(curso);
