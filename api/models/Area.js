@@ -16,6 +16,8 @@ module.exports = {
 
     area: {type: 'string'},
 
+    imgApp: {type: 'string'},
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
