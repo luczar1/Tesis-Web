@@ -542,7 +542,7 @@ Vue.component('list-courses', {
 
           for (let key in cursos) {
 
-            if (cursos[key].img == "") {
+            if (cursos[key].img == "" || cursos[key].img == null) {
               cursos[key].img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
             }
             else {
@@ -655,9 +655,10 @@ Vue.component('list-courses', {
                                                 <td><button 
                                                 :class="{
                                                 'btn btn-success': curso.vigente.toUpperCase() == 'VIGENTE', 
+                                                'btn btn-success': curso.vigente.toUpperCase() == 'SI', 
                                                 'btn btn-warning': curso.vigente.toUpperCase() == 'EN REPROGRAMACIÓN', 
                                                 'btn btn-danger': curso.vigente.toUpperCase() == 'CANCELADO', 
-                                                }">{{curso.vigente}}</button></td>
+                                                }">{{curso.vigente == 'Si' ? 'Vigente' : curso.vigente}}</button></td>
                                                 <td>
                                                   <i v-tooltip='curso.estado' 
                                                   v-if="curso.estado.toUpperCase() == 'INICIADO' 
