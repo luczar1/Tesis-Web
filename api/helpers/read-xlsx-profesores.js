@@ -85,9 +85,8 @@ module.exports = {
 
       if (!busqueda) {
         profesoresUnicos.push(profesor);
-      }
-      else {
-        if (profesor.cursos[0]!=null){
+      } else {
+        if (profesor.cursos[0] != null) {
           busqueda.cursos.push(profesor.cursos[0]);
         }
       }
@@ -105,24 +104,21 @@ module.exports = {
           apellido: profesoresUnicos[key].apellido,
           error: "No tiene definido documento"
         });
-      }
-      else if (profesoresUnicos[key].email == null) {
+      } else if (profesoresUnicos[key].email == null) {
         errores.push({
           documento: profesoresUnicos[key].doc,
           nombre: profesoresUnicos[key].nombre,
           apellido: profesoresUnicos[key].apellido,
           error: "No tiene definido email"
         });
-      }
-      else if (profesoresUnicos[key].tipoDoc == "DNI" && isNaN(profesoresUnicos[key].doc)) {
+      } else if (profesoresUnicos[key].tipoDoc == "DNI" && isNaN(profesoresUnicos[key].doc)) {
         errores.push({
           documento: profesoresUnicos[key].doc,
           nombre: profesoresUnicos[key].nombre,
           apellido: profesoresUnicos[key].apellido,
           error: "Error en el DNI"
         });
-      }
-      else {
+      } else {
 
         await Docente.findOrCreate({documento: profesoresUnicos[key].doc},
           {
@@ -178,7 +174,6 @@ module.exports = {
             }
 
 
-
             if (findOrCreateCouter >= profesoresUnicos.length - 1) {
               let cursosProfesoresDB = await DocentePorCurso.find({});
 
@@ -195,8 +190,7 @@ module.exports = {
 
                 }
               }
-            }
-            else {
+            } else {
               findOrCreateCouter++;
             }
           });
@@ -209,9 +203,27 @@ module.exports = {
     sails.log(endTime - startTime);
 
     // All done.
+
+    let logDB = await Log.find({
+      select: ['pagina', 'error']
+    });
+
+    /**
+     * Cargados los logs viejos en el historico
+     */
+    await LogHistorico.createEach(logDB);
+    sails.log('Cargado el log historico');
+
+    /**
+     * Borrada la tabla de logs para cargar los nuevos
+     */
+    await Log.destroy({});
+    sails.log('Borrada la tabla de logs');
+
     let logs = [];
-    for (let error of errores){
-      logs.push({pagina: 'Carga de docentes',
+    for (let error of errores) {
+      logs.push({
+        pagina: 'Carga de docentes',
         error: 'Profesor ' + error.nombre + ' ' + error.apellido + ' ' + error.error
       })
     }

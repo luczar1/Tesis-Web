@@ -35,7 +35,7 @@ module.exports = {
     req.file('profesXlsx').upload({maxBytes: 50000000},async function (err, uploadedFiles) {
       if (err) {
         //Hago log en caso de error
-        sails.log(err);
+        // sails.log(err);
       }
 
       if (uploadedFiles.length === 0 ) {
