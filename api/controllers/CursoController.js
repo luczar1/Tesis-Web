@@ -17,7 +17,9 @@ module.exports = {
       * es decir Documentacion y pago en caso de alumno, caracter en caso de docente
       * */
       res.json(await Curso.find({
-        vigente: { '!=' : 'Recargado' }
+        where: { 'vigente': { '!=' : 'Recargado' }},
+        select: ['codigo', 'nombre', 'nombreUA', 'inicio', 'vigente', 'estado'],
+        sort: 'inicio ASC'
       }).populate('alumnos').populate('docentes'));
     } else {
       if (req.param('area')) {

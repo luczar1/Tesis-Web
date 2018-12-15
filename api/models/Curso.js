@@ -45,7 +45,7 @@ module.exports = {
     /**
      * Fecha de inicio del curso.
      */
-    inicio: {type: "string"},
+    inicio: {type: "number"},
 
     /**
      * Fecha de finalizacion del curso.

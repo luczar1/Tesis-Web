@@ -38,6 +38,13 @@ Vue.component('box-curso', {
           this.$forceUpdate();
       });
     },
+    getInicio: function(timestamp) {
+      let date = new Date(timestamp);
+      let day = ('0' + date.getDate()).slice(-2);
+      let month = ('0' + (date.getMonth() + 1)).slice(-2);
+      let year = ('0' + date.getFullYear()).slice(-2);
+      return day + '-' + month + '-' + year;
+    },
     getImgPath() {
       return this.curso.img;
     },
@@ -152,8 +159,8 @@ Vue.component('box-curso', {
             </div>
             <div class="col-sm-8">
               <div><b>Descripcion:</b> {{curso.descripcion}}</div>
-              <div><b>Inicio:</b> {{curso.inicio}}</div>
-              <div><b>Fin:</b> {{curso.fin}}</div>
+              <div><b>Inicio:</b> {{getInicio(curso.inicio)}}</div>
+              <div><b>Fin:</b> {{ curso.fin }}</div>
               <div><b>Estado:</b> {{curso.estado}}</div>
               <div><b>Vigente:</b> {{curso.vigente}}</div>
             </div>
@@ -563,6 +570,13 @@ Vue.component('list-courses', {
         this.page--;
       }
     },
+    getInicio: function(timestamp) {
+      let date = new Date(timestamp);
+      let day = ('0' + date.getDate()).slice(-2);
+      let month = ('0' + (date.getMonth() + 1)).slice(-2);
+      let year = ('0' + date.getFullYear()).slice(-2);
+      return day + '/' + month + '/' + year;
+    },
     verCurso(curso) {
       this.cursoMostrar = curso;
     },
@@ -599,27 +613,37 @@ Vue.component('list-courses', {
                                             <tr>
                                               <th @click="sortCursos('codigo')" style="cursor: pointer">
                                                 <i v-if="sort.by == 'codigo'" 
-                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                  :class="{
+                                                  'fas fa-sort-amount-up': sort.order == 'desc',
                                                   'fas fa-sort-amount-down': sort.order == 'asc'}">                     
                                                 </i> 
                                                 Código
                                               </th>
                                               <th @click="sortCursos('nombre')" style="cursor: pointer">
-                                               <i v-if="sort.by == 'nombre'" 
-                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                <i v-if="sort.by == 'nombre'" 
+                                                  :class="{
+                                                  'fas fa-sort-amount-up': sort.order == 'desc',
                                                   'fas fa-sort-amount-down': sort.order == 'asc'}">                     
                                                 </i> 
-                                              Nombre
+                                                Nombre
                                               </th>
                                               <th @click="sortCursos('nombreUA')" style="cursor: pointer" v-tooltip="'Unidad Academica'">
-                                               <i v-if="sort.by == 'nombreUA'" 
-                                                  :class="{'fas fa-sort-amount-up': sort.order == 'desc',
+                                                <i v-if="sort.by == 'nombreUA'" 
+                                                  :class="{
+                                                  'fas fa-sort-amount-up': sort.order == 'desc',
                                                   'fas fa-sort-amount-down': sort.order == 'asc'}">                     
                                                 </i> 
-                                              UA</th>
+                                                UA</th>
                                               <th>Vigencia</th>
                                               <th>Estado</th>
-                                              <th>Inicio</th>
+                                              <th @click="sortCursos('inicio')" style="cursor: pointer; min-width: 100px">
+                                                <i v-if="sort.by == 'inicio'" 
+                                                  :class="{
+                                                  'fas fa-sort-amount-up': sort.order == 'desc',
+                                                  'fas fa-sort-amount-down': sort.order == 'asc'}">                     
+                                                </i>
+                                                Inicio
+                                               </th>
                                               <th>Alumnos</th>
                                         </tr>
                                         </thead>
@@ -649,7 +673,7 @@ Vue.component('list-courses', {
                                                   && curso.estado.toUpperCase() != 'TERMINADO'
                                                   && curso.estado.toUpperCase() != 'POR INICIAR'">{{curso.estado}}</span>
                                                 </td>
-                                                <td>{{curso.inicio.replace(/-/g,'/')}}</td>
+                                                <td>{{getInicio(curso.inicio)}}</td>
                                                 <td>{{curso.alumnos.length}}</td>
                                             </tr>
                                         </tbody>
