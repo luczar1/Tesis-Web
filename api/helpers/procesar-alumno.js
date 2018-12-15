@@ -40,77 +40,85 @@ module.exports = {
 
     // Get alumno.
     let alumno = {};
+    let curso = {};
     alumno.cursos = [];
 
-    alumno.clave = inputs.alumnoXls['Clave'];
-    alumno.apellido = inputs.alumnoXls['Apellido y nombre'].split(",")[0].trim();
-    alumno.nombre = inputs.alumnoXls['Apellido y nombre'].split(",")[1].trim();
-    switch (inputs.alumnoXls['Documento'].split(" ")[0]) {
-      case "DN":
-        alumno.tipoDoc = "DNI";
-        break;
-      case "PA":
-        alumno.tipoDoc = "PASAPORTE";
-        break;
-      case "LE":
-        alumno.tipoDoc = "LE";
-        break;
-      case "LC":
-        alumno.tipoDoc = "LC";
-        break;
-    }
-    alumno.doc = inputs.alumnoXls['Documento'].split(" ")[1];
-    alumno.email = inputs.alumnoXls['E-mail'];
-    alumno.tel = inputs.alumnoXls['Teléfono'];
-
-    let curso = {};
-
-    curso.id = inputs.cursosDB.find(function (element) {
+    let cursoFind = inputs.cursosDB.find(function (element) {
 
       return element.codigoAlternativo == inputs.alumnoXls['Código'].toString();
 
-    }).id;
-    curso.documentacion = inputs.alumnoXls['Docu Pers'].toLowerCase() === 'si';
-    curso.pago = inputs.alumnoXls['Pago'].toLowerCase() === 'si';
-
-    alumno.cursos.push(curso);
-
-    /**
-     * busca si el alumno ya esta cargado
-     */
-    let busquedaAlumno = inputs.listadoAlumnos.find(function (element) {
-      return element.doc === alumno.doc;
     });
 
+    if (cursoFind) {
+      curso.id = cursoFind.id;
 
-    /**
-     * Si no esta cargado, lo agrega
-     */
-    if (!busquedaAlumno) {
-      inputs.listadoAlumnos.push(alumno);
-    }
-    /**
-     * Si esta cargado, busca si ese curso ya esta agregado
-     */
-    else {
-      let busquedaCurso = busquedaAlumno.cursos.find(function (element) {
-        return element.id == alumno.cursos[0].id;
-      });
+      alumno.clave = inputs.alumnoXls['Clave'];
+      alumno.apellido = inputs.alumnoXls['Apellido y nombre'].split(",")[0].trim();
+      alumno.nombre = inputs.alumnoXls['Apellido y nombre'].split(",")[1].trim();
+      switch (inputs.alumnoXls['Documento'].split(" ")[0]) {
+        case "DN":
+          alumno.tipoDoc = "DNI";
+          break;
+        case "PA":
+          alumno.tipoDoc = "PASAPORTE";
+          break;
+        case "LE":
+          alumno.tipoDoc = "LE";
+          break;
+        case "LC":
+          alumno.tipoDoc = "LC";
+          break;
+      }
+      alumno.doc = inputs.alumnoXls['Documento'].split(" ")[1];
+      alumno.email = inputs.alumnoXls['E-mail'];
+      alumno.tel = inputs.alumnoXls['Teléfono'];
+
+      curso.documentacion = inputs.alumnoXls['Docu Pers'].toLowerCase() == 'si';
+      curso.pago = inputs.alumnoXls['Pago'].toLowerCase() == 'si';
+
+      alumno.cursos.push(curso);
+
       /**
-       * Si esta agregado, es porque esta inscripto mas de una vez, entonces chequea doc y pago
+       * busca si el alumno ya esta cargado
        */
-      if (busquedaCurso){
-        busquedaCurso.documentacion = alumno.cursos[0].documentacion || busquedaCurso.documentacion;
-        busquedaCurso.pago = alumno.cursos[0].pago || busquedaCurso.pago;
+      let busquedaAlumno = inputs.listadoAlumnos.find(function (element) {
+        return element.doc === alumno.doc;
+      });
+
+
+      /**
+       * Si no esta cargado, lo agrega
+       */
+      if (!busquedaAlumno) {
+        inputs.listadoAlumnos.push(alumno);
       }
       /**
-       * Si no, es porque es otro curso en el que esta inscripto y lo agrega
+       * Si esta cargado, busca si ese curso ya esta agregado
        */
       else {
-        if(alumno.cursos[0] != null) {
-          busquedaAlumno.cursos.push(alumno.cursos[0]);
+        let busquedaCurso = busquedaAlumno.cursos.find(function (element) {
+          return element.id == alumno.cursos[0].id;
+        });
+        /**
+         * Si esta agregado, es porque esta inscripto mas de una vez, entonces chequea doc y pago
+         */
+        if (busquedaCurso) {
+          busquedaCurso.documentacion = alumno.cursos[0].documentacion || busquedaCurso.documentacion;
+          busquedaCurso.pago = alumno.cursos[0].pago || busquedaCurso.pago;
+        }
+        /**
+         * Si no, es porque es otro curso en el que esta inscripto y lo agrega
+         */
+        else {
+          if (alumno.cursos[0] != null) {
+            busquedaAlumno.cursos.push(alumno.cursos[0]);
+          }
         }
       }
+
+    }
+    else {
+      sails.log("Alumno: " + inputs.alumnoXls['Código'] + " Doc: " + inputs.alumnoXls['Documento'] + " Inscripto a curso: " + inputs.alumnoXls['Código'] + " El cual no se encuentra en base de datos, se omitio la carga");
     }
 
 
