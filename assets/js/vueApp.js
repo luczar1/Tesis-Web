@@ -46,7 +46,7 @@ Vue.component('box-curso', {
       return day + '-' + month + '-' + year;
     },
     getImgPath() {
-      return this.curso.img;
+      return this.curso.img == "" || this.curso.img ==  null ? "https://via.placeholder.com/313x250.png?text=Sin Imagen" : this.curso.img;
     },
     changeSection(newSection) {
       this.section = newSection;
