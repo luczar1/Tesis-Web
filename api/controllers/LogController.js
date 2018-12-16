@@ -15,7 +15,7 @@ module.exports = {
     let filestream = sails.fs.createReadStream(fileName);
     filestream.pipe(res);
 
-    sails.fs.unlink(fileName);
+    //sails.fs.unlink(fileName);
     res.attachment("Resumen de Logs.xlsx");
   },
 
