@@ -18,7 +18,6 @@ module.exports = {
       * */
       res.json(await Curso.find({
         where: { 'vigente': { '!=' : 'Recargado' }},
-        select: ['codigo', 'nombre', 'nombreUA', 'inicio', 'vigente', 'estado'],
         sort: 'inicio ASC'
       }).populate('alumnos').populate('docentes'));
     } else {
