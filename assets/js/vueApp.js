@@ -436,7 +436,7 @@ Vue.component('list-courses', {
       cursos: [],
       cursoMostrar: null,
       sort: {
-        order: 'asc',
+        order: 'desc',
         by: 'inicio'
       },
       inicio: 0,
@@ -529,10 +529,7 @@ Vue.component('list-courses', {
       return list;
     },
     currentPage(pg) {
-      if (pg === this.page) {
-        return true
-      }
-      return false;
+      return pg === this.page;
     },
     loadCourses() {
       this.$http.get('/curso')
@@ -544,9 +541,6 @@ Vue.component('list-courses', {
 
             if (cursos[key].img == "" || cursos[key].img == null) {
               cursos[key].img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
-            }
-            else {
-              cursos[key].img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + cursos[key].img;
             }
             this.cursos.push(cursos[key]);
           }
@@ -726,10 +720,8 @@ var app = new Vue({
         });
     },
     checkLocation(link) {
-      if (link == window.location.pathname) {
-        return true;
-      }
-      return false;
+      return link == window.location.pathname;
+
     },
   },
   beforeMount() {
