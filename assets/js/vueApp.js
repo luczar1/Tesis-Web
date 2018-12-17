@@ -36,9 +36,9 @@ Vue.component('box-curso', {
             docente.sendNotifApp = false;
           }
           this.$forceUpdate();
-      });
+        });
     },
-    getInicio: function(timestamp) {
+    getInicio: function (timestamp) {
       let date = new Date(timestamp);
       let day = ('0' + date.getDate()).slice(-2);
       let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -51,24 +51,24 @@ Vue.component('box-curso', {
     changeSection(newSection) {
       this.section = newSection;
     },
-    toggleNotifAppAlumnos(section){
+    toggleNotifAppAlumnos(section) {
       switch (section) {
         case 'todos':
           for (let alumno of this.curso.alumnos) {
-            alumno.sendNotifApp = ! alumno.sendNotifApp;
+            alumno.sendNotifApp = !alumno.sendNotifApp;
           }
           break;
         case 'inscriptos':
           for (let alumno of this.curso.alumnos) {
             if (alumno.pago) {
-              alumno.sendNotifApp = ! alumno.sendNotifApp;
+              alumno.sendNotifApp = !alumno.sendNotifApp;
             }
           }
           break;
         case 'solicitudes':
           for (let alumno of this.curso.alumnos) {
             if (!alumno.pago) {
-              alumno.sendNotifApp = ! alumno.sendNotifApp;
+              alumno.sendNotifApp = !alumno.sendNotifApp;
             }
           }
           break;
@@ -79,33 +79,33 @@ Vue.component('box-curso', {
       switch (section) {
         case 'todos':
           for (let alumno of this.curso.alumnos) {
-            alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+            alumno.sendNotifEmail = !alumno.sendNotifEmail;
           }
           break;
         case 'inscriptos':
           for (let alumno of this.curso.alumnos) {
             if (alumno.pago) {
-              alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+              alumno.sendNotifEmail = !alumno.sendNotifEmail;
             }
           }
           break;
         case 'solicitudes':
           for (let alumno of this.curso.alumnos) {
             if (!alumno.pago) {
-              alumno.sendNotifEmail = ! alumno.sendNotifEmail;
+              alumno.sendNotifEmail = !alumno.sendNotifEmail;
             }
           }
           break;
       }
       this.$forceUpdate();
     },
-    toggleNotifAppDocentes(){
+    toggleNotifAppDocentes() {
       for (let docente of this.curso.docentes) {
         docente.sendNotifApp = !docente.sendNotifApp;
       }
       this.$forceUpdate();
     },
-    toggleNotifEmailDocentes(){
+    toggleNotifEmailDocentes() {
       for (let docente of this.curso.docentes) {
         docente.sendNotifEmail = !docente.sendNotifEmail;
       }
@@ -113,12 +113,12 @@ Vue.component('box-curso', {
     },
     getListadoAlumnos(section) {
       let alumnosReturn = [];
-      switch (section){
+      switch (section) {
         case 'todos':
           return this.curso.alumnos;
           break;
         case 'solicitudes':
-            return this.curso.alumnos.filter(element => !element.pago);
+          return this.curso.alumnos.filter(element => !element.pago);
           break;
         case 'inscriptos':
           return this.curso.alumnos.filter(element => element.pago);
@@ -291,7 +291,7 @@ Vue.component('list-logs', {
       search: "",
       logs: [],
       inicio: 0,
-      fin : 9,
+      fin: 9,
       cantLogs: 0,
     }
   },
@@ -329,7 +329,7 @@ Vue.component('list-logs', {
       let pages = Math.trunc(this.cantLogs / this.cantPerPage);
       let rest = this.cantLogs % this.cantPerPage;
 
-      if (rest>0) {
+      if (rest > 0) {
         pages++;
       }
       if (this.page < pages) {
@@ -385,7 +385,9 @@ Vue.component('list-logs', {
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                              <th>Tipo de error</th>
+                                              <th>Tipo</th>
+                                              <th>Nombre</th>
+                                              <th>Apellido</th>
                                               <th>Descripción</th>
                                               <th>Fecha</th>
                                             </tr>
@@ -393,6 +395,8 @@ Vue.component('list-logs', {
                                         <tbody>
                                             <tr v-for="log in getLogs()">
                                                 <td>{{log.pagina}}</td>
+                                                <td>{{log.nombre}}</td>
+                                                <td>{{log.apellido}}</td>
                                                 <td>{{log.error}}</td>
                                                 <td>{{displayDate(log.createdAt)}}</td>                                                     
                                             </tr>
@@ -421,7 +425,7 @@ Vue.component('list-logs', {
                                       <button class="btn btn-success" @click="downloadLogsExcel()"><i class="fas fa-file-excel"></i> Descargar en formato Excel</button>
                                    </div>
                                    </div>
-                                </div>`,
+                                </div></div></div>`,
 
 });
 
@@ -436,11 +440,11 @@ Vue.component('list-courses', {
       cursos: [],
       cursoMostrar: null,
       sort: {
-        order: 'asc',
+        order: 'desc',
         by: 'inicio'
       },
       inicio: 0,
-      fin : 9,
+      fin: 9,
       cantCursos: 0,
     }
   },
@@ -490,8 +494,7 @@ Vue.component('list-courses', {
           return 0;
 
         });
-      }
-      else {
+      } else {
         this.cursos = this.cursos.sort(function (a, b) {
           if (a[by] > b[by]) {
             return -1;
@@ -529,10 +532,7 @@ Vue.component('list-courses', {
       return list;
     },
     currentPage(pg) {
-      if (pg === this.page) {
-        return true
-      }
-      return false;
+      return pg === this.page;
     },
     loadCourses() {
       this.$http.get('/curso')
@@ -555,7 +555,7 @@ Vue.component('list-courses', {
       let pages = Math.trunc(this.cantCursos / this.cantPerPage);
       let rest = this.cantCursos % this.cantPerPage;
 
-      if (rest>0) {
+      if (rest > 0) {
         pages++;
       }
       if (this.page < pages) {
@@ -567,7 +567,7 @@ Vue.component('list-courses', {
         this.page--;
       }
     },
-    getInicio: function(timestamp) {
+    getInicio: function (timestamp) {
       let date = new Date(timestamp);
       let day = ('0' + date.getDate()).slice(-2);
       let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -664,7 +664,7 @@ Vue.component('list-courses', {
                                                   :class="{
                                                   'fas fa-play-circle fa-2x text-success': curso.estado.toUpperCase() == 'INICIADO', 
                                                   'fas fa-stop-circle fa-2x text-danger': curso.estado.toUpperCase() == 'TERMINADO',
-                                                  'fas fa-arrow-circle-right fa-2x text-warning': curso.estado.toUpperCase() == 'POR INICIAR',}">
+                                                  'fas fa-arrow-circle-right fa-2x text-warning': curso.estado.toUpperCase() == 'POR INICIAR'}">
                                                   </i>
                                                   <span 
                                                   v-if="curso.estado.toUpperCase() != 'INICIADO' 
@@ -723,10 +723,8 @@ var app = new Vue({
         });
     },
     checkLocation(link) {
-      if (link == window.location.pathname) {
-        return true;
-      }
-      return false;
+      return link == window.location.pathname;
+
     },
   },
   beforeMount() {

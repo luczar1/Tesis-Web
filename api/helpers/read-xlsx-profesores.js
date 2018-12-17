@@ -205,31 +205,35 @@ module.exports = {
     // All done.
 
     let logDB = await Log.find({
-      select: ['pagina', 'error']
+      select: ['pagina', 'nombre', 'apellido', 'error']
     });
 
     /**
      * Cargados los logs viejos en el historico
      */
-    await LogHistorico.createEach(logDB);
-    sails.log('Cargado el log historico');
+    if (logDB != null) {
+      await LogHistorico.createEach(logDB);
+      sails.log('Cargado el log historico');
+      /**
+       * Borrada la tabla de logs para cargar los nuevos
+       */
+      await Log.destroy({});
+      sails.log('Borrada la tabla de logs');
+    }
 
-    /**
-     * Borrada la tabla de logs para cargar los nuevos
-     */
-    await Log.destroy({});
-    sails.log('Borrada la tabla de logs');
 
     let logs = [];
     for (let error of errores) {
       logs.push({
         pagina: 'Carga de docentes',
-        error: 'Profesor ' + error.nombre + ' ' + error.apellido + ' ' + error.error
+        nombre: error.nombre,
+        apellido: error.apellido,
+        error: error.error
       })
     }
 
     await Log.createEach(logs)
-
+    sails.log('Creada la nueva tabla de logs')
     return exits.success(errores);
 
   }
