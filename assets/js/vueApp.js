@@ -655,7 +655,7 @@ Vue.component('list-courses', {
                                                 'btn btn-success': curso.vigente.toUpperCase() == 'SI', 
                                                 'btn btn-warning': curso.vigente.toUpperCase() == 'EN REPROGRAMACIÓN', 
                                                 'btn btn-danger': curso.vigente.toUpperCase() == 'CANCELADO', 
-                                                }">{{curso.vigente == 'Si' ? 'Vigente' : curso.vigente}}</button></td>
+                                                }">{{curso.vigente}}</button></td>
                                                 <td>
                                                   <i v-tooltip='curso.estado' 
                                                   v-if="curso.estado.toUpperCase() == 'INICIADO' 
