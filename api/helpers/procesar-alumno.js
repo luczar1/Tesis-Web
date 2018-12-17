@@ -118,7 +118,7 @@ module.exports = {
 
     }
     else {
-      sails.log("Alumno: " + inputs.alumnoXls['Código'] + " Doc: " + inputs.alumnoXls['Documento'] + " Inscripto a curso: " + inputs.alumnoXls['Código'] + " El cual no se encuentra en base de datos, se omitio la carga");
+      sails.log("Alumno: " + inputs.alumnoXls['Apellido y nombre'] + " Doc: " + inputs.alumnoXls['Documento'] + " Inscripto a curso: " + inputs.alumnoXls['Código'] + " El cual no se encuentra en base de datos, se omitio la carga");
     }
 
 
