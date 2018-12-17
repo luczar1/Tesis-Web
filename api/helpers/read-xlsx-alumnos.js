@@ -22,6 +22,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    //Medir Performance
+    var startTime = new Date().getTime();
+
     let buf = sails.fs.readFileSync(inputs.filePath);
     let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
@@ -75,6 +78,9 @@ module.exports = {
       })
         .exec(async (err, newOrExistingRecord, wasCreated) => {
 
+          if (err != null) {
+            sails.log(err);
+          }
           let found = listadoAlumnos.find((e) => {
             return e.doc == newOrExistingRecord.documento
           });
@@ -84,7 +90,7 @@ module.exports = {
 
           if (wasCreated != null && !wasCreated) {
 
-            // sails.log(found);
+            //sails.log(found);
             await Alumno.update({id: newOrExistingRecord.id}, {
 
               clave: found.clave,
@@ -128,14 +134,16 @@ module.exports = {
 
               }
             }
+            var endTime = new Date().getTime();
+            var totalTime = endTime - startTime;
+
+            sails.log("El proceso tardó: " + totalTime + "milisegundos");
           }
           else {
             findOrCreateCounter++;
           }
         });
     }
-
-
 
     // All done.
     return exits.success();
