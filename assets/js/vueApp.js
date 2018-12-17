@@ -545,9 +545,6 @@ Vue.component('list-courses', {
             if (cursos[key].img == "" || cursos[key].img == null) {
               cursos[key].img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
             }
-            else {
-              cursos[key].img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + cursos[key].img;
-            }
             this.cursos.push(cursos[key]);
           }
         }, err => {
