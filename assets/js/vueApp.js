@@ -385,7 +385,9 @@ Vue.component('list-logs', {
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                              <th>Tipo de error</th>
+                                              <th>Tipo</th>
+                                              <th>Nombre</th>
+                                              <th>Apellido</th>
                                               <th>Descripción</th>
                                               <th>Fecha</th>
                                             </tr>
@@ -393,6 +395,8 @@ Vue.component('list-logs', {
                                         <tbody>
                                             <tr v-for="log in getLogs()">
                                                 <td>{{log.pagina}}</td>
+                                                <td>{{log.nombre}}</td>
+                                                <td>{{log.apellido}}</td>
                                                 <td>{{log.error}}</td>
                                                 <td>{{displayDate(log.createdAt)}}</td>                                                     
                                             </tr>
