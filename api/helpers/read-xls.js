@@ -46,8 +46,8 @@ module.exports = {
       cursoOk.inicio = dateObj.getTime();
       cursoOk.fin = json[curso]['Fin'];
       cursoOk.categoria = json[curso]['Categoría'];
-      cursoOk.vigente = json[curso]['Vigente'];
-      cursoOk.estado = json[curso]['Estado'];
+      cursoOk.vigente = json[curso]['Vigente'] == 'Si' ? 'Vigente' : json[curso]['Vigente'];
+      cursoOk.estado = json[curso]['Estado'] == 'Si' ? 'Por iniciar' : json[curso]['Estado'];
       cursoOk.cupoMax = json[curso]['Cupo Max.'];
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
       cursoOk.areas = [];

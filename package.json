@@ -37,7 +37,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "start-test": "sails lift",
+    "start-test": "sails lift --hookTimeout=80000",
     "test": "node ./node_modules/mocha/bin/mocha test/lifecycle.test.js test/integration/**/*.test.js",
     "lint": "eslint . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
