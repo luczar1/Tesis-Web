@@ -547,6 +547,8 @@ Vue.component('list-courses', {
             }
             this.cursos.push(cursos[key]);
           }
+
+          this.sortCursos('inicio');
         }, err => {
           console.log(err);
         });
