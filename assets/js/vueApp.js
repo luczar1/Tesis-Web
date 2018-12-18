@@ -440,7 +440,7 @@ Vue.component('list-courses', {
       cursos: [],
       cursoMostrar: null,
       sort: {
-        order: 'asc',
+        order: 'desc',
         by: 'inicio'
       },
       inicio: 0,
