@@ -45,5 +45,22 @@ module.exports = {
     mail2: {type: "boolean"}
   },
 
+  /**
+   * Dar de baja un alumno de un curso
+   * @param {string} cursoId  id del curso
+   * @param {string} alumnoId id del alumno
+   * @returns {Promise<*>}
+   */
+  bajaAlumno: async function(cursoId, alumnoId) {
+    return await AlumnoPorCurso.destroy({
+      where: {
+        and: [
+          { curso: cursoId },
+          { alumno: alumnoId }
+        ]
+      }
+    });
+  },
+
 };
 
