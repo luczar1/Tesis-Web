@@ -30,12 +30,16 @@ module.exports = {
     lastLogin: {type: "number"},
 
     /**
-     * Relacion con admin
+     * Relacion con alumno
      */
-    /*admin: {
-      model: 'admin',
-      unique: true
-    }*/
+    alumnoId: {type: 'string'},
+
+
+    /**
+     * Relacion con profesor
+     */
+    docenteId: {type: 'string'},
+
   },
 
   login: async function(email, pass, session) {
