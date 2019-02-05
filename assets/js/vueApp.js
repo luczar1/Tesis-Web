@@ -1,6 +1,5 @@
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
-Vue.use('vue-js-modal');
 
 
 Vue.component('box-curso', {
@@ -54,7 +53,6 @@ Vue.component('box-curso', {
       this.section = newSection;
     },
     toggleNotifAppAlumnos(section) {
-      this.$modal.show('hello-world');
       switch (section) {
         case 'todos':
           for (let alumno of this.curso.alumnos) {
@@ -307,10 +305,6 @@ Vue.component('box-curso', {
         </div>
         </div>
       </div>
-      <modal name="hello-world">
-        hello, world!
-      </modal>
-    </div>`
 });
 
 Vue.component('list-logs', {
