@@ -15,7 +15,8 @@ module.exports.bootstrap = async function(done) {
   sails.fs = require('fs');
   sails.request = require('request');
   sails.utf8 = require('utf8');
-  sails.sleep = require('system-sleep');
+  sails.sleep = require('system-sleep')
+  sails.nodemailer = require('nodemailer');
 
   // By convention, this is a good place to set up fake data during development.
   //

@@ -17,6 +17,7 @@
     "grunt": "^1.0.3",
     "jquery": "^3.3.1",
     "mocha": "^5.2.0",
+    "nodemailer": "^5.1.1",
     "request": "^2.88.0",
     "sails": "^1.0.2",
     "sails-hook-grunt": "^3.0.2",
