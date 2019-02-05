@@ -131,6 +131,15 @@ Vue.component('box-curso', {
     changeSectionAlumnos(val) {
       this.alumnosSection = val;
     },
+    bajaAlumno(id) {
+      this.$http.post('/api/curso/bajaAlumno', {cursoId: this.curso.id, alumnoId: id})
+        .then((response) => {
+          let index = this.curso.alumnos.findIndex(element => element.id === id);
+          this.curso.alumnos.splice(index, 1);
+        }, err => {
+          console.log(err);
+        });
+    }
   },
   template: `
       <div class="card" v-if="curso != null">
@@ -234,6 +243,7 @@ Vue.component('box-curso', {
                       <th scope="col">Pago</th>
                       <th scope="col"><i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i></th>
                       <th scope="col"><i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></th>
+                      <th scope="col">Dar de baja</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -259,6 +269,21 @@ Vue.component('box-curso', {
                       </td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifEmail"></td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifApp"></td>
+                      <td style="padding-left: 30px"><button class="btn btn-danger btn-sm" type="button" @click="bajaAlumno(alumno.id)"><i class="fas fa-user-minus"></i></button></td>
+                       <!-- Bubble confirmacion Dar de baja alumno -->
+                      <!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+                        <!--<div class="modal-dialog" role="document">-->
+                          <!--<div class="modal-content">-->
+                            <!--<div class="modal-body">-->
+                              <!--¿Seguro que desea dar de baja a {{alumno.apellido}}, {{alumno.nombre}}?-->
+                            <!--</div>-->
+                            <!--<div class="modal-footer">-->
+                              <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>-->
+                              <!--<button type="button" class="btn btn-primary" data-dismiss="modal" v-model="alumno" @click="bajaAlumno(alumno)">Confirmar</button>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</div>-->
+                      <!--</div>-->
                     </tr>
                     <tr v-if="getListadoAlumnos(alumnosSection).length == 0"><td colspan="9" class="text-center"><b>No se registraron alumnos</b></td></tr>
                   </tbody>

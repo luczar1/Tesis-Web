@@ -35,5 +35,18 @@ module.exports = {
     });
   },
 
+  /**
+   * Dar de baja un alumno de un curso.
+   * Se reutilizó este Controller para no crear un ApiAlumnosPorCursoController.
+   * @param req request
+   * @param res response
+   * @returns {Promise<*>}
+   */
+  bajaAlumno: async function (req, res) {
+    let cursoId = req.body.cursoId,
+        alumnoId = req.body.alumnoId;
+    res.json(await AlumnoPorCurso.bajaAlumno(cursoId, alumnoId));
+  }
+
 };
 
