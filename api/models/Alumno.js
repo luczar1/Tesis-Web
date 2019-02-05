@@ -58,5 +58,12 @@ module.exports = {
     }
   },
 
+  /**
+   * Tipo de usuario
+   */
+  user: {
+    model: 'user',
+  }
+
 };
 

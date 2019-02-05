@@ -33,6 +33,8 @@ module.exports = {
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
     let listadoAlumnos = [];
+    let nuevosUsers = [];
+
 
     let cursosDB = await Curso.find({
       select: ['id', 'codigoAlternativo']
@@ -59,6 +61,7 @@ module.exports = {
     let findOrCreateCounter= 0;
 
     for (let key in listadoAlumnos) {
+
 
 
       await Alumno.findOrCreate({documento: listadoAlumnos[key].doc}, {
@@ -107,16 +110,30 @@ module.exports = {
               })
             });
 
+          } else {
+            const hash = await sails.argon2.hash(found.doc);
+            nuevosUsers.push({alumnoId: found.id, email: found.email, pass: hash, tipoUser: 'alumno'});
+
           }
 
+
+
           if (findOrCreateCounter >= listadoAlumnos.length - 1) {
+
+            sails.log(' por crear user');
+           await User.createEach(nuevosUsers);
 
             let cursosAlumnosDB = await AlumnoPorCurso.find();
             sails.log('DB: ');
             sails.log(cursosAlumnosDB);
             //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
 
+
+
             for (alumno of listadoAlumnos) {
+
+
+
               // sails.log('Alumno: ');
               // sails.log(alumno);
               for (curso of alumno.cursos) {
