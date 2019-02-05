@@ -34,6 +34,7 @@ module.exports = {
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
     let profesoresUnicos = [];
+    let nuevosUsers = [];
     let errores = [];
 
     // traigo a memoria todos los cursos su id y su codigo
@@ -136,12 +137,8 @@ module.exports = {
             })
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
-            /*let cursos = await Curso.find({
-              codigo: {
-                in: profesoresUnicos[key].codCurso
-              }
-            });*/
-            console.log(err);
+
+            // console.log(err);
             let found = profesoresUnicos.find((e) => {
               return e.doc == newOrExistingRecord.documento
             });
@@ -149,12 +146,8 @@ module.exports = {
 
             found.id = newOrExistingRecord.id;
 
-            //sails.log(found);
 
             if (!wasCreated && wasCreated != null) {
-              /*let found = profesoresUnicos.find((e) => {
-                return e.doc == newOrExistingRecord.documento
-              });*/
 
               await Docente.update({id: newOrExistingRecord.id}, {
                 clave: found.clave,
@@ -171,10 +164,18 @@ module.exports = {
                 })
               });
 
+            } else {
+              const hash = await sails.argon2.hash(found.doc);
+              nuevosUsers.push({docenteId: found.id, email: found.email, pass: hash, tipoUser: 'docente'});
             }
 
 
-            if (findOrCreateCouter >= profesoresUnicos.length - 1) {
+
+            if (findOrCreateCouter >= profesoresUnicos.length - 1 - errores.length) {
+
+              sails.log(' por crear user');
+              await User.createEach(nuevosUsers);
+
               let cursosProfesoresDB = await DocentePorCurso.find({});
 
               //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
@@ -196,6 +197,15 @@ module.exports = {
           });
       }
     }
+
+
+    if(nuevosUsers != null){
+
+      await User.createEach(nuevosUsers);
+      sails.log(' creados los users');
+
+    }
+
 
     let endTime = new Date().getTime();
 

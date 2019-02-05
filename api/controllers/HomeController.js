@@ -12,7 +12,7 @@ module.exports = {
   },
   redirect: async function (req, res) {
 
-    await User.create({
+    await User.findOrCreate({email: 'prueba@prueba.com'},{
       email: 'prueba@prueba.com',
       pass: '$argon2d$v=19$m=1024,t=1,p=1$c29tZXNhbHQ$anJPL9+0zRaui5EJ02t89OfL4p5Jv8O2gIOyZEoQO0s',
       tipoUser: 'admin',

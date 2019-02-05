@@ -140,8 +140,7 @@ module.exports = {
                 let cursoPorAlumno = cursosAlumnosDB.find((element) => {
                   return element.alumno == alumno.id && element.curso == curso.id;
                 });
-                sails.log('Alumno por curso: ');
-                sails.log(cursoPorAlumno);
+
 
                 await AlumnoPorCurso.update({id: cursoPorAlumno.id}, {
                   documentacion: curso.documentacion,

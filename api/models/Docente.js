@@ -45,6 +45,13 @@ module.exports = {
     telefono: {type: "string"},
 
     /**
+     * Tipo de usuario
+     */
+    user: {
+      model: 'user',
+    },
+
+    /**
      * Cursos en los que participa.
      */
     cursos: {
