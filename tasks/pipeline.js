@@ -77,6 +77,7 @@ var jsFilesToInject = [
   'plugins/admin-dashboard/bootstrap-notify.js',
   'plugins/vue/vue-resource.js',
   'plugins/vue/v-tooltip.min.js',
+  'plugins/vue/vue-clipboard.js',
   'plugins/jquery-fileupload.js',
   'dependencies/**/*.js',
   'assets/js/uploadFiles.js',
