@@ -37,7 +37,9 @@ module.exports.blueprints = {
     // indicate that the request is attempting to set an exceedingly high `limit` clause,
     // then prevent it (we'll say `limit` must not exceed 100).
 
-        queryOptions.criteria.limit = 1000000;
+    //for (let join in queryOptions[0].populates)
+
+    queryOptions.criteria.limit = 1000000;
 
     return queryOptions;
 

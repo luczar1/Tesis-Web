@@ -1,4 +1,5 @@
 Vue.use(VTooltip);
+Vue.use(VueClipboard)
 
 
 Vue.component('box-curso', {
@@ -589,6 +590,15 @@ Vue.component('list-courses', {
         this.page++;
       }
     },
+    copy(msg) {
+      this.$copyText(msg).then(function (e) {
+        alert('Copied')
+        console.log(e)
+      }, function (e) {
+        alert('Can not copy')
+        console.log(e)
+      })
+    },
     prevPage() {
       if (this.page > 1) {
         this.page--;
@@ -673,7 +683,7 @@ Vue.component('list-courses', {
                                         </thead>
                                         <tbody>
                                             <tr v-for="curso in getCursos()" @click="verCurso(curso)" style="cursor: pointer">
-                                                <td><button class="btn btn-default"> {{curso.codigo}} </button></td>
+                                                <td><button class="btn btn-default" @click="copy(curso.codigo)"> {{curso.codigo}} </button></td>
                                                 <td>{{curso.nombre}}</td>
                                                 <td>{{curso.nombreUA}}</td>
                                                 <td><button 

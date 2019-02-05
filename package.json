@@ -17,6 +17,7 @@
     "grunt": "^1.0.3",
     "jquery": "^3.3.1",
     "mocha": "^5.2.0",
+    "nodemailer": "^5.1.1",
     "request": "^2.88.0",
     "sails": "^1.0.2",
     "sails-hook-grunt": "^3.0.2",
@@ -29,6 +30,7 @@
     "utf8": "^3.0.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.5.17",
+    "vue-clipboard2": "^0.2.1",
     "vue-resource": "^1.5.1",
     "xlsx": "^0.14.0"
   },
