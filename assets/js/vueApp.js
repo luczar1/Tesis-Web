@@ -354,7 +354,7 @@ Vue.component('box-curso', {
         </div>
         </div>
         <modal-notificacion :showModal="showNotifModal"></modal-notificacion>
-      </div>`
+      </div></div>`
 });
 
 Vue.component('list-logs', {
