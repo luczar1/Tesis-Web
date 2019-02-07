@@ -29,14 +29,14 @@ Vue.component('modal-notificacion', {
 
     },
     countNotifEmail() {
-      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail);
-      let cantProfes = this.curso.docentes.filter(element => element.sendNotifEmail);
+      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail).length;
+      let cantProfes = this.curso.docentes.filter(element => element.sendNotifEmail).length;
 
       return cantAlumnos + cantProfes;
     },
     countNotifApp() {
-      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifApp);
-      let cantProfes = this.curso.docentes.filter(element => element.sendNotifApp);
+      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifApp).length;
+      let cantProfes = this.curso.docentes.filter(element => element.sendNotifApp).length;
 
       return cantAlumnos + cantProfes;
     },
