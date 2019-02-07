@@ -5,6 +5,8 @@ Vue.use(VueClipboard);
 Vue.component('modal-notificacion', {
   data: () => {
     return {
+      cantNotifApp: 0,
+      cantNotifEmail: 0,
     }
   },
   props:['showModal', 'curso'],
@@ -35,13 +37,13 @@ Vue.component('modal-notificacion', {
       let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail).length;
       let cantProfes = this.curso.docentes.filter(element => element.sendNotifEmail).length;
 
-      return cantAlumnos + cantProfes;
+      this.cantNotifApp = cantAlumnos + cantProfes;
     },
     countNotifApp() {
       let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifApp).length;
       let cantProfes = this.curso.docentes.filter(element => element.sendNotifApp).length;
 
-      return cantAlumnos + cantProfes;
+      this.cantNotifEmail = cantAlumnos + cantProfes;
     },
   },
   template: `<div class="modal" tabindex="-1" role="dialog" id="modalNotif">
@@ -54,7 +56,7 @@ Vue.component('modal-notificacion', {
                       </button>
                     </div>
                     <div class="modal-body">
-                      <button class="btn btn-default btn-xs">{{countNotifEmail()}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{countNotifApp()}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
+                      <button class="btn btn-default btn-xs">{{cantNotifEmail}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{cantNotifApp}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
                       <br>
                       <input type="text" class="form-control" placeholder="Titulo">
                       <br>
