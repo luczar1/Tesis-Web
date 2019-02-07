@@ -36,13 +36,15 @@ Vue.component('modal-notificacion', {
                       </button>
                     </div>
                     <div class="modal-body">
+                      <input type="text" class="form-control" placeholder="Titulo">
+                      <textarea class="form-control" rows="5" placeholder="Mensaje"></textarea>
                       <p>Se enviaran</p>
                       <p>X E-Mails</p>
                       <p>X Notificaciones vía app</p>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Enviar</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                   </div>
                 </div>
