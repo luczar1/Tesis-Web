@@ -58,6 +58,12 @@ module.exports = {
       collection: "curso",
       via: "docente",
       through: "docenteporcurso"
+    },
+
+    notificaciones: {
+      collection: 'notificacion',
+      via: '',
+      through: 'notificacionpordocente'
     }
   },
 
