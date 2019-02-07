@@ -7,7 +7,7 @@ Vue.component('modal-notificacion', {
     return {
     }
   },
-  props:['showModal'],
+  props:['showModal', 'curso'],
   watch: {
     showModal: function (val) {
       if (val) {
@@ -23,8 +23,23 @@ Vue.component('modal-notificacion', {
       $('#modalNotif').modal('show');
     },
     hide() {
-      this.$emit('hideModal');
-    }
+      this.$emit('onHideModal');
+    },
+    sendNotif() {
+
+    },
+    countNotifEmail() {
+      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail);
+      let cantProfes = this.curso.docentes.filter(element => element.sendNotifEmail);
+
+      return cantAlumnos + cantProfes;
+    },
+    countNotifApp() {
+      let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifApp);
+      let cantProfes = this.curso.docentes.filter(element => element.sendNotifApp);
+
+      return cantAlumnos + cantProfes;
+    },
   },
   template: `<div class="modal" tabindex="-1" role="dialog" id="modalNotif">
                 <div class="modal-dialog" role="document">
@@ -36,7 +51,10 @@ Vue.component('modal-notificacion', {
                       </button>
                     </div>
                     <div class="modal-body">
+                      <button class="btn btn-default btn-xs">{{countNotifEmail}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{countNotifApp}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
+                      <br>
                       <input type="text" class="form-control" placeholder="Titulo">
+                      <br>
                       <textarea class="form-control" rows="5" placeholder="Mensaje"></textarea>
                       <p>Se enviaran</p>
                       <p>X E-Mails</p>
@@ -360,7 +378,7 @@ Vue.component('box-curso', {
           </div>
         </div>
         </div>
-        <modal-notificacion :showModal="showNotifModal" @hideModal="closeNotifModal"></modal-notificacion>
+        <modal-notificacion :showModal="showNotifModal" :curso="curso" @onHideModal="closeNotifModal"></modal-notificacion>
       </div></div>`
 });
 
