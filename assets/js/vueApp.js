@@ -346,7 +346,7 @@ Vue.component('box-curso', {
                 </table>
                 <div class="row">
                   <div class="col-sm-12">
-                    <button type="button" class="btn btn-outline-success"><i class="fas fa-bell"></i> Enviar notificaciones</button>
+                    <button type="button" class="btn btn-outline-success" @click="openNotifModal()"><i class="fas fa-bell"></i> Enviar notificaciones</button>
                   </div>
                 </div>
             </div>
