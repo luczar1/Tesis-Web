@@ -9,7 +9,7 @@ module.exports = {
 
 
   create : async function(req, res) {
-    let notificacion = JSON.parse(req.param("notificacion"));
+    let notificacion = req.param("notificacion");
 
     res.json(notificacion);
   }
