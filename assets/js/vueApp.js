@@ -7,6 +7,8 @@ Vue.component('modal-notificacion', {
     return {
       cantNotifApp: 0,
       cantNotifEmail: 0,
+      titulo: "",
+      mensaje: "",
     }
   },
   props:['showModal', 'curso'],
@@ -31,6 +33,20 @@ Vue.component('modal-notificacion', {
       this.$emit('onHideModal');
     },
     sendNotif() {
+      let notificacion = {};
+
+      notificacion.titulo = this.titulo;
+      notificacion.mensaje = this.mensaje;
+      notificacion.alumnos = this.curso.alumnos;
+      notificacion.docentes = this.curso.docentes;
+
+      this.$http.post("/notificacion", notificacion)
+        .then((response) =>{
+
+          console.log(response.data);
+
+        });
+
 
     },
     countNotifEmail() {
@@ -58,12 +74,12 @@ Vue.component('modal-notificacion', {
                     <div class="modal-body">
                       <button class="btn btn-default btn-xs">{{cantNotifEmail}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{cantNotifApp}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
                       <br><br>
-                      <input type="text" class="form-control" placeholder="Titulo">
+                      <input type="text" class="form-control" v-bind="titulo" placeholder="Titulo">
                       <br>
-                      <textarea class="form-control" rows="5" placeholder="Mensaje"></textarea>
+                      <textarea class="form-control" rows="5" v-bind="mensaje" placeholder="Mensaje"></textarea>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary">Enviar</button>
+                      <button type="button" class="btn btn-primary" @click="sendNotif()">Enviar</button>
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
                   </div>
