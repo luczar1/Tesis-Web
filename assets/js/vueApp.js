@@ -40,7 +40,7 @@ Vue.component('modal-notificacion', {
       notificacion.alumnos = this.curso.alumnos;
       notificacion.docentes = this.curso.docentes;
 
-      this.$http.post("/notificacion", notificacion)
+      this.$http.post("/notificacion", {notificacion: notificacion})
         .then((response) =>{
 
           console.log(response.data);
