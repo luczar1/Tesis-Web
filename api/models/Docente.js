@@ -52,6 +52,11 @@ module.exports = {
     },
 
     /**
+     * Token de firebase para envio de notificaciones.
+     */
+    tokenFirebase: {type: "string"},
+
+    /**
      * Cursos en los que participa.
      */
     cursos: {

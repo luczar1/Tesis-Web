@@ -45,8 +45,9 @@ module.exports = {
     telefono: {type: "string"},
 
     /**
-     * Categoria a la que pertence
+     * Token de firebase para envio de notificaciones.
      */
+    tokenFirebase: {type: "string"},
 
     /**
      * Cursos en los que se ha inscripto.
