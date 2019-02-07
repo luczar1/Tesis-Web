@@ -23,7 +23,7 @@ Vue.component('modal-notificacion', {
       $('#modalNotif').modal('show');
     },
     hide() {
-      $('#modalNotif').modal('hide');
+      this.$emit('hideModal');
     }
   },
   template: `<div class="modal" tabindex="-1" role="dialog" id="modalNotif">
@@ -31,7 +31,7 @@ Vue.component('modal-notificacion', {
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title">Enviar notificaciones</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModal = false">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hide()">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
@@ -192,6 +192,9 @@ Vue.component('box-curso', {
     },
     openNotifModal() {
      this.showNotifModal = true;
+    },
+    closeNotifModal() {
+      this.showNotifModal = false;
     }
   },
   template: `
@@ -357,7 +360,7 @@ Vue.component('box-curso', {
           </div>
         </div>
         </div>
-        <modal-notificacion :showModal="showNotifModal"></modal-notificacion>
+        <modal-notificacion :showModal="showNotifModal" @hideModal="closeNotifModal"></modal-notificacion>
       </div></div>`
 });
 
