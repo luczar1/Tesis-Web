@@ -231,8 +231,8 @@ Vue.component('box-curso', {
         <div class="col-sm-12">
           <nav class="nav nav-pills">
             <a class="nav-link" :class="{'active': section == 'general'}" href="#" @click="changeSection('general')">General</a>
-            <a class="nav-link" :class="{'active': section == 'profesores'}" href="#" @click="changeSection('profesores')">Profesores ({{this.curso.docentes.length}})</a>
-            <a class="nav-link" :class="{'active': section == 'alumnos'}" href="#" @click="changeSection('alumnos')">Alumnos ({{this.curso.alumnos.length}})</a>
+            <a class="nav-link" :class="{'active': section == 'profesores'}" href="#" @click="changeSection('profesores')">Profesores <span :class="{'badge badge-light': section == 'profesores','badge badge-primary': section != 'profesores', }">{{this.curso.docentes.length}}</a>
+            <a class="nav-link" :class="{'active': section == 'alumnos'}" href="#" @click="changeSection('alumnos')">Alumnos <span :class="{'badge badge-light': section == 'alumnos','badge badge-primary': section != 'alumnos', }">{{this.curso.alumnos.length}}</span></a>
           </nav>
         </div>
        </div>
@@ -301,7 +301,7 @@ Vue.component('box-curso', {
           <nav class="nav nav-pills">
             <a class="nav-link" :class="{'active': alumnosSection == 'todos'}" href="#" @click="changeSectionAlumnos('todos')">Todos <span :class="{'badge badge-light': alumnosSection == 'todos','badge badge-primary': alumnosSection != 'todos', }">{{getListadoAlumnos('all').length}}</span></a>
             <a class="nav-link" :class="{'active': alumnosSection == 'solicitudes'}" href="#" @click="changeSectionAlumnos('solicitudes')">Solicitudes <span :class="{'badge badge-light': alumnosSection == 'solicitudes','badge badge-primary': alumnosSection != 'solicitudes', }">{{getListadoAlumnos('solicitudes').length}}</span></a>
-            <a class="nav-link" :class="{'active': alumnosSection == 'inscriptos'}" href="#" @click="changeSectionAlumnos('inscriptos')">Inscriptos <span :class="{'badge badge-light': alumnosSection == 'inscriptos','badge badge-primary': alumnosSection != 'inscriptos', }">{{getListadoAlumnos('inscriptos').length}})</span></a>
+            <a class="nav-link" :class="{'active': alumnosSection == 'inscriptos'}" href="#" @click="changeSectionAlumnos('inscriptos')">Inscriptos <span :class="{'badge badge-light': alumnosSection == 'inscriptos','badge badge-primary': alumnosSection != 'inscriptos', }">{{getListadoAlumnos('inscriptos').length}}</span></a>
           </nav>
           </div>
         </div>
