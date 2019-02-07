@@ -1,7 +1,51 @@
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
-Vue.use('vue-js-modal');
 
+
+Vue.component('modal-notificacion', {
+  data: () => {
+    return {
+    }
+  },
+  props:['showModal'],
+  watch: {
+    showModal: function (val) {
+      if (val) {
+        this.show();
+      }
+      else {
+        this.hide();
+      }
+    }
+  },
+  methods: {
+    show() {
+      $('#modalNotif').modal('show');
+    },
+    hide() {
+      $('#modalNotif').modal('hide');
+    }
+  },
+  template: `<div class="modal" tabindex="-1" role="dialog" id="modalNotif">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>`
+});
 
 Vue.component('box-curso', {
   props: ['curso'],
@@ -9,6 +53,7 @@ Vue.component('box-curso', {
     return {
       section: 'general',
       alumnosSection: 'todos',
+      showNotifModal: false,
     }
   },
   watch: {
@@ -48,13 +93,12 @@ Vue.component('box-curso', {
       return day + '-' + month + '-' + year;
     },
     getImgPath() {
-      return this.curso.img == "" || this.curso.img ==  null ? "https://via.placeholder.com/313x250.png?text=Sin Imagen" : this.curso.img;
+      return this.curso.img == "" || this.curso.img == null ? "https://via.placeholder.com/313x250.png?text=Sin Imagen" : this.curso.img;
     },
     changeSection(newSection) {
       this.section = newSection;
     },
     toggleNotifAppAlumnos(section) {
-      this.$modal.show('hello-world');
       switch (section) {
         case 'todos':
           for (let alumno of this.curso.alumnos) {
@@ -141,6 +185,9 @@ Vue.component('box-curso', {
         }, err => {
           console.log(err);
         });
+    },
+    openNotifModal() {
+     this.showNotifModal = true;
     }
   },
   template: `
@@ -215,7 +262,7 @@ Vue.component('box-curso', {
                 </table>
                 <div class="row">
                   <div class="col-sm-12">
-                    <button type="button" class="btn btn-outline-success"><i class="fas fa-bell"></i> Enviar notificaciones</button>
+                    <button type="button" class="btn btn-outline-success" @click="openNotifModal()"><i class="fas fa-bell"></i> Enviar notificaciones</button>
                   </div>
                 </div>
             </div>
@@ -306,11 +353,8 @@ Vue.component('box-curso', {
           </div>
         </div>
         </div>
-      </div>
-      <modal name="hello-world">
-        hello, world!
-      </modal>
-    </div>`
+        <modal-notificacion :showModal="showNotifModal"></modal-notificacion>
+      </div>`
 });
 
 Vue.component('list-logs', {
@@ -456,7 +500,8 @@ Vue.component('list-logs', {
                                       <button class="btn btn-success" @click="downloadLogsExcel()"><i class="fas fa-file-excel"></i> Descargar en formato Excel</button>
                                    </div>
                                    </div>
-                                </div></div></div>`,
+                                </div></div>
+                                </div>`,
 
 });
 
