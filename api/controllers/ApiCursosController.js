@@ -46,7 +46,6 @@ module.exports = {
     let cursoId = req.body.cursoId,
         alumnoId = req.body.alumnoId;
     res.json(await AlumnoPorCurso.bajaAlumno(cursoId, alumnoId));
-  }
-
+  },
 };
 

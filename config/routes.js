@@ -70,6 +70,7 @@ module.exports.routes = {
   'get /api/curso': 'ApiCursosController.getCursos',
   'get /api/curso/:id': 'ApiCursosController.getCurso',
   'post /api/curso/bajaAlumno': 'ApiCursosController.bajaAlumno',
+  'post /api/loginApp': 'UserController.logInApp',
   'get /log/generateXlsx': 'LogController.generateXlsx',
 
 

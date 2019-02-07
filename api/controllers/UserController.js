@@ -92,5 +92,22 @@ module.exports = {
     res.json(navBarForUser);
 
   },
+  logInApp: async function(req, res) {
+    let email = req.param("email");
+    let pass = req.param("pass");
+
+    if (email == null || pass == null) {
+      res.json({status: 'ERROR'});
+    }
+
+    let user = await User.findOne({email: email});
+
+    if (user != null && user.tipoUser == 'alumno' && await sails.argon2.verify(user.pass, pass)) {
+      res.json({status: 'OK', idAlumno: user.alumnoId})
+    }
+    else {
+      res.json({status: 'ERROR'});
+    }
+  }
 };
 
