@@ -178,15 +178,22 @@ module.exports = {
 
               let cursosProfesoresDB = await DocentePorCurso.find({});
 
-              //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+              // console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
 
               for (profe of profesoresUnicos) {
                 for (curso of profe.cursos) {
                   let CursoPorProfe = cursosProfesoresDB.find((element) => {
-                    return element.docente == profe.id && element.curso == curso.id;
+                    return element.docente == profe.id && element.curso == curso.idCurso;
                   });
 
-                  DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
+                  if(CursoPorProfe == undefined){
+                    sails.log(profe);
+                    sails.log(curso);
+                  }
+                  else {
+                    await DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
+
+                  }
 
 
                 }

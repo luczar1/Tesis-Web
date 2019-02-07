@@ -52,7 +52,7 @@ module.exports = {
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
       cursoOk.areas = [];
 
-      sails.log(cursoOk.codigoAlternativo);
+      // sails.log(cursoOk.codigoAlternativo);
 
       if (cursoOk.estado != "Terminado") {
 
@@ -60,21 +60,21 @@ module.exports = {
           url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + cursoOk.codigo
         }, function (error, response, body) {
           if (error) {
-            console.log(error);
+            // console.log(error);
           }
           else {
             try {
               let json = JSON.parse(body);
               if (json[0].cext_foto != null && json[0].cext_foto != "") {
                 cursoOk.img = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/" + json[0].cext_foto;
-                console.log(cursoOk.img);
+                // console.log(cursoOk.img);
               }
               else {
                 cursoOk.img = "https://via.placeholder.com/313x250.png?text=Sin Imagen";
               }
               if (json[0].descripcion != null) {
                 cursoOk.descripcion = sails.utf8.decode(json[0].descripcion);
-                console.log(cursoOk.descripcion);
+                // console.log(cursoOk.descripcion);
               }
               if (json[0].id_area != null) {
                 let areas = json[0].id_area.split(";");
@@ -85,7 +85,7 @@ module.exports = {
                    return element.id_area == area;
                   }).id);
                 }
-                console.log(cursoOk.areas);
+                // console.log(cursoOk.areas);
               }
             }
             catch (e) {
