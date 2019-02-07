@@ -51,7 +51,7 @@ Vue.component('modal-notificacion', {
                       </button>
                     </div>
                     <div class="modal-body">
-                      <button class="btn btn-default btn-xs">{{countNotifEmail()}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{countNotifApp()}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
+                      <button class="btn btn-default btn-xs">{{this.countNotifEmail()}} <i class="fas fa-at" v-tooltip="'Notificación via E-Mail'"></i> {{this.countNotifApp()}} <i class="fas fa-bell" v-tooltip="'Notificación via App'"></i></button>
                       <br>
                       <input type="text" class="form-control" placeholder="Titulo">
                       <br>
