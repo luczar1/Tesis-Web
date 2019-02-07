@@ -360,7 +360,7 @@ Vue.component('box-curso', {
                         }"></i>
                       </td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifEmail"></td>
-                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="alumno.sendNotifApp"></td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" :disabled="alumno.tokenFirebase == '' || alumno.tokenFirebase == null" v-model="alumno.sendNotifApp"></td>
                       <td style="padding-left: 30px"><button class="btn btn-danger btn-sm" type="button" @click="bajaAlumno(alumno.id)"><i class="fas fa-user-minus"></i></button></td>
                        <!-- Bubble confirmacion Dar de baja alumno -->
                       <!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
@@ -377,7 +377,7 @@ Vue.component('box-curso', {
                         <!--</div>-->
                       <!--</div>-->
                     </tr>
-                    <tr v-if="getListadoAlumnos(alumnosSection).length == 0"><td colspan="9" class="text-center"><b>No se registraron alumnos</b></td></tr>
+                    <tr v-if="getListadoAlumnos(alumnosSection).length == 0"><td colspan="10" class="text-center"><b>No se registraron alumnos</b></td></tr>
                   </tbody>
                   <tfoot>
                   <tr v-if="getListadoAlumnos(alumnosSection).length > 0">
