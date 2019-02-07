@@ -16,12 +16,37 @@ module.exports = {
     let docentes = req.param('docentes');
 
 
+
+
     for (let alumno of alumnos) {
       if (process.env.NODE_ENV == 'production') {
 
       } else {
         if (alumno.sendNotifApp) {
 
+          let notifBody = {};
+
+          notifBody.to = alumno.tokenFirebase;
+          notifBody.notification = {};
+          notifBody.notification.title = titulo;
+          notifBody.notification.body = mensaje;
+
+          sails.request.post({
+            url: 'https://fcm.googleapis.com/fcm/send',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'key=AIzaSyCSI6KQmbm3Z_k6TbYX8XouQjO-kWwj0CI',
+            },
+            body: notifBody,
+
+          }, function (error, response, body) {
+            if (error) {
+              sails.log(error);
+            }
+            else {
+             sails.log(response);
+            }
+          });
         }
         if (alumno.sendNotifEmail) {
           sails.log("Envio de mail");
