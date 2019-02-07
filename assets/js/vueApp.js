@@ -20,6 +20,9 @@ Vue.component('modal-notificacion', {
   },
   methods: {
     show() {
+      this.countNotifEmail();
+      this.countNotifApp();
+
       $('#modalNotif').modal('show');
     },
     hide() {
