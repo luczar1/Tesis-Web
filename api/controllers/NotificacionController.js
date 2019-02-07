@@ -37,7 +37,7 @@ module.exports = {
               'Content-Type': 'application/json',
               'Authorization': 'key=AIzaSyCSI6KQmbm3Z_k6TbYX8XouQjO-kWwj0CI',
             },
-            body: notifBody,
+            body: JSON.stringify(notifBody),
 
           }, function (error, response, body) {
             if (error) {
