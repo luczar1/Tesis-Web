@@ -59,7 +59,7 @@ module.exports = {
 
     notificaciones: {
       collection: 'notificacion',
-      via: '',
+      via: 'alumno',
       through: 'notificacionporalumno'
     }
   },

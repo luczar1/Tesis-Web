@@ -15,12 +15,12 @@ module.exports = {
 
     alumnos:{
       collection: 'alumno',
-      via: '',
+      via: 'notificacion',
       through: 'notificacionporalumno',
     },
     docentes: {
       collection: 'docente',
-      via: '',
+      via: 'notificacion',
       through: 'notificacionpordocente'
     }
 
