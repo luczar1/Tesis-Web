@@ -37,13 +37,13 @@ Vue.component('modal-notificacion', {
       let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail).length;
       let cantProfes = this.curso.docentes.filter(element => element.sendNotifEmail).length;
 
-      this.cantNotifApp = cantAlumnos + cantProfes;
+      this.cantNotifEmail = cantAlumnos + cantProfes;
     },
     countNotifApp() {
       let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifApp).length;
       let cantProfes = this.curso.docentes.filter(element => element.sendNotifApp).length;
 
-      this.cantNotifEmail = cantAlumnos + cantProfes;
+      this.cantNotifApp = cantAlumnos + cantProfes;
     },
   },
   template: `<div class="modal" tabindex="-1" role="dialog" id="modalNotif">
