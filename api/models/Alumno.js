@@ -58,6 +58,9 @@ module.exports = {
       through: "alumnoporcurso"
     },
 
+    /**
+     * Notificaciones que ha recibido.
+     */
     notificaciones: {
       collection: 'notificacion',
       via: 'alumno',

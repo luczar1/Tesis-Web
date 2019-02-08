@@ -9,9 +9,16 @@ module.exports = {
 
   attributes: {
 
+    /**
+     * Notificacion.
+     */
     notificacion: {
       model: 'notificacion'
     },
+
+    /**
+     * Docente.
+     */
     docente: {
       model: 'docente',
     },
