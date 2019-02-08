@@ -291,7 +291,7 @@ Vue.component('box-curso', {
                       <td>{{docente.caracter}}</td>
                       <td>{{docente.email}}</td>
                       <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifEmail"></td>
-                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" v-model="docente.sendNotifApp"></td>
+                      <td style="padding-left: 30px"><input class="form-check-input position-static" type="checkbox" :disabled="docente.tokenFirebase == '' || docente.tokenFirebase == null" v-model="docente.sendNotifApp"></td>
                     </tr>
                     <tr v-if="curso.docentes.length == 0"><td colspan="9" class="text-center"><b>No se registraron docentes</b></td></tr>
                   </tbody>

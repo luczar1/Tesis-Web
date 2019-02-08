@@ -7,46 +7,69 @@
 
 module.exports = {
 
-
+  /**
+   * Send a new Notification.
+   * @param req
+   * @param res
+   * @returns {Promise<void>}
+   */
   create : async function(req, res) {
-    let titulo = req.param("titulo");
-    let mensaje = req.param("mensaje");
 
-    let alumnos = req.param('alumnos');
-    let docentes = req.param('docentes');
+    /**
+     * Get notification body structure.
+     * @param title
+     * @param message
+     * @returns {{to: null, notification: {title: *, body: *}}}
+     */
+    function getNotification(title, message) {
+      return {
+        to: null,
+        notification: {
+          title: title,
+          body: message
+        }
+      }
+    }
 
+    /**
+     * Send the given notification using a FirebaseToken.
+     * @param notification
+     * @param token
+     */
+    function sendNotification(notification, token) {
+      notification.to = token;
+      sails.request.post({
+        url: 'https://fcm.googleapis.com/fcm/send',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AIzaSyCSI6KQmbm3Z_k6TbYX8XouQjO-kWwj0CI',
+        },
+        body: JSON.stringify(notification),
+      }, function (error, response, body) {
+        if (error) {
+          sails.log(error);
+        }
+        else {
+          sails.log(response);
+        }
+      });
+    }
 
-
+    let titulo = req.param("titulo"),
+      mensaje = req.param("mensaje"),
+      alumnos = req.param('alumnos'),
+      docentes = req.param('docentes'),
+      alumnosNotificados = [],
+      docentesNotificados = [],
+      notification = getNotification(titulo, mensaje);
 
     for (let alumno of alumnos) {
       if (process.env.NODE_ENV == 'production') {
 
       } else {
         if (alumno.sendNotifApp) {
-
-          let notifBody = {};
-
-          notifBody.to = alumno.tokenFirebase;
-          notifBody.notification = {};
-          notifBody.notification.title = titulo;
-          notifBody.notification.body = mensaje;
-
-          sails.request.post({
-            url: 'https://fcm.googleapis.com/fcm/send',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'key=AIzaSyCSI6KQmbm3Z_k6TbYX8XouQjO-kWwj0CI',
-            },
-            body: JSON.stringify(notifBody),
-
-          }, function (error, response, body) {
-            if (error) {
-              sails.log(error);
-            }
-            else {
-             sails.log(response);
-            }
-          });
+          alumnosNotificados.push(alumno.id);
+          sendNotification(notification, alumno.tokenFirebase);
         }
         if (alumno.sendNotifEmail) {
           sails.log("Envio de mail");
@@ -59,7 +82,8 @@ module.exports = {
 
       } else {
         if (docente.sendNotifApp) {
-
+          docentesNotificados.push(docente.id);
+          sendNotification(notification, docente.tokenFirebase);
         }
         if (docente.sendNotifEmail) {
           sails.log("Envio de mail");
@@ -68,18 +92,15 @@ module.exports = {
       }
     }
 
-    await Notification.create({
+    await Notificacion.create({
       titulo: titulo,
       mensaje: mensaje,
-      // archivo: '',
-      // alumnos: alumnos,
-      // docentes: docentes
+      archivo: '',
+      alumnos: alumnosNotificados,
+      docentes: docentesNotificados
     });
 
     res.ok();
   }
-
-
-
 };
 
