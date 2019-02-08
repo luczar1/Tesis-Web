@@ -71,9 +71,9 @@ module.exports = {
     await Notification.create({
       titulo: titulo,
       mensaje: mensaje,
-      archivo: '',
-      alumnos: alumnos,
-      docentes: docentes
+      // archivo: '',
+      // alumnos: alumnos,
+      // docentes: docentes
     });
 
     res.ok();
