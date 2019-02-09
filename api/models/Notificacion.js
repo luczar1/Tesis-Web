@@ -25,6 +25,13 @@ module.exports = {
     archivo: {type: 'string'},
 
     /**
+     * Curso desde el cual se envió la notificación.
+     */
+    curso: {
+      model: 'curso'
+    },
+
+    /**
      * Alumnos.
      */
     alumnos:{

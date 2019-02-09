@@ -37,6 +37,7 @@ Vue.component('modal-notificacion', {
 
       notificacion.titulo = this.titulo;
       notificacion.mensaje = this.mensaje;
+      notificacion.curso = this.curso.id;
       notificacion.alumnos = this.curso.alumnos;
       notificacion.docentes = this.curso.docentes;
 
@@ -226,6 +227,16 @@ Vue.component('box-curso', {
           console.log(err);
         });
     },
+    displayDate(timestamp) {
+      let fecha = new Date(timestamp),
+        date = fecha.getDate(),
+        month = fecha.getMonth() + 1,
+        year = fecha.getFullYear(),
+        hours = fecha.getHours() < 10 ? '0' + fecha.getHours() : fecha.getHours(),
+        minutes = fecha.getMinutes() < 10 ? '0' + fecha.getMinutes() : fecha.getMinutes();
+
+      return date + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
+    },
     openNotifModal() {
      this.showNotifModal = true;
     },
@@ -249,6 +260,7 @@ Vue.component('box-curso', {
             <a class="nav-link" :class="{'active': section == 'general'}" href="#" @click="changeSection('general')">General</a>
             <a class="nav-link" :class="{'active': section == 'profesores'}" href="#" @click="changeSection('profesores')">Profesores <span :class="{'badge badge-light': section == 'profesores','badge badge-primary': section != 'profesores', }">{{this.curso.docentes.length}}</a>
             <a class="nav-link" :class="{'active': section == 'alumnos'}" href="#" @click="changeSection('alumnos')">Alumnos <span :class="{'badge badge-light': section == 'alumnos','badge badge-primary': section != 'alumnos', }">{{this.curso.alumnos.length}}</span></a>
+            <a class="nav-link" :class="{'active': section == 'notificaciones'}" href="#" @click="changeSection('notificaciones')">Notificaciones</a>
           </nav>
         </div>
        </div>
@@ -392,6 +404,34 @@ Vue.component('box-curso', {
                     <button type="button" class="btn btn-outline-success" @click="openNotifModal()"><i class="fas fa-bell"></i> Enviar notificaciones</button>
                   </div>
                 </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12" v-if="section == 'notificaciones'">
+          <div class="row pt-3">
+            <div class="col-sm-12">
+              <table class="table table-striped">
+                <colgroup> 
+                   <col span="1" style="width: 25%;">
+                   <col span="1" style="width: 60%;">
+                   <col span="1" style="width: 15%;">
+                </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col">Titulo</th>
+                      <th scope="col">Mensaje</th>
+                      <th scope="col">Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="notificacion in curso.notificaciones">
+                      <td>{{notificacion.titulo}}</td>
+                      <td>{{notificacion.mensaje}}</td>
+                      <td>{{displayDate(notificacion.createdAt)}}</td>
+                    </tr>
+                    <tr v-if="curso.notificaciones.length == 0"><td colspan="9" class="text-center"><b>No se registraron notificaciones</b></td></tr>
+                  </tbody>
+                </table>
             </div>
           </div>
         </div>

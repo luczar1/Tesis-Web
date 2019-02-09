@@ -19,7 +19,7 @@ module.exports = {
       res.json(await Curso.find({
         where: { 'vigente': { '!=' : 'Recargado' }},
         sort: 'inicio ASC'
-      }).populate('alumnos').populate('docentes'));
+      }).populate('alumnos').populate('docentes').populate('notificaciones', { sort: 'createdAt desc'}));
     } else {
       if (req.param('area')) {
         //Busco por id de area, me devuelve datos del area junto con un array de cursos de esa area

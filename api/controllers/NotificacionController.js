@@ -57,6 +57,7 @@ module.exports = {
 
     let titulo = req.param("titulo"),
       mensaje = req.param("mensaje"),
+      curso = req.param("curso"),
       alumnos = req.param('alumnos'),
       docentes = req.param('docentes'),
       alumnosNotificados = [],
@@ -95,6 +96,7 @@ module.exports = {
     await Notificacion.create({
       titulo: titulo,
       mensaje: mensaje,
+      curso: curso,
       archivo: '',
       alumnos: alumnosNotificados,
       docentes: docentesNotificados

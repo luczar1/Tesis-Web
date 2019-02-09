@@ -104,6 +104,14 @@ module.exports = {
     areas: {
       collection: 'area',
       via: 'cursos'
+    },
+
+    /**
+     * Notificaciones enviadas desde el curso.
+     */
+    notificaciones: {
+      collection: 'notificacion',
+      via: 'curso'
     }
   },
 
