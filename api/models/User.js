@@ -111,9 +111,7 @@ module.exports = {
   },
 
   getCurso: async function(id) {
-    let curso = await Curso.findOne({id: id});
-
-    return curso;
+    return await Curso.findOne({id: id}).populate('docentes');
   },
 
   logout: function (session) {
