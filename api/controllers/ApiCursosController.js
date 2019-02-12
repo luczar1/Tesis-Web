@@ -26,6 +26,9 @@ module.exports = {
           let jsonResp = JSON.parse(body);
           curso.inscripcionLink = jsonResp[0].link;
           curso.precio = jsonResp[0].precio;
+          curso.lugar = (jsonResp[0].lugar != null) ? sails.utf8.decode(jsonResp[0].lugar) : '';
+          curso.requi_aprob = (jsonResp[0].requi_aprob != null) ? sails.utf8.decode(jsonResp[0].requi_aprob) : '';
+          curso.contenido = (jsonResp[0].contenido != null) ? sails.utf8.decode(jsonResp[0].contenido) : '';
         }
         catch (e) {
           sails.log(e);
