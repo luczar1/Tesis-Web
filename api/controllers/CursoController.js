@@ -26,7 +26,7 @@ module.exports = {
 
       sails.log(idDocente);
 
-      let docente = await Cursos.find({
+      let docente = await Curso.find({
         where: { 'docentes': { 'in' : idDocente }
         }});
 
