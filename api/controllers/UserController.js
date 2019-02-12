@@ -115,14 +115,24 @@ module.exports = {
       res.json({status: 'ERROR'});
     }
   },
+  create: async function (req, res) {
+    let email = req.param("email");
+    let pass = await sails.argon2.hash(req.param("pass"));
+    let tipoUser = req.param("tipoUser");
 
-  find: async function (req, res) {
-    if (await User.isAdmin(req.session)) {
-      res.json(await User.find());
-    }
-    else {
-      res.notFound();
-    }
-  }
-};
+    await User.findOrCreate({email: email}, {
+      email: email,
+      pass: pass,
+      tipoUser: tipoUser,
 
+    }).exec(async (err, newOrExistingRecord, wasCreated) => {
+      sails.log(err);
+      if (wasCreated != null && !wasCreated) {
+        res.json({status: 'USUARIO YA EXISTENTE', user: newOrExistingRecord});
+
+      } else {
+        res.json({status: 'OK', user: newOrExistingRecord});
+      }
+    });
+  },
+}
