@@ -32,7 +32,7 @@ module.exports = {
       let cursos = await Curso.find(
         {id: {
           'in':
-            cursosId.map((x) => x.curso())
+            cursosId.map((x) => x.curso)
           }
         });
 
