@@ -78,6 +78,12 @@ module.exports = {
         icon: "fas fa-exclamation-triangle",
         link: "/panel/listLogs",
         accesLvl: ['admin'],
+      },
+      {
+        title: "AGREGAR USUARIOS",
+        icon: "fas fa-users",
+        link: "/panel/newUser",
+        accesLvl: ['admin'],
       }
     ];
 
