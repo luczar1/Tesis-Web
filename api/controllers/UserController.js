@@ -142,5 +142,8 @@ module.exports = {
     else {
       res.notFound();
     }
-  }
+  },
+  showNewUser: function (req, res) {
+    res.view("pages/newUser", {layout: "layouts/admin"});
+  },
 }
