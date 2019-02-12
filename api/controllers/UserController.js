@@ -8,7 +8,7 @@
 module.exports = {
 
 
-  login: async function(req, res) {
+  login: async function (req, res) {
 
     //Capturo las variables enviadas via post
 
@@ -22,15 +22,14 @@ module.exports = {
       //Si esta correcto guardo el ID en una variable de session y
       //redirecciono a /panel/home
       res.redirect("/panel/home")
-    }
-    else {
+    } else {
       //Si no esta correcto redirecciono a la pantalla de login
       res.redirect("/login")
     }
 
   },
 
-  logout: function (req,res) {
+  logout: function (req, res) {
     //Paremtro la variable de session
     User.logout(req.session);
     res.redirect("/login");
@@ -39,7 +38,7 @@ module.exports = {
     //Envio la view de login
     res.view("pages/login", {layout: 'layouts/login_layout'});
   },
-  showNewUser: function (req, res){
+  showNewUser: function (req, res) {
     res.view("pages/newUser", {layout: "layouts/admin"});
   },
   redirectLogin: function (req, res) {
@@ -83,7 +82,7 @@ module.exports = {
         accesLvl: ['admin'],
       },
       {
-        title: "AGREGAR USUARIOS",
+        title: "ADMINISTRAR USUARIOS",
         icon: "fas fa-users",
         link: "/panel/newUser",
         accesLvl: ['admin'],
@@ -94,14 +93,14 @@ module.exports = {
     let navBarForUser = [];
 
     for (item of navbar) {
-      if (item.accesLvl.includes(currentUser.tipoUser)){
-          navBarForUser.push(item);
+      if (item.accesLvl.includes(currentUser.tipoUser)) {
+        navBarForUser.push(item);
       }
     }
     res.json(navBarForUser);
 
   },
-  logInApp: async function(req, res) {
+  logInApp: async function (req, res) {
     let email = req.param("email");
     let pass = req.param("pass");
 
@@ -113,10 +112,28 @@ module.exports = {
 
     if (user != null && user.tipoUser == 'alumno' && await sails.argon2.verify(user.pass, pass)) {
       res.json({status: 'OK', idAlumno: user.alumnoId})
-    }
-    else {
+    } else {
       res.json({status: 'ERROR'});
     }
-  }
-};
+  },
+  create: async function (req, res) {
+    let email = req.param("email");
+    let pass = await sails.argon2.hash(req.param("pass"));
+    let tipoUser = req.param("tipoUser");
 
+    await User.findOrCreate({email: email}, {
+      email: email,
+      pass: pass,
+      tipoUser: tipoUser,
+
+    }).exec(async (err, newOrExistingRecord, wasCreated) => {
+      sails.log(err);
+      if (wasCreated != null && !wasCreated) {
+        res.json({status: 'USUARIO YA EXISTENTE', user: newOrExistingRecord});
+
+      } else {
+        res.json({status: 'OK', user: newOrExistingRecord});
+      }
+    });
+  },
+}

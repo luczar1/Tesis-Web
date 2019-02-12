@@ -870,12 +870,48 @@ Vue.component('list-courses', {
 
 Vue.component('new-user', {
   props: ['titulo'],
+  data: () => {
+    return {
+      correo:'',
+      pass: '',
+      type:''
+    }
+  },
   methods: {
-    createNewUser(mail, pass, type) {
+
+    createNewUser() {
+      let tipoUser ='';
+      let email = this.correo;
+      let pass= this.pass;
+      let tipo = this.type;
+      switch (tipo) {
+        case '0':
+          tipoUser = 'admin';
+          break;
+        case '1':
+          tipoUser = 'secretaria';
+              break;
+        case '2':
+          tipoUser = 'docente';
+          break;
+        case '3':
+          tipoUser = "alumno";
+          break;
+        default:
+          console.log('Error en el tipo de usuario');
+
+      }
+      this.$http.post("/user", {email, pass, tipoUser})
+        .then((response) => {
+
+          console.log(response.data);
+
+        });
+
 
     }
   },
-  template: `<div><div class="card strpied-tabled-with-hover">
+  template: `<div class="align-content-center"><div class="col-lg-4 card strpied-tabled-with-hover">
                                 <div class="card-header ">
                                   <div class="row">
                                     <div class="col-sm-6">
@@ -885,40 +921,30 @@ Vue.component('new-user', {
                                     </div>
                                   </div>
                                 </div>
-                                <div class="card-body table-full-width table-responsive" v-if="logs.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
-                                <div class="card-body table-full-width table-responsive" v-if="logs.length > 0">
+                                <div class="card-body table-full-width table-responsive">
                                 <form>
-                                  <div class="form-group">
+                                  <div class="form-group"  >
                                     <label for="exampleInputEmail1">Email</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa email">
+                                    <input type="email" v-model="correo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa email">
                                      <small id="emailHelp" class="form-text text-muted">Este va a ser el nombre de usuario</small>
                                   </div>
                                   <div class="form-group">
                                     <label for="exampleInputPassword1">Contraseña</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+                                    <input type="password" v-model="pass" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
                                   </div>
                                   <div>
-                                    <label for="inputState">State</label>
-                                  <select id="inputState" class="form-control">
+                                    <label for="inputState">Tipo de usuario</label>
+                                  <select id="inputState" v-model="type" class="form-control">
                                     <option selected>Choose...</option>
                                     <option value="0">Administrador</option>
-                                    <option value="1">Secretaria</option>
+                                    <option value="1">Secretaría</option>
                                     <option value="2">Docente</option>
                                     <option value="3">Alumno</option>
                                   </select>
                                   </div>
                                 </div>                                 
-                                  <button type="submit" class="btn btn-primary">Submit</button>
+                                  <button type="submit" class="btn btn-primary" @click="createNewUser()">Submit </button>
                                 </form>
- 
-                                </div>
-                                <div class="card-footer" v-if="logs.length > 0">
-
-                                   <div class="row" style="display: flex">
-                                   <div class="col-sm-12" style="display: flex;">
-                                      <button class="btn btn-success" @click="downloadLogsExcel()"><i class="fas fa-file-excel"></i> Descargar en formato Excel</button>
-                                   </div>
-                                   </div>
                                 </div>
                                 </div>`
 });

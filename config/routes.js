@@ -43,8 +43,8 @@ module.exports.routes = {
   'get /api/navBar': 'UserController.navbar',
 
   //Models
-  '/user': "UserController.notFound",
-  '/user/*': "UserController.notFound",
+  /*'/user': "UserController.notFound",
+  '/user/*': "UserController.notFound",*/
 
 
 
