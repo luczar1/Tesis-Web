@@ -91,6 +91,16 @@ module.exports = {
     return false;
   },
 
+  isDocente: async function(session) {
+    if (User.isLogged(session)) {
+      let user = await User.findOne({id: session.userId});
+      if (user.tipoUser == 'docente') {
+        return user.docenteId;
+      }
+    }
+    return false;
+  },
+
   getCursos: async function() {
     const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
 

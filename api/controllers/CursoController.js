@@ -20,7 +20,14 @@ module.exports = {
         where: { 'vigente': { '!=' : 'Recargado' }},
         sort: 'inicio ASC'
       }).populate('alumnos').populate('docentes').populate('notificaciones', { sort: 'createdAt desc'}));
-    } else {
+    }
+    else if (await User.isDocente(req.session)) {
+      let idDocente = await User.isDocente(req.session);
+
+      res.json(await Docente.findOne({id: idDocente
+      }).populate('cursos').cursos);
+    }
+    else {
       if (req.param('area')) {
         //Busco por id de area, me devuelve datos del area junto con un array de cursos de esa area
         res.json(await Area.findOne({id: req.param('area')}).populate('cursos'));

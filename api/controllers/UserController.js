@@ -74,12 +74,18 @@ module.exports = {
         title: "LISTADO DE CURSOS",
         icon: "fas fa-list-ul",
         link: "/panel/listCourses",
-        accesLvl: ['admin'],
+        accesLvl: ['admin', 'docente'],
       },
       {
         title: "ERRORES DE CARGA",
         icon: "fas fa-exclamation-triangle",
         link: "/panel/listLogs",
+        accesLvl: ['admin'],
+      },
+      {
+        title: "AGREGAR USUARIOS",
+        icon: "fas fa-users",
+        link: "/panel/newUser",
         accesLvl: ['admin'],
       }
     ];
