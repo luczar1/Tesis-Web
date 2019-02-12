@@ -26,8 +26,17 @@ module.exports = {
 
       sails.log(idDocente);
 
-      res.json(await Docente.findOne({id: idDocente
-      }).populate('cursos'));
+      let cursosId = await DocentePorCurso.find({ select: ['curso'],
+        where: { docente: idDocente } });
+
+      let cursos = await Curso.find(
+        {id: {
+          'in':
+            cursosId.map((x) => x.curso)
+          }
+        });
+
+      res.json(cursos);
     }
     else {
       if (req.param('area')) {
