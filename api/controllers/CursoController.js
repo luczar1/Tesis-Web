@@ -24,8 +24,10 @@ module.exports = {
     else if (await User.isDocente(req.session)) {
       let idDocente = await User.isDocente(req.session);
 
+      sails.log(idDocente);
+
       res.json(await Docente.findOne({id: idDocente
-      }).populate('cursos').cursos);
+      }).populate('cursos'));
     }
     else {
       if (req.param('area')) {
