@@ -36,7 +36,7 @@ module.exports = {
           }
         });
 
-      res.json(cursosId);
+      res.json(cursos);
     }
     else {
       if (req.param('area')) {
