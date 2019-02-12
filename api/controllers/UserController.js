@@ -135,4 +135,12 @@ module.exports = {
       }
     });
   },
+  find: async function (req, res) {
+    if (await User.isAdmin(req.session)) {
+      res.json(await User.find());
+    }
+    else {
+      res.notFound();
+    }
+  }
 }
