@@ -39,6 +39,9 @@ module.exports = {
     //Envio la view de login
     res.view("pages/login", {layout: 'layouts/login_layout'});
   },
+  showNewUser: function (req, res){
+    res.view("pages/newUser", {layout: "layouts/admin"});
+  },
   redirectLogin: function (req, res) {
     res.redirect("/login");
   },

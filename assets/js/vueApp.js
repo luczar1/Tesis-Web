@@ -11,13 +11,12 @@ Vue.component('modal-notificacion', {
       mensaje: "",
     }
   },
-  props:['showModal', 'curso'],
+  props: ['showModal', 'curso'],
   watch: {
     showModal: function (val) {
       if (val) {
         this.show();
-      }
-      else {
+      } else {
         this.hide();
       }
     }
@@ -42,7 +41,7 @@ Vue.component('modal-notificacion', {
       notificacion.docentes = this.curso.docentes;
 
       this.$http.post("/notificacion", notificacion)
-        .then((response) =>{
+        .then((response) => {
 
           console.log(response.data);
 
@@ -238,7 +237,7 @@ Vue.component('box-curso', {
       return date + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
     },
     openNotifModal() {
-     this.showNotifModal = true;
+      this.showNotifModal = true;
     },
     closeNotifModal() {
       this.showNotifModal = false;
@@ -867,6 +866,61 @@ Vue.component('list-courses', {
                             </div>
                              <box-curso :curso="cursoMostrar" v-on:closeCurso="closeCurso()"></box-curso>
                             </div>`,
+});
+
+Vue.component('new-user', {
+  props: ['titulo'],
+  methods: {
+    createNewUser(mail, pass, type) {
+
+    }
+  },
+  template: `<div><div class="card strpied-tabled-with-hover">
+                                <div class="card-header ">
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <h4 class="card-title">{{titulo}}</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-body table-full-width table-responsive" v-if="logs.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
+                                <div class="card-body table-full-width table-responsive" v-if="logs.length > 0">
+                                <form>
+                                  <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa email">
+                                     <small id="emailHelp" class="form-text text-muted">Este va a ser el nombre de usuario</small>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="exampleInputPassword1">Contraseña</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+                                  </div>
+                                  <div>
+                                    <label for="inputState">State</label>
+                                  <select id="inputState" class="form-control">
+                                    <option selected>Choose...</option>
+                                    <option value="0">Administrador</option>
+                                    <option value="1">Secretaria</option>
+                                    <option value="2">Docente</option>
+                                    <option value="3">Alumno</option>
+                                  </select>
+                                  </div>
+                                </div>                                 
+                                  <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+ 
+                                </div>
+                                <div class="card-footer" v-if="logs.length > 0">
+
+                                   <div class="row" style="display: flex">
+                                   <div class="col-sm-12" style="display: flex;">
+                                      <button class="btn btn-success" @click="downloadLogsExcel()"><i class="fas fa-file-excel"></i> Descargar en formato Excel</button>
+                                   </div>
+                                   </div>
+                                </div>
+                                </div>`
 });
 
 
