@@ -114,6 +114,15 @@ module.exports = {
     else {
       res.json({status: 'ERROR'});
     }
+  },
+
+  find: async function (req, res) {
+    if (await User.isAdmin(req.session)) {
+      res.json(await User.find());
+    }
+    else {
+      res.notFound();
+    }
   }
 };
 
