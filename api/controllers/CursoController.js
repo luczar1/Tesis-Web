@@ -22,8 +22,10 @@ module.exports = {
       }).populate('alumnos').populate('docentes').populate('notificaciones', { sort: 'createdAt desc'}));
     }
     else if (await User.isDocente(req.session)) {
-      res.json(await Docente.find({
-      }).populate('cursos'));
+      let idDocente = await User.isDocente(req.session);
+
+      res.json(await Docente.findOne({id: idDocente
+      }).populate('cursos').cursos);
     }
     else {
       if (req.param('area')) {
