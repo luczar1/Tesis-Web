@@ -71,7 +71,7 @@ module.exports = {
         title: "LISTADO DE CURSOS",
         icon: "fas fa-list-ul",
         link: "/panel/listCourses",
-        accesLvl: ['admin'],
+        accesLvl: ['admin', 'docente'],
       },
       {
         title: "ERRORES DE CARGA",
