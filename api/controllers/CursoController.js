@@ -29,6 +29,13 @@ module.exports = {
       let cursosId = await DocentePorCurso.find({ select: ['curso'],
         where: { docente: idDocente } });
 
+      let cursos = await Curso.find(
+        {id: {
+          'in':
+            cursosId.map((x) => x.curso())
+          }
+        });
+
       res.json(cursosId);
     }
     else {
