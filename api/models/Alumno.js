@@ -73,6 +73,19 @@ module.exports = {
    */
   user: {
     model: 'user',
+  },
+
+  /**
+   * Obtener las notificaciones de un determinado curso.
+   * @param id    id del alumno
+   * @param curso id del curso
+   * @returns {Promise<*>}
+   */
+  getNotificaciones: async function (id, curso) {
+    let alumno = await Alumno.findOne({id: id}).populate('notificaciones', {
+      where: {curso: curso}
+    });
+    return alumno ? alumno.notificaciones : [];
   }
 
 };
