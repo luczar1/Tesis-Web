@@ -34,7 +34,7 @@ module.exports = {
           'in':
             cursosId.map((x) => x.curso)
           }
-        });
+        }).populate('alumnos').populate('docentes');
 
       res.json(cursos);
     }
