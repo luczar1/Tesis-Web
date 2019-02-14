@@ -120,8 +120,8 @@ module.exports = {
 
   },
 
-  getCurso: async function(id) {
-    return await Curso.findOne({id: id}).populate('docentes');
+  getCurso: async function(id, selectDocentes, selectAlumnos) {
+    return await Curso.findOne({id: id}).populate('docentes', {select: selectDocentes}).populate('alumnos', {select: selectAlumnos});
   },
 
   logout: function (session) {

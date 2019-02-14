@@ -11,9 +11,19 @@ module.exports = {
     res.json(cursos);
   },
 
+  /**
+   * Busca un curso en particular por el id.
+   * @param req
+   * @param res
+   * @returns {Promise<void>}
+   */
   getCurso: async function (req, res) {
     let cursoId = req.param('id');
-    let curso = await User.getCurso(cursoId);
+    let selectAlumnos = (req.param('alumnos') !== undefined && req.param('alumnos') !== null) ?
+      req.param('alumnos') : ['id', 'apellido', 'nombre', 'email', 'tokenFirebase'];
+    let selectDocentes = (req.param('docentes') !== undefined && req.param('docentes') !== null) ?
+      req.param('docentes') : ['id', 'apellido', 'nombre', 'email', 'tokenFirebase'];
+    let curso = await User.getCurso(cursoId, selectDocentes, selectAlumnos);
 
     sails.request.get({
       url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + curso.codigo
