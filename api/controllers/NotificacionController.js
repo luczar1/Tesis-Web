@@ -58,6 +58,7 @@ module.exports = {
     let titulo = req.param("titulo"),
       mensaje = req.param("mensaje"),
       curso = req.param("curso"),
+      emisor = req.session.userId;
       alumnos = req.param('alumnos'),
       docentes = req.param('docentes'),
       alumnosNotificados = [],
@@ -74,7 +75,7 @@ module.exports = {
         }
         if (alumno.sendNotifEmail) {
           sails.log("Envio de mail");
-          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: "Tienes un nuevo mensaje de la fundacion Jean Sonet", text: "titulo: " + titulo + "Mensaje: " + mensaje});
+          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
         }
       }
     }
@@ -88,7 +89,7 @@ module.exports = {
         }
         if (docente.sendNotifEmail) {
           sails.log("Envio de mail");
-          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: "Tienes un nuevo mensaje de la fundacion Jean Sonet", text: "titulo: " + titulo + "Mensaje: " + mensaje});
+          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
         }
       }
     }
@@ -97,6 +98,7 @@ module.exports = {
       titulo: titulo,
       mensaje: mensaje,
       curso: curso,
+      emisor: emisor,
       archivo: '',
       alumnos: alumnosNotificados,
       docentes: docentesNotificados

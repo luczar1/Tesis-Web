@@ -85,7 +85,13 @@ module.exports = {
     let alumno = await Alumno.findOne({id: id}).populate('notificaciones', {
       where: {curso: curso}
     });
-    return alumno ? alumno.notificaciones : [];
+    if (!alumno) {
+      return [];
+    }
+    for(let notificacion of alumno.notificaciones) {
+      notificacion.emisor = await Notificacion.getNombreEmisor(notificacion.emisor);
+    }
+    return alumno.notificaciones;
   }
 
 };
