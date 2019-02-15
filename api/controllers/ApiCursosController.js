@@ -19,6 +19,8 @@ module.exports = {
    */
   getCurso: async function (req, res) {
     let cursoId = req.param('id');
+    let alumnoId = req.param('alumnoId');
+
     let selectAlumnos = (req.param('alumnos') !== undefined && req.param('alumnos') !== null) ?
       req.param('alumnos') : ['id', 'apellido', 'nombre', 'email', 'tokenFirebase'];
     let selectDocentes = (req.param('docentes') !== undefined && req.param('docentes') !== null) ?
@@ -27,7 +29,7 @@ module.exports = {
 
     sails.request.get({
       url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + curso.codigo
-    }, function (error, response, body) {
+    }, async function (error, response, body) {
       if (error) {
         sails.log(error);
       }
@@ -43,6 +45,16 @@ module.exports = {
         catch (e) {
           sails.log(e);
         }
+      }
+
+      if (alumnoId != "" && alumnoId != null) {
+
+        let alumnoPorCurso = await AlumnoPorCurso.findOne({alumno: alumnoId, curso: cursoId});
+
+        sails.log(alumnoPorCurso);
+
+        curso.pago = alumnoPorCurso.pago;
+        curso.documentacion = alumnoPorCurso.documentacion;
       }
       res.json(curso);
     });
