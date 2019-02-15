@@ -939,8 +939,8 @@ Vue.component('new-user', {
                                     <option selected>Choose...</option>
                                     <option value="0">Administrador</option>
                                     <option value="1">Secretaría</option>
-                                    <option value="2">Docente</option>
-                                    <option value="3">Alumno</option>
+                                    <!--<option value="2">Docente</option>-->
+                                    <!--<option value="3">Alumno</option>-->
                                   </select>
                                   </div>
                                 </div>                                 
