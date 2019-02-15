@@ -604,6 +604,7 @@ Vue.component('list-courses', {
       inicio: 0,
       fin: 9,
       cantCursos: 0,
+      cursosLoad: false,
     }
   },
   watch: {
@@ -705,7 +706,7 @@ Vue.component('list-courses', {
             }
             this.cursos.push(cursos[key]);
           }
-
+          this.cursosLoad = true;
           this.sortCursos('inicio');
         }, err => {
           console.log(err);
