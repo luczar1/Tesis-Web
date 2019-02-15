@@ -69,6 +69,7 @@ module.exports.routes = {
 
   //API
   'get /api/curso': 'ApiCursosController.getCursos',
+  'get /api/curso/:id/:alumnoId': 'ApiCursosController.getCurso',
   'get /api/curso/:id': 'ApiCursosController.getCurso',
   'get /api/notificacion': 'ApiNotificacionController.getNotificaciones',
   'post /api/notificacion': 'ApiNotificacionController.enviarNotificacion',
