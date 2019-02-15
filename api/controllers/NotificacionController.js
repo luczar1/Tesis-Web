@@ -67,6 +67,14 @@ module.exports = {
 
     for (let alumno of alumnos) {
       if (process.env.NODE_ENV == 'production') {
+        if (alumno.sendNotifApp) {
+          alumnosNotificados.push(alumno.id);
+          sendNotification(notification, alumno.tokenFirebase);
+        }
+        if (alumno.sendNotifEmail) {
+          sails.log("Envio de mail");
+          await sails.helpers.sendEmail.with({to: alumno.email, subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
+        }
 
       } else {
         if (alumno.sendNotifApp) {
@@ -81,6 +89,14 @@ module.exports = {
     }
     for (let docente of docentes) {
       if (process.env.NODE_ENV == 'production') {
+        if (docente.sendNotifApp) {
+          docentesNotificados.push(docente.id);
+          sendNotification(notification, docente.tokenFirebase);
+        }
+        if (docente.sendNotifEmail) {
+          sails.log("Envio de mail");
+          await sails.helpers.sendEmail.with({to: alumno.email, subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
+        }
 
       } else {
         if (docente.sendNotifApp) {
