@@ -58,7 +58,7 @@ module.exports = {
     let titulo = req.param("titulo"),
       mensaje = req.param("mensaje"),
       curso = req.param("curso"),
-      emisor = req.session.userId;
+      emisor = req.param("emisor") !== undefined ? req.param("emisor") : req.session.userId;
       alumnos = req.param('alumnos'),
       docentes = req.param('docentes'),
       alumnosNotificados = [],
