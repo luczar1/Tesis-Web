@@ -71,6 +71,18 @@ module.exports = {
         title: "LISTADO DE CURSOS",
         icon: "fas fa-list-ul",
         link: "/panel/listCourses",
+        accesLvl: ['admin', 'docente'],
+      },
+      {
+        title: "ERRORES DE CARGA",
+        icon: "fas fa-exclamation-triangle",
+        link: "/panel/listLogs",
+        accesLvl: ['admin'],
+      },
+      {
+        title: "AGREGAR USUARIOS",
+        icon: "fas fa-users",
+        link: "/panel/newUser",
         accesLvl: ['admin'],
       }
     ];
@@ -86,6 +98,52 @@ module.exports = {
     res.json(navBarForUser);
 
   },
+  logInApp: async function(req, res) {
+    let email = req.param("email");
+    let pass = req.param("pass");
 
-};
+    if (email == null || pass == null) {
+      res.json({status: 'ERROR'});
+    }
 
+    let user = await User.findOne({email: email});
+
+    if (user != null && user.tipoUser == 'alumno' && await sails.argon2.verify(user.pass, pass)) {
+      res.json({status: 'OK', idAlumno: user.alumnoId})
+    }
+    else {
+      res.json({status: 'ERROR'});
+    }
+  },
+  create: async function (req, res) {
+    let email = req.param("email");
+    let pass = await sails.argon2.hash(req.param("pass"));
+    let tipoUser = req.param("tipoUser");
+
+    await User.findOrCreate({email: email}, {
+      email: email,
+      pass: pass,
+      tipoUser: tipoUser,
+
+    }).exec(async (err, newOrExistingRecord, wasCreated) => {
+      sails.log(err);
+      if (wasCreated != null && !wasCreated) {
+        res.json({status: 'USUARIO YA EXISTENTE', user: newOrExistingRecord});
+
+      } else {
+        res.json({status: 'OK', user: newOrExistingRecord});
+      }
+    });
+  },
+  find: async function (req, res) {
+    if (await User.isAdmin(req.session)) {
+      res.json(await User.find());
+    }
+    else {
+      res.notFound();
+    }
+  },
+  showNewUser: function (req, res) {
+    res.view("pages/newUser", {layout: "layouts/admin"});
+  },
+}

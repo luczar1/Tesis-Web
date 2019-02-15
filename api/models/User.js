@@ -25,12 +25,21 @@ module.exports = {
     tipoUser: {type: "string"},
 
     /**
-     * Relacion con admin
+     * Fecha y hora del ultimo login.
      */
-    /*admin: {
-      model: 'admin',
-      unique: true
-    }*/
+    lastLogin: {type: "number"},
+
+    /**
+     * Relacion con alumno
+     */
+    alumnoId: {type: 'string'},
+
+
+    /**
+     * Relacion con profesor
+     */
+    docenteId: {type: 'string'},
+
   },
 
   login: async function(email, pass, session) {
@@ -51,11 +60,44 @@ module.exports = {
       //redirecciono a /panel/home
       session.userId = user.id;
 
+      //Acualizo la fecha y hora del ultimo login
+      await User.update({id: user.id}, {lastLogin: new Date().getTime()});
+
       return true;
     }
 
     //Si las contraseñas cifradas no concuerdan, devuelvo false
 
+    return false;
+  },
+  //Funcion que recibiendo la variable de session me determina si el usuario esta loggeado o no
+  isLogged: function(session) {
+    if (session.userId == null) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  },
+
+  //Checkea que el usuario este loggeado y sea de tipo admin recibiendo la variable de session
+  isAdmin: async function(session) {
+    if (User.isLogged(session)) {
+      let user = await User.findOne({id: session.userId});
+      if (user.tipoUser == 'admin') {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  isDocente: async function(session) {
+    if (User.isLogged(session)) {
+      let user = await User.findOne({id: session.userId});
+      if (user.tipoUser == 'docente') {
+        return user.docenteId;
+      }
+    }
     return false;
   },
 
@@ -78,13 +120,8 @@ module.exports = {
 
   },
 
-  getCurso: async function(id) {
-    const imgPath = "https://www.ucc.edu.ar/portalucc/archivos/File/fjs/fotos/";
-
-    let curso = await Curso.findOne({id: id});
-    curso.img = imgPath + curso.img;
-
-    return curso;
+  getCurso: async function(id, selectDocentes, selectAlumnos) {
+    return await Curso.findOne({id: id}).populate('docentes', {select: selectDocentes}).populate('alumnos', {select: selectAlumnos});
   },
 
   logout: function (session) {

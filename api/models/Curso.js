@@ -45,7 +45,7 @@ module.exports = {
     /**
      * Fecha de inicio del curso.
      */
-    inicio: {type: "string"},
+    inicio: {type: "number"},
 
     /**
      * Fecha de finalizacion del curso.
@@ -96,6 +96,22 @@ module.exports = {
       collection: "docente",
       via: "curso",
       through: "docenteporcurso"
+    },
+
+    /**
+     * Areas a las que pertenecen
+     */
+    areas: {
+      collection: 'area',
+      via: 'cursos'
+    },
+
+    /**
+     * Notificaciones enviadas desde el curso.
+     */
+    notificaciones: {
+      collection: 'notificacion',
+      via: 'curso'
     }
   },
 

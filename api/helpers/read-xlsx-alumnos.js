@@ -22,6 +22,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    //Medir Performance
+    var startTime = new Date().getTime();
+
     let buf = sails.fs.readFileSync(inputs.filePath);
     let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
@@ -29,106 +32,131 @@ module.exports = {
 
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
-    // let alumnosOk = [];
-    let alumnosUnicos = [];
+    let listadoAlumnos = [];
+    let nuevosUsers = [];
+
+
+    let cursosDB = await Curso.find({
+      select: ['id', 'codigoAlternativo']
+    });
 
     sails.log('Por entrar al for');
 
-    for (let alumno in json) {
-      let alumnosOk = {};
-      alumnosOk.clave = json[alumno]['Clave'];
-      alumnosOk.apellido = json[alumno]['Apellido y nombre'].split(",")[0].trim();
-      alumnosOk.nombre = json[alumno]['Apellido y nombre'].split(",")[1].trim();
-      switch (json[alumno]['Documento'].split(" ")[0]) {
-        case "DN":
-          alumnosOk.tipoDoc = "DNI";
-          break;
-        case "PA":
-          alumnosOk.tipoDoc = "PASAPORTE";
-          break;
-        case "LE":
-          alumnosOk.tipoDoc = "LE";
-          break;
-        case "LC":
-          alumnosOk.tipoDoc = "LC";
-          break;
-      }
-      alumnosOk.doc = json[alumno]['Documento'].split(" ")[1];
-      alumnosOk.codCurso = [];
-      alumnosOk.codCurso.push(json[alumno]['Código'].toString());
-      alumnosOk.email = json[alumno]['E-mail'];
-      alumnosOk.tel = json[alumno]['Teléfono'];
-      alumnosOk.documentacion = json[alumno]['Docu'];
-      alumnosOk.pago = json[alumno]['Pago'];
-
-
-      var busqueda = alumnosUnicos.find(function (element) {
-        return element.doc == alumnosOk.doc;
+    for (let alumno of json) {
+      /**
+       * Se llama la funcion para pasar del excel a datos mas ordenados
+       */
+      listadoAlumnos = await sails.helpers.procesarAlumno.with({
+        alumnoXls: alumno,
+        listadoAlumnos: listadoAlumnos,
+        cursosDB: cursosDB,
       });
 
-      if (!busqueda) {
-        alumnosUnicos.push(alumnosOk);
-      }
-      else {
-        busqueda.codCurso.push(alumnosOk.codCurso.toString());
-      }
     }
 
+    // const util = require('util')
+    // console.log(util.inspect(listadoAlumnos, {showHidden: false, depth: null}))
+    //
+    // return;
+    let findOrCreateCounter= 0;
 
-    for (let key in alumnosUnicos) {
+    for (let key in listadoAlumnos) {
 
-      let cursos = await Curso.find({
-        codigoAlternativo: {
-          in: alumnosUnicos[key].codCurso
-        }
-      });
 
-      let arrIdCursos = [];
 
-      for (let key2 in cursos) {
-        arrIdCursos.push(cursos[key2].id);
-      }
+      await Alumno.findOrCreate({documento: listadoAlumnos[key].doc}, {
 
-      await Alumno.findOrCreate({documento: alumnosUnicos[key].doc}, {
-
-        clave: alumnosUnicos[key].clave,
-        apellido: alumnosUnicos[key].apellido,
-        nombre: alumnosUnicos[key].nombre,
-        tipoDocumento: alumnosUnicos[key].tipoDoc,
-        documento: alumnosUnicos[key].doc,
-        email: alumnosUnicos[key].email,
-        telefono: alumnosUnicos[key].tel,
-        cursos: arrIdCursos,
-        documentacion: alumnosUnicos[key].documentacion,
-        pago: alumnosUnicos[key].pago,
-
+        clave: listadoAlumnos[key].clave,
+        apellido: listadoAlumnos[key].apellido,
+        nombre: listadoAlumnos[key].nombre,
+        tipoDocumento: listadoAlumnos[key].tipoDoc,
+        documento: listadoAlumnos[key].doc,
+        email: listadoAlumnos[key].email,
+        telefono: listadoAlumnos[key].tel,
+        cursos: listadoAlumnos[key].cursos.map((x) => {
+          if (x != null && x.id != null) {
+            return x.id;
+          }
+        })
       })
         .exec(async (err, newOrExistingRecord, wasCreated) => {
+
+          if (err != null) {
+            sails.log(err);
+          }
+          let found = listadoAlumnos.find((e) => {
+            return e.doc == newOrExistingRecord.documento
+          });
+
+
+          found.id = newOrExistingRecord.id;
+
           if (wasCreated != null && !wasCreated) {
 
-            let found = alumnosUnicos.find((e) => {
-              return e.codigo === newOrExistingRecord.codigo
-            });
-
-
-            delete found.id;
-            delete found.updatedAt;
-            delete found.createdAt;
-            delete found.alumnos;
-
-            // sails.log(found);
+            //sails.log(found);
             await Alumno.update({id: newOrExistingRecord.id}, {
 
-                clave: found.clave,
-                apellido: found.apellido,
-                nombre: found.nombre,
-                tipoDocumento: found.tipoDoc,
-                documento: found.doc,
-                email: found.email,
-                telefono: found.tel,
-                cursos: arrIdCursos
-              });
+              clave: found.clave,
+              apellido: found.apellido,
+              nombre: found.nombre,
+              tipoDocumento: found.tipoDoc,
+              documento: found.doc,
+              email: found.email,
+              telefono: found.tel,
+              cursos: listadoAlumnos[key].cursos.map((x) => {
+                if (x != null && x.id != null) {
+                  return x.id;
+                }
+              })
+            });
 
+          } else {
+            const hash = await sails.argon2.hash(found.doc);
+            nuevosUsers.push({alumnoId: found.id, email: found.email, pass: hash, tipoUser: 'alumno'});
+
+          }
+
+
+
+          if (findOrCreateCounter >= listadoAlumnos.length - 1) {
+
+            sails.log(' por crear user');
+           await User.createEach(nuevosUsers);
+
+            let cursosAlumnosDB = await AlumnoPorCurso.find();
+            sails.log('DB: ');
+            sails.log(cursosAlumnosDB);
+            //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+
+
+
+            for (alumno of listadoAlumnos) {
+
+
+
+              // sails.log('Alumno: ');
+              // sails.log(alumno);
+              for (curso of alumno.cursos) {
+                let cursoPorAlumno = cursosAlumnosDB.find((element) => {
+                  return element.alumno == alumno.id && element.curso == curso.id;
+                });
+
+
+                await AlumnoPorCurso.update({id: cursoPorAlumno.id}, {
+                  documentacion: curso.documentacion,
+                  pago: curso.pago
+                })
+
+
+              }
+            }
+            var endTime = new Date().getTime();
+            var totalTime = endTime - startTime;
+
+            sails.log("El proceso tardó: " + totalTime + "milisegundos");
+          }
+          else {
+            findOrCreateCounter++;
           }
         });
     }
@@ -136,8 +164,7 @@ module.exports = {
     // All done.
     return exits.success();
 
-  }
-
+  },
 
 };
 

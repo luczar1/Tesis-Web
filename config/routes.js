@@ -35,14 +35,16 @@ module.exports.routes = {
   'get /panel/uploadCourse': 'NuevoCursoController.show',
   'post /panel/uploadCourse': 'NuevoCursoController.uploadXls',
   'get /panel/listCourses': 'ListCursosController.show',
+  'get /panel/listLogs': 'ListLogsProfesoresController.show',
+  'get /panel/newUser': 'UserController.showNewUser',
 
 
   //Funciones que sirven
   'get /api/navBar': 'UserController.navbar',
 
   //Models
-  '/user': "UserController.notFound",
-  '/user/*': "UserController.notFound",
+  /*'/user': "UserController.notFound",
+  '/user/*': "UserController.notFound",*/
 
 
 
@@ -68,6 +70,11 @@ module.exports.routes = {
   //API
   'get /api/curso': 'ApiCursosController.getCursos',
   'get /api/curso/:id': 'ApiCursosController.getCurso',
+  'get /api/notificacion': 'ApiNotificacionController.getNotificaciones',
+  'post /api/notificacion': 'ApiNotificacionController.enviarNotificacion',
+  'post /api/curso/bajaAlumno': 'ApiCursosController.bajaAlumno',
+  'post /api/loginApp': 'UserController.logInApp',
+  'get /log/generateXlsx': 'LogController.generateXlsx',
 
 
 

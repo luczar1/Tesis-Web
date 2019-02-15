@@ -45,12 +45,33 @@ module.exports = {
     telefono: {type: "string"},
 
     /**
+     * Tipo de usuario
+     */
+    user: {
+      model: 'user',
+    },
+
+    /**
+     * Token de firebase para envio de notificaciones.
+     */
+    tokenFirebase: {type: "string"},
+
+    /**
      * Cursos en los que participa.
      */
     cursos: {
       collection: "curso",
       via: "docente",
       through: "docenteporcurso"
+    },
+
+    /**
+     * Notificaciones que ha recibido.
+     */
+    notificaciones: {
+      collection: 'notificacion',
+      via: 'docente',
+      through: 'notificacionpordocente'
     }
   },
 

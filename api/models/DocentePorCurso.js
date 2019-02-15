@@ -27,7 +27,7 @@ module.exports = {
      * Caracter del docente participante.
      * Ej: COORINADOR, DISERTANTE, DIRECTOR
      */
-    caracter: {type: "number"}
+    caracter: {type: "string"}
   },
 
 };

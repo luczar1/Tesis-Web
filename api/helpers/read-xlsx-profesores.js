@@ -21,9 +21,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const util = require('util')
+    const util = require('util');
 
-    var startTime = new Date().getTime();
+    let startTime = new Date().getTime();
 
 
     let buf = sails.fs.readFileSync(inputs.filePath);
@@ -34,6 +34,7 @@ module.exports = {
     let json = sails.xlsx.utils.sheet_to_json(ws);
 
     let profesoresUnicos = [];
+    let nuevosUsers = [];
     let errores = [];
 
     // traigo a memoria todos los cursos su id y su codigo
@@ -47,7 +48,7 @@ module.exports = {
       profesor.cursos = [];
       profesor.clave = json[key]['Clave'];
 
-      var busquedaCurso = cursosDB.find(function (element) {
+      let busquedaCurso = cursosDB.find(function (element) {
         return element.codigo == json[key]['Cod.Presup.'];
       });
 
@@ -79,20 +80,22 @@ module.exports = {
       profesor.email = json[key]['E-mail'];
       profesor.tel = json[key]['Teléfono'];
 
-      var busqueda = profesoresUnicos.find(function (element) {
+      let busqueda = profesoresUnicos.find(function (element) {
         return element.doc == profesor.doc;
       });
 
       if (!busqueda) {
         profesoresUnicos.push(profesor);
-      }
-      else {
-        busqueda.cursos.push(profesor.cursos[0]);
+      } else {
+        if (profesor.cursos[0] != null) {
+          busqueda.cursos.push(profesor.cursos[0]);
+        }
       }
     }
 
     //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
 
+    let findOrCreateCouter = 0;
 
     for (key in profesoresUnicos) {
 
@@ -102,24 +105,21 @@ module.exports = {
           apellido: profesoresUnicos[key].apellido,
           error: "No tiene definido documento"
         });
-      }
-      else if (profesoresUnicos[key].email == null) {
+      } else if (profesoresUnicos[key].email == null) {
         errores.push({
           documento: profesoresUnicos[key].doc,
           nombre: profesoresUnicos[key].nombre,
           apellido: profesoresUnicos[key].apellido,
           error: "No tiene definido email"
         });
-      }
-      else if (profesoresUnicos[key].tipoDoc == "DNI" && isNaN(profesoresUnicos[key].doc)) {
+      } else if (profesoresUnicos[key].tipoDoc == "DNI" && isNaN(profesoresUnicos[key].doc)) {
         errores.push({
           documento: profesoresUnicos[key].doc,
           nombre: profesoresUnicos[key].nombre,
           apellido: profesoresUnicos[key].apellido,
           error: "Error en el DNI"
         });
-      }
-      else {
+      } else {
 
         await Docente.findOrCreate({documento: profesoresUnicos[key].doc},
           {
@@ -131,18 +131,14 @@ module.exports = {
             email: profesoresUnicos[key].email,
             telefono: profesoresUnicos[key].tel,
             cursos: profesoresUnicos[key].cursos.map((x) => {
-              if (x != null && x.idCurso != null) {
+              if (x != null && x.idCurso != null && x !== undefined && x.idCurso !== undefined) {
                 return x.idCurso;
               }
             })
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
-            /*let cursos = await Curso.find({
-              codigo: {
-                in: profesoresUnicos[key].codCurso
-              }
-            });*/
-            console.log(err);
+
+            // console.log(err);
             let found = profesoresUnicos.find((e) => {
               return e.doc == newOrExistingRecord.documento
             });
@@ -150,12 +146,8 @@ module.exports = {
 
             found.id = newOrExistingRecord.id;
 
-            //sails.log(found);
 
             if (!wasCreated && wasCreated != null) {
-              /*let found = profesoresUnicos.find((e) => {
-                return e.doc == newOrExistingRecord.documento
-              });*/
 
               await Docente.update({id: newOrExistingRecord.id}, {
                 clave: found.clave,
@@ -166,49 +158,99 @@ module.exports = {
                 email: found.email,
                 telefono: found.tel,
                 cursos: found.cursos.map((x) => {
-                  if (x != undefined) {
+                  if (x != null && x.idCurso != null && x != undefined && x.idCurso != undefined) {
                     return x.idCurso;
                   }
                 })
               });
 
+            } else {
+              const hash = await sails.argon2.hash(found.doc);
+              nuevosUsers.push({docenteId: found.id, email: found.email, pass: hash, tipoUser: 'docente'});
+            }
+
+
+
+            if (findOrCreateCouter >= profesoresUnicos.length - 1 - errores.length) {
+
+              sails.log(' por crear user');
+              await User.createEach(nuevosUsers);
+
+              let cursosProfesoresDB = await DocentePorCurso.find({});
+
+              // console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+
+              for (profe of profesoresUnicos) {
+                for (curso of profe.cursos) {
+                  let CursoPorProfe = cursosProfesoresDB.find((element) => {
+                    return element.docente == profe.id && element.curso == curso.idCurso;
+                  });
+
+                  if(CursoPorProfe == undefined){
+                    sails.log(profe);
+                    sails.log(curso);
+                  }
+                  else {
+                    await DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
+
+                  }
+
+
+                }
+              }
+            } else {
+              findOrCreateCouter++;
             }
           });
       }
     }
 
-    let cursosProfesoresDB = await DocentePorCurso.find({});
 
-    //console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
+    if(nuevosUsers != null){
 
-    for (profe of profesoresUnicos) {
-      for (curso of profe.cursos) {
-        let CursoPorProfe = cursosProfesoresDB.find((element) => {
-          return element.docente == profe.id && element.curso == curso.id;
-        });
+      await User.createEach(nuevosUsers);
+      sails.log(' creados los users');
 
-        DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
-
-
-      }
     }
 
 
-    var endTime = new Date().getTime();
+    let endTime = new Date().getTime();
 
     sails.log("ALTO TIME");
     sails.log(endTime - startTime);
 
     // All done.
 
-    for (key in errores){
-      await Logs.create({
-        pagina: 'Carga de docentes',
-        error: 'Profesor ' + errores[key].nombre + ' ' + errores[key].apellido + ' ' + errores[key].error
-      });
+    let logDB = await Log.find({
+      select: ['pagina', 'nombre', 'apellido', 'error']
+    });
 
+    /**
+     * Cargados los logs viejos en el historico
+     */
+    if (logDB != null) {
+      await LogHistorico.createEach(logDB);
+      sails.log('Cargado el log historico');
+      /**
+       * Borrada la tabla de logs para cargar los nuevos
+       */
+      await Log.destroy({});
+      sails.log('Borrada la tabla de logs');
     }
 
+
+    let logs = [];
+    for (let error of errores) {
+      logs.push({
+        pagina: 'Carga de docentes',
+        nombre: error.nombre,
+        apellido: error.apellido,
+        error: error.error
+      })
+    }
+
+    await Log.createEach(logs)
+    sails.log('Creada la nueva tabla de logs')
     return exits.success(errores);
 
   }

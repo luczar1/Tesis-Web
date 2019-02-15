@@ -10,9 +10,9 @@ module.exports = {
     //Envio la view uploadCurso usando el layout de admin
     res.view("pages/uploadCurso", {layout: "layouts/admin"});
   },
-  uploadXls: function (req, res) {
+  uploadXls: async function (req, res) {
     //El archivo viene con nombre cursosXlsx
-    req.file('cursosXlsx').upload(async function (err, uploadedFiles) {
+    req.file('cursosXlsx').upload({maxBytes: 50000000},async function (err, uploadedFiles) {
       if (err) {
         //Hago log en caso de error
         sails.log(err);
@@ -32,10 +32,10 @@ module.exports = {
 
 
     });
-    req.file('profesXlsx').upload(async function (err, uploadedFiles) {
+    req.file('profesXlsx').upload({maxBytes: 50000000},async function (err, uploadedFiles) {
       if (err) {
         //Hago log en caso de error
-        sails.log(err);
+        // sails.log(err);
       }
 
       if (uploadedFiles.length === 0 ) {
@@ -52,7 +52,7 @@ module.exports = {
 
 
     });
-    req.file('alumnosXlsx').upload(async function (err, uploadedFiles) {
+    req.file('alumnosXlsx').upload({maxBytes: 50000000}, async function (err, uploadedFiles) {
       if (err) {
         //Hago log en caso de error
         sails.log(err);

@@ -49,6 +49,24 @@ module.exports = function(grunt) {
           src: ['**/*'],
           dest: '.tmp/public/plugins/vue'
         },
+        {
+          expand:true,
+          cwd: './node_modules/v-tooltip/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/vue'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/vue-clipboard2/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/vue'
+        },
+        {
+          expand:true,
+          cwd: './node_modules/vue-js-modal/dist',
+          src: ['**/*'],
+          dest: '.tmp/public/plugins/vue'
+        },
       ]
     },
     build: {
