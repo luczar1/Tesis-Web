@@ -41,7 +41,10 @@ module.exports = {
     });
 
     let mailOptions = {
-      from: 'mariano1colombo@gmail.com',
+      from: {
+        name: 'Mariano Colombo',
+        address: 'mariano1colombo@gmail.com'
+      },
       to: inputs.to,
       subject: inputs.subject,
       text: inputs.text,
