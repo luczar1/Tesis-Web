@@ -80,7 +80,7 @@ module.exports = {
         accesLvl: ['admin'],
       },
       {
-        title: "AGREGAR USUARIOS",
+        title: "ADMINISTRAR USUARIOS",
         icon: "fas fa-users",
         link: "/panel/newUser",
         accesLvl: ['admin'],
