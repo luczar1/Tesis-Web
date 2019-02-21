@@ -81,7 +81,7 @@ Vue.component('modal-notificacion', {
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-primary" @click="sendNotif()">Enviar</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="hide()">Cerrar</button>
                     </div>
                   </div>
                 </div>
