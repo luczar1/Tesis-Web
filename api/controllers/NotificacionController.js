@@ -73,7 +73,7 @@ module.exports = {
         }
         if (alumno.sendNotifEmail) {
           sails.log("Envio de mail");
-          await sails.helpers.sendEmail.with({to: alumno.email, subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
+          await sails.helpers.sendEmail.with({to: alumno.email, subject: titulo, text: mensaje});
         }
 
       } else {
@@ -105,7 +105,7 @@ module.exports = {
         }
         if (docente.sendNotifEmail) {
           sails.log("Envio de mail");
-          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: "Tienes un nuevo mensaje de la Fundación Jean Sonet", text: "Título: " + titulo + "Mensaje: " + mensaje});
+          await sails.helpers.sendEmail.with({to: 'lucas.zarza@gmail.com', subject: titulo, text: mensaje});
         }
       }
     }
