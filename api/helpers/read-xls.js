@@ -22,7 +22,8 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-
+    var startTime;
+    var endTime;
     let buf = sails.fs.readFileSync(inputs.filePath);
     let workbook = sails.xlsx.read(buf, {type: 'buffer'});
     let ws = workbook.Sheets[workbook.SheetNames[0]];
@@ -52,10 +53,12 @@ module.exports = {
       cursoOk.cantHoras = json[curso]['Cant.Hs.'];
       cursoOk.areas = [];
 
-      // sails.log(cursoOk.codigoAlternativo);
+      sails.log(cursoOk.codigoAlternativo);
 
       if (cursoOk.estado != "Terminado") {
 
+        startTime = new Date().getTime();
+        console.log('Por hacer la consulta a david, tiempo ' + startTime);
         sails.request.get({
           url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + cursoOk.codigo
         }, function (error, response, body) {
@@ -94,6 +97,8 @@ module.exports = {
             }
           }
         });
+        endTime = new Date().getTime();
+        console.log('Terminada la consulta. Demoro: ' + startTime - endTime + ' ms');
 
         let sleep = sails.sleep;
         sleep(250);
