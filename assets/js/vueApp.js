@@ -30,6 +30,12 @@ Vue.component('lista-usuarios', {
 
           this.usuarios = resp;
 
+          this.usuarios.sort(function(a, b) {
+            if(a.email < b.email) { return -1; }
+            if(a.email > b.email) { return 1; }
+            return 0;
+          });
+
         });
     },
     habilitarDeshabilitar(usuario) {
