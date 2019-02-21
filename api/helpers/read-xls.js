@@ -58,7 +58,7 @@ module.exports = {
       if (cursoOk.estado != "Terminado") {
 
         startTime = new Date().getTime();
-        console.log('Por hacer la consulta a david, tiempo ' + startTime);
+        console.log('Por hacer la consulta a david.');
         sails.request.get({
           url: 'http://fjs.ucc.edu.ar/json/curso.php?id=' + cursoOk.codigo
         }, function (error, response, body) {
@@ -98,7 +98,8 @@ module.exports = {
           }
         });
         endTime = new Date().getTime();
-        console.log('Terminada la consulta. Demoro: ' + startTime - endTime + ' ms');
+        var totalTime = endTime - startTime;
+        console.log('Terminada la consulta. Demoro: ' + totalTime + ' ms');
 
         let sleep = sails.sleep;
         sleep(250);
