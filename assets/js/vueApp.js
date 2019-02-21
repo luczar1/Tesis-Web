@@ -32,6 +32,18 @@ Vue.component('lista-usuarios', {
 
         });
     },
+    habilitarDeshabilitar(usuario) {
+      this.usuarios = [];
+      this.$http.patch('/user/' + usuario.id, { habilitado: !usuario.habilitado})
+        .then((response) => {
+
+          let resp = response.body;
+          console.log(resp);
+
+          this.loadUsers();
+
+        });
+    }
   },
 
   beforeMount() {
@@ -74,13 +86,13 @@ Vue.component('lista-usuarios', {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="usuario in usuarios" style="cursor: pointer">
+                                            <tr v-for="usuario in usuarios">
                                                 <td>{{usuario.email}}</td>
                                                 <td>{{usuario.tipoUser}}</td>
-                                                <td>
+                                                <td style="cursor: pointer;">
                                                   <i :class="{
                                                     'fas fa-check-circle fa-2x text-success': usuario.habilitado, 
-                                                    'fas fa-times-circle fa-2x text-danger': !usuario.habilitado}">
+                                                    'fas fa-times-circle fa-2x text-danger': !usuario.habilitado}" @click="habilitarDeshabilitar(usuario)">
                                                    </i>
                                                  </td>
                                             </tr>
