@@ -119,11 +119,13 @@ module.exports = {
     let email = req.param("email");
     let pass = await sails.argon2.hash(req.param("pass"));
     let tipoUser = req.param("tipoUser");
+    let habilitado = req.param("habilitado");
 
     await User.findOrCreate({email: email}, {
       email: email,
       pass: pass,
       tipoUser: tipoUser,
+      habilitado: habilitado,
 
     }).exec(async (err, newOrExistingRecord, wasCreated) => {
       sails.log(err);
@@ -137,7 +139,14 @@ module.exports = {
   },
   find: async function (req, res) {
     if (await User.isAdmin(req.session)) {
-      res.json(await User.find());
+      if (req.param("where") != "" && req.param("where") != null) {
+        let where = JSON.parse(req.param('where'));
+        console.log(req.param("where"));
+        res.json(await User.find(where));
+      }
+      else {
+        res.json(await User.find());
+      }
     }
     else {
       res.notFound();

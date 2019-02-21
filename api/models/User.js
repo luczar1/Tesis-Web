@@ -55,22 +55,27 @@ module.exports = {
       return false;
     }
 
-    if (await sails.argon2.verify(user.pass,pass)) {
+    if (!await sails.argon2.verify(user.pass,pass)) {
       //Si la contraseña cifrada ingresada concuerda con la cifrada
       // en base de datos devuelvo los datos del usuario
       //Si esta correcto guardo el ID en una variable de session y
       //redirecciono a /panel/home
-      session.userId = user.id;
 
-      //Acualizo la fecha y hora del ultimo login
-      await User.update({id: user.id}, {lastLogin: new Date().getTime()});
 
-      return true;
+
+
+      return false;
     }
 
-    //Si las contraseñas cifradas no concuerdan, devuelvo false
+    if (!user.habilitado) {
+      return false;
+    }
 
-    return false;
+    session.userId = user.id;
+    //Acualizo la fecha y hora del ultimo login
+    await User.update({id: user.id}, {lastLogin: new Date().getTime()});
+
+    return true;
   },
   //Funcion que recibiendo la variable de session me determina si el usuario esta loggeado o no
   isLogged: function(session) {

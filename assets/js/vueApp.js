@@ -3,6 +3,93 @@ Vue.use(VueClipboard);
 Vue.use(Toasted, {duration: 3000, iconPack	: 'fontawesome'});
 
 
+
+Vue.component('lista-usuarios', {
+
+  data: () => {
+    return {
+      usuarios: [],
+      search: "",
+    }
+  },
+
+  methods: {
+    loadUsers() {
+      this.usuarios = [];
+      let where = {
+        or: [
+          {tipoUser: 'admin'},
+          {tipoUser: 'secretaria'},
+        ]
+      };
+      this.$http.get('/user?where=' + encodeURI(JSON.stringify(where)))
+        .then((response) => {
+
+          let resp = response.body;
+          console.log(resp);
+
+          this.usuarios = resp;
+
+        });
+    },
+  },
+
+  beforeMount() {
+      this.loadUsers();
+  },
+
+  mounted () {
+    this.$root.$on('reloadUsers', data => {
+      this.loadUsers();
+    });
+  },
+
+  template: `<div class="card strpied-tabled-with-hover ">
+                                <div class="card-header ">
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <h4 class="card-title">Listado de usuarios</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                      <!--<p class="card-category">Here is a subtitle for this table</p>-->
+                                      <div class="form-inline float-right" v-if="usuarios.length > 0">
+                                        <div class="input-group mb-2 mr-sm-2">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                          </div>
+                                          <input type="text" class="form-control" v-model="search" placeholder="Buscar...">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-body table-full-width table-responsive" v-if="usuarios.length == 0" style="text-align: center"><i class="fas fa-spinner fa-spin fa-3x"></i></div>
+                                <div class="card-body table-full-width table-responsive" v-if="usuarios.length > 0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                              <th>Usuario</th>
+                                              <th>Tipo de Usuario</th>
+                                              <th>Habilitado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="usuario in usuarios" style="cursor: pointer">
+                                                <td>{{usuario.email}}</td>
+                                                <td>{{usuario.tipoUser}}</td>
+                                                <td>
+                                                  <i :class="{
+                                                    'fas fa-check-circle fa-2x text-success': usuario.habilitado, 
+                                                    'fas fa-times-circle fa-2x text-danger': !usuario.habilitado}">
+                                                   </i>
+                                                 </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>`
+});
+
 Vue.component('modal-notificacion', {
   data: () => {
     return {
@@ -911,7 +998,7 @@ Vue.component('new-user', {
           return;
 
       }
-      this.$http.post("/user", {email, pass, tipoUser})
+      this.$http.post("/user", {email: email, pass: pass, tipoUser: tipoUser, habilitado: true})
         .then((response) => {
 
           console.log(response.data);
@@ -921,7 +1008,7 @@ Vue.component('new-user', {
           }
           else {
             this.$toasted.show("Usuario generado correctamente...",{type: 'success', icon: 'check', iconPack	: 'fontawesome'});
-
+            this.$root.$emit('reloadUsers');
           }
         }, (response) => {
           this.$toasted.show("Error al generar usuario...",{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
@@ -931,7 +1018,7 @@ Vue.component('new-user', {
 
     }
   },
-  template: `<div class="align-content-center"><div class="col-lg-4 card strpied-tabled-with-hover">
+  template: `<div class="card strpied-tabled-with-hover">
                                 <div class="card-header ">
                                   <div class="row">
                                     <div class="col-sm-6">
@@ -942,8 +1029,8 @@ Vue.component('new-user', {
                                   </div>
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
-                                <form>
-                                  <div class="form-group"  >
+                                <div class="col-lg-12">
+                                  <div class="form-group">
                                     <label for="exampleInputEmail1">Email</label>
                                     <input type="email" v-model="correo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa email">
                                      <small id="emailHelp" class="form-text text-muted">Este va a ser el nombre de usuario</small>
@@ -952,7 +1039,7 @@ Vue.component('new-user', {
                                     <label for="exampleInputPassword1">Contraseña</label>
                                     <input type="password" v-model="pass" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
                                   </div>
-                                  <div>
+                                  <div class="form-group">
                                     <label for="inputState">Tipo de usuario</label>
                                   <select id="inputState" v-model="type" class="form-control">
                                     <option value="-1" selected disabled>Seleccionar...</option>
@@ -961,11 +1048,13 @@ Vue.component('new-user', {
                                     <!--<option value="2">Docente</option>-->
                                     <!--<option value="3">Alumno</option>-->
                                   </select>
+                                 
                                   </div>
-                                </div>                                 
-                                  <button type="submit" class="btn btn-primary" @click="createNewUser()">Submit </button>
-                                </form>
-                                </div>
+                                  <div class="form-group">
+                                     <button type="submit" class="btn btn-primary btn-block" @click="createNewUser()">Agregar usuario </button>
+                                  </div>
+                                </div>     
+                                </div>                            
                                 </div>`
 });
 
