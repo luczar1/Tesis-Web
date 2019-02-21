@@ -96,10 +96,13 @@ module.exports = {
               sails.log(cursoOk.codigo);
             }
           }
+
+          endTime = new Date().getTime();
+          var totalTime = endTime - startTime;
+          console.log('Terminada la consulta. Demoro: ' + totalTime + ' ms');
+
         });
-        endTime = new Date().getTime();
-        var totalTime = endTime - startTime;
-        console.log('Terminada la consulta. Demoro: ' + totalTime + ' ms');
+
 
         let sleep = sails.sleep;
         sleep(250);
