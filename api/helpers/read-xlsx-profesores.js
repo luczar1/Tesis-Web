@@ -184,9 +184,11 @@ module.exports = {
                 })
               });
 
-            } else {
+            } else {if (!userDB.find((x)=> x.email == found.email)){
+              console.log(found);
               const hash = await sails.argon2.hash(found.doc);
               nuevosUsers.push({docenteId: found.id, email: found.email, pass: hash, tipoUser: 'docente'});
+            }
             }
 
 
