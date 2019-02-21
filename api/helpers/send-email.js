@@ -41,7 +41,10 @@ module.exports = {
     });
 
     let mailOptions = {
-      from: 'mariano1colombo@gmail.com',
+      from: {
+        name: 'Mariano Colombo',
+        address: 'mariano1colombo@gmail.com'
+      },
       to: inputs.to,
       subject: inputs.subject,
       text: inputs.text,
@@ -50,13 +53,16 @@ module.exports = {
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
+        return exits.success(true);
       } else {
         console.log('Email sent: ' + info.response);
       }
+
+      return exits.success(false);
     });
 
 
-    return exits.success();
+
   }
 
 };

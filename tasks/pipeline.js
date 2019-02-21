@@ -78,6 +78,7 @@ var jsFilesToInject = [
   'plugins/vue/vue-resource.js',
   'plugins/vue/v-tooltip.min.js',
   'plugins/vue/vue-clipboard.js',
+  'plugins/vue/vue-toasted.js',
   'plugins/vue/index.js',
   'plugins/jquery-fileupload.js',
   'dependencies/**/*.js',

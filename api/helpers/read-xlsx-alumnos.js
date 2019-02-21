@@ -40,6 +40,10 @@ module.exports = {
       select: ['id', 'codigoAlternativo']
     });
 
+    let userDB = await User.find({
+      select: ['email']
+    });
+
     sails.log('Por entrar al for');
 
     for (let alumno of json) {
@@ -111,9 +115,11 @@ module.exports = {
             });
 
           } else {
+            if (!userDB.find((x)=> x.email == found.email)){
+              console.log(found);
             const hash = await sails.argon2.hash(found.doc);
             nuevosUsers.push({alumnoId: found.id, email: found.email, pass: hash, tipoUser: 'alumno'});
-
+            }
           }
 
 

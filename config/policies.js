@@ -17,20 +17,20 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
   HomeController: {
-    'show': 'isAuthenticated'
+    'show': ['isAuthenticated', 'isEnabled']
   },
   UserController: {
-    'showLogin': 'redirHomeIfAuth',
-    'navbar': 'isAuthenticated',
+    'showLogin': ['redirHomeIfAuth'],
+    'navbar': ['isAuthenticated','isEnabled'],
   },
   NuevoCursoController: {
-    'show': ['isAuthenticated', 'isAdmin'],
+    'show': ['isAuthenticated', 'isAdmin', 'isEnabled'],
     //'uploadXls': ['isAuthenticated', 'isAdmin'],
   },
 
   //Policies para api blueprints
 
-  'log/*': ['isAuthenticated','isAdmin'],
+  'log/*': ['isAuthenticated','isAdmin', 'isEnabled'],
 
 
   // '*': true,
