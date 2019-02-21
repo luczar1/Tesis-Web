@@ -25,23 +25,18 @@ module.exports = {
      */
     apellido: {type: 'string'},
     /**
+     * Unidad académica
+     */
+    ua: {type: 'string'},
+    /**
      * Descripcion del error
      */
     error: {type: "string"},
-
     /**
      * Quien causo el error
      */
     usuario: {type: "string"},
 
-    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
   },
 

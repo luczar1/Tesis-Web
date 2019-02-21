@@ -23,7 +23,7 @@ module.exports = {
     var workbook = sails.xlsx.readFile(currentPath + "/assets/downloads/logFileTemplate.xlsx");
 
     let logs = await Log.find({
-      select: ['pagina', 'nombre', 'apellido', 'error']
+      select: ['pagina', 'nombre', 'apellido', 'ua', 'error']
     });
 
     let ws = sails.xlsx.utils.json_to_sheet(logs);

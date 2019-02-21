@@ -546,6 +546,7 @@ Vue.component('list-logs', {
                                               <th>Tipo</th>
                                               <th>Nombre</th>
                                               <th>Apellido</th>
+                                              <th>Unidad academica</th>
                                               <th>Descripción</th>
                                               <th>Fecha</th>
                                             </tr>
@@ -555,6 +556,7 @@ Vue.component('list-logs', {
                                                 <td>{{log.pagina}}</td>
                                                 <td>{{log.nombre}}</td>
                                                 <td>{{log.apellido}}</td>
+                                                <td>{{log.ua}}</td>
                                                 <td>{{log.error}}</td>
                                                 <td>{{displayDate(log.createdAt)}}</td>                                                     
                                             </tr>
