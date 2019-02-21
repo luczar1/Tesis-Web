@@ -53,13 +53,16 @@ module.exports = {
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
+        return exits.success(true);
       } else {
         console.log('Email sent: ' + info.response);
       }
+
+      return exits.success(false);
     });
 
 
-    return exits.success();
+
   }
 
 };
