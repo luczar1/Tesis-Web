@@ -128,7 +128,7 @@ module.exports = {
     }).exec(async (err, newOrExistingRecord, wasCreated) => {
       sails.log(err);
       if (wasCreated != null && !wasCreated) {
-        res.json({status: 'USUARIO YA EXISTENTE', user: newOrExistingRecord});
+        res.json({status: 'ERROR', msg: 'Ya existe un usuario con ese E-mail', user: newOrExistingRecord});
 
       } else {
         res.json({status: 'OK', user: newOrExistingRecord});

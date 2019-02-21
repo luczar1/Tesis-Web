@@ -1,6 +1,6 @@
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
-Vue.use(Toasted);
+Vue.use(Toasted, {duration: 3000});
 
 
 Vue.component('modal-notificacion', {
@@ -888,7 +888,6 @@ Vue.component('new-user', {
       let email = this.correo;
       let pass= this.pass;
       let tipo = this.type;
-      else {
       switch (tipo) {
         case '0':
           tipoUser = 'admin';
@@ -912,8 +911,13 @@ Vue.component('new-user', {
 
           console.log(response.data);
 
-          this.$toasted.show("Usuario generado correctamente...",{type: 'success', icon: 'check', iconPack	: 'fontawesome'});
+          if (response.data.status == 'ERROR') {
+            this.$toasted.show(response.data.msg,{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
+          }
+          else {
+            this.$toasted.show("Usuario generado correctamente...",{type: 'success', icon: 'check', iconPack	: 'fontawesome'});
 
+          }
         }, (response) => {
           this.$toasted.show("Error al generar usuario...",{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
         }
