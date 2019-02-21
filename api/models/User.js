@@ -24,6 +24,8 @@ module.exports = {
      */
     tipoUser: {type: "string"},
 
+    habilitado: {type: "boolean"},
+
     /**
      * Fecha y hora del ultimo login.
      */
