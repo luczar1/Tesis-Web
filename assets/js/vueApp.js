@@ -1,6 +1,6 @@
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
-Vue.use(Toasted, {duration: 3000});
+Vue.use(Toasted, {duration: 3000, iconPack	: 'fontawesome'});
 
 
 Vue.component('modal-notificacion', {
@@ -41,14 +41,19 @@ Vue.component('modal-notificacion', {
       notificacion.alumnos = this.curso.alumnos;
       notificacion.docentes = this.curso.docentes;
 
+      this.$toasted.show("Enviando notificación...",{type: 'info', icon: 'clock'});
+
+
       this.$http.post("/notificacion", notificacion)
         .then((response) => {
 
           console.log(response.data);
-
-        });
-
-
+          this.$toasted.show("Notificacion enviada correctamente...",{type: 'success', icon: 'check'});
+          this.hide();
+        },
+          (response) => {
+            this.$toasted.show("Error al enviar notificacion...",{type: 'error', icon: 'check'});
+          });
     },
     countNotifEmail() {
       let cantAlumnos = this.curso.alumnos.filter(element => element.sendNotifEmail).length;
