@@ -215,6 +215,16 @@ Vue.component('box-curso', {
             docente.sendNotifEmail = false;
             docente.sendNotifApp = false;
           }
+          this.curso.alumnos.sort(function (a, b) {
+            if(a.apellido < b.apellido) { return -1; }
+            if(a.apellido > b.apellido) { return 1; }
+            return 0;
+          });
+          this.curso.docentes.sort(function (a, b) {
+            if(a.apellido < b.apellido) { return -1; }
+            if(a.apellido > b.apellido) { return 1; }
+            return 0;
+          });
           this.$forceUpdate();
         });
     },
@@ -968,17 +978,17 @@ Vue.component('new-user', {
   props: ['titulo'],
   data: () => {
     return {
-      correo:'',
+      correo: '',
       pass: '',
-      type:'-1'
+      type: '-1'
     }
   },
   methods: {
 
     createNewUser() {
-      let tipoUser ='';
+      let tipoUser = '';
       let email = this.correo;
-      let pass= this.pass;
+      let pass = this.pass;
       let tipo = this.type;
       switch (tipo) {
         case '0':
@@ -986,7 +996,7 @@ Vue.component('new-user', {
           break;
         case '1':
           tipoUser = 'secretaria';
-              break;
+          break;
         case '2':
           tipoUser = 'docente';
           break;
@@ -994,14 +1004,14 @@ Vue.component('new-user', {
           tipoUser = "alumno";
           break;
         default:
-          this.$toasted.show("Error en el tipo de usuario...",{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
+          this.$toasted.show("Error en el tipo de usuario...", {type: 'error', icon: 'times', iconPack: 'fontawesome'});
           return;
 
       }
       this.$http.post("/user", {email: email, pass: pass, tipoUser: tipoUser, habilitado: true})
         .then((response) => {
 
-          console.log(response.data);
+            console.log(response.data);
 
           if (response.data.status == 'ERROR') {
             this.$toasted.show(response.data.msg,{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
