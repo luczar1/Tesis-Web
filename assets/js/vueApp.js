@@ -1,5 +1,6 @@
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
+Vue.use(Toasted);
 
 
 Vue.component('modal-notificacion', {
@@ -875,7 +876,7 @@ Vue.component('new-user', {
     return {
       correo:'',
       pass: '',
-      type:''
+      type:'-1'
     }
   },
   methods: {
@@ -885,6 +886,7 @@ Vue.component('new-user', {
       let email = this.correo;
       let pass= this.pass;
       let tipo = this.type;
+      else {
       switch (tipo) {
         case '0':
           tipoUser = 'admin';
@@ -899,7 +901,8 @@ Vue.component('new-user', {
           tipoUser = "alumno";
           break;
         default:
-          console.log('Error en el tipo de usuario');
+          this.$toasted.show("Error en el tipo de usuario...",{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
+          return;
 
       }
       this.$http.post("/user", {email, pass, tipoUser})
@@ -907,7 +910,12 @@ Vue.component('new-user', {
 
           console.log(response.data);
 
-        });
+          this.$toasted.show("Usuario generado correctamente...",{type: 'success', icon: 'check', iconPack	: 'fontawesome'});
+
+        }, (response) => {
+          this.$toasted.show("Error al generar usuario...",{type: 'error', icon: 'times', iconPack	: 'fontawesome'});
+        }
+      );
 
 
     }
@@ -936,7 +944,7 @@ Vue.component('new-user', {
                                   <div>
                                     <label for="inputState">Tipo de usuario</label>
                                   <select id="inputState" v-model="type" class="form-control">
-                                    <option selected>Choose...</option>
+                                    <option value="-1" selected disabled>Seleccionar...</option>
                                     <option value="0">Administrador</option>
                                     <option value="1">Secretaría</option>
                                     <!--<option value="2">Docente</option>-->
