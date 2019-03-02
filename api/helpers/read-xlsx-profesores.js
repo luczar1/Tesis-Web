@@ -21,7 +21,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const util = require('util');
 
     let startTime = new Date().getTime();
 
@@ -42,6 +41,9 @@ module.exports = {
       select: ['id', 'codigo', 'nombreUA']
     });
 
+    let userDB = await User.find({
+      select: ['email']
+    });
 
     for (let key in json) {
       let profesor = {};
@@ -157,18 +159,11 @@ module.exports = {
             })
           })
           .exec(async (err, newOrExistingRecord, wasCreated) => {
-
-            // console.log(err);
             let found = profesoresUnicos.find((e) => {
               return e.doc == newOrExistingRecord.documento
             });
-
-
             found.id = newOrExistingRecord.id;
-
-
             if (!wasCreated && wasCreated != null) {
-
               await Docente.update({id: newOrExistingRecord.id}, {
                 clave: found.clave,
                 apellido: found.apellido,
@@ -183,12 +178,11 @@ module.exports = {
                   }
                 })
               });
-
-            } else {if (!userDB.find((x)=> x.email == found.email)){
-              console.log(found);
-              const hash = await sails.argon2.hash(found.doc);
-              nuevosUsers.push({docenteId: found.id, email: found.email, pass: hash, tipoUser: 'docente'});
-            }
+            } else {
+              if (!userDB.find((x) => x.email === found.email)) {
+                const hash = await sails.argon2.hash(found.doc);
+                nuevosUsers.push({docenteId: found.id, email: found.email, pass: hash, tipoUser: 'docente'});
+              }
             }
 
 
@@ -199,10 +193,8 @@ module.exports = {
 
               let cursosProfesoresDB = await DocentePorCurso.find({});
 
-              // console.log(util.inspect(profesoresUnicos, {showHidden: false, depth: null}));
-
-              for (profe of profesoresUnicos) {
-                for (curso of profe.cursos) {
+              for (let profe of profesoresUnicos) {
+                for (let curso of profe.cursos) {
                   let CursoPorProfe = cursosProfesoresDB.find((element) => {
                     return element.docente == profe.id && element.curso == curso.idCurso;
                   });
@@ -212,7 +204,6 @@ module.exports = {
                     sails.log(curso);
                   } else {
                     await DocentePorCurso.update({id: CursoPorProfe.id}, {caracter: curso.caracter})
-
                   }
 
 
@@ -224,15 +215,6 @@ module.exports = {
           });
       }
     }
-
-
-    if (nuevosUsers != null) {
-
-      await User.createEach(nuevosUsers);
-      sails.log(' creados los users');
-
-    }
-
 
     let endTime = new Date().getTime();
 

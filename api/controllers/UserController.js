@@ -108,8 +108,12 @@ module.exports = {
 
     let user = await User.findOne({email: email});
 
-    if (user != null && user.tipoUser == 'alumno' && await sails.argon2.verify(user.pass, pass)) {
-      res.json({status: 'OK', idAlumno: user.alumnoId})
+    if (user != null && await sails.argon2.verify(user.pass, pass)) {
+      res.json({
+        status: 'OK',
+        tipo: user.tipoUser,
+        id: user.tipoUser === 'alumno' ? user.alumnoId : user.docenteId
+      })
     }
     else {
       res.json({status: 'ERROR'});
