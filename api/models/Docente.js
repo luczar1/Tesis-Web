@@ -75,5 +75,25 @@ module.exports = {
     }
   },
 
+  /**
+   * Obtener las notificaciones de un determinado curso.
+   * @param id    id del docente
+   * @param curso id del curso
+   * @returns {Promise<*>}
+   */
+  getNotificaciones: async function (id, curso) {
+    let docente = await Docente.findOne({id: id}).populate('notificaciones', {
+      where: {curso: curso},
+      sort: 'createdAt desc'
+    });
+    if (!docente) {
+      return [];
+    }
+    for(let notificacion of docente.notificaciones) {
+      notificacion.emisor = await Notificacion.getNombreEmisor(notificacion.emisor);
+    }
+    return docente.notificaciones;
+  }
+
 };
 

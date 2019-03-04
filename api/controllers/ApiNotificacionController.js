@@ -18,7 +18,12 @@ module.exports = {
   getNotificaciones: async function(req, res) {
     let userId = req.param('user');
     let cursoId = req.param('curso');
-    res.json(await Alumno.getNotificaciones(userId, cursoId));
+    let tipoUser = req.param('tipoUser');
+    if (tipoUser === 'alumno') {
+      res.json(await Alumno.getNotificaciones(userId, cursoId));
+    } else {
+      res.json(await Docente.getNotificaciones(userId, cursoId));
+    }
   },
 
   /**

@@ -83,7 +83,8 @@ module.exports = {
    */
   getNotificaciones: async function (id, curso) {
     let alumno = await Alumno.findOne({id: id}).populate('notificaciones', {
-      where: {curso: curso}
+      where: {curso: curso},
+      sort: 'createdAt desc'
     });
     if (!alumno) {
       return [];
